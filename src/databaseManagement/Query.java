@@ -23,6 +23,7 @@ public class Query {
 	 * Ideally, this should be called when we make an INSERT SQL query.
 	 * Closes the Statement object after it is complete.
 	 * 
+	 * @pre userQuery.length > 0
 	 * @param userQuery the SQL statement to be executed
 	 * @return the number of rows affected by the query.
 	 * @throws SQLException when the query fails
@@ -42,6 +43,8 @@ public class Query {
 	/**
 	 * Alias of the create() method. Ideally, this is called whenever
 	 * we make an UPDATE SQL query.
+	 * 
+	 * @pre userQuery.length > 0
 	 * @param userQuery the SQL statement to be executed
 	 * @return the number of rows affected by the query.
 	 * @throws SQLException when the query fails
@@ -55,6 +58,7 @@ public class Query {
 	/**
 	 * Alias of the create() method. Ideally, this is called whenever
 	 * we make a DELETE SQL query.
+	 * @pre userQuery.length > 0
 	 * @param userQuery the SQL statement to be executed
 	 * @return the number of rows affected by the query.
 	 * @throws SQLException when the query fails
@@ -67,6 +71,7 @@ public class Query {
 	/**
 	 * Performs the general SELECT statement.
 	 * 
+	 * @pre userQuery.length > 0
 	 * @param userQuery the SQL SELECT query
 	 * @return results, the ResultSet containing the selected rows of the table.
 	 * @throws SQLException is thrown if the query fails.
@@ -86,6 +91,7 @@ public class Query {
 	/**
 	 * Runs a SELECT * FROM query to return every row of a specified table.
 	 * 
+	 * @pre userQuery.length > 0
 	 * @param tableName table to run the SELECT * from
 	 * @return ResultSet, the set of results for this query.
 	 * @throws SQLException if query fails.
