@@ -7,9 +7,9 @@ Current Status
 
 Needs Completion/To Do list:
 ----------------------------
-__Aiming to have main functionality complete within week of April 6__
 
-__Aiming to have secondary functionality complete within week of April 13__
+
+__Aiming to have main functionality complete within week of April 6__
 
 * Main Functionality:
 
@@ -22,6 +22,8 @@ __Aiming to have secondary functionality complete within week of April 13__
     * Add Vehicle purchasing system (manager needs to be able to add vehicles to database)
     * Add Employee system (employees should be created/removed from database)
     * Add Customer system (customers should be able to look up vehicles from web)
+
+__Aiming to have secondary functionality complete within week of April 13__
 
 * Secondary Functionality:
     * Manager's ability to sell vehicles
