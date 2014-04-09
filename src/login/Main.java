@@ -6,17 +6,17 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
+import login.LoginController;
 
+import login.LoginController;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("loginScreen.fxml"));
-			Scene scene = new Scene(root,600, 400);
-			primaryStage.setTitle("CRS");
-			primaryStage.setResizable(false); //don't let use resize the window
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			
+		    LoginController loginController = new LoginController();
+		    loginController.launchLogingController(primaryStage);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
