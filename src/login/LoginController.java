@@ -19,7 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import security.DBSecurity;
 import databaseManagement.Query;
-import manager.ManagerController;
+//import manager.ManagerController;
 /**
  * Controller class to handle all two button events from the 
  * Login form (namely the login button and the cancel button).
@@ -40,7 +40,7 @@ public class LoginController implements Initializable{
 	@FXML
 	private PasswordField passwd;
 	
-	private ManagerController manager;
+	//private ManagerController manager;
 	 private Parent parent;
 	    private Scene scene;
 	    private Stage stage;
@@ -110,8 +110,8 @@ public class LoginController implements Initializable{
 					System.out.println("Yes");
 				}
 				if(empType.equalsIgnoreCase("manager")){
-					manager = new ManagerController();
-					manager.redirectHome(stage);
+//					manager = new ManagerController();
+//					manager.redirectHome(stage);
 				}
 			}
 			
