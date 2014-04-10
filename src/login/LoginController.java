@@ -21,7 +21,11 @@ import javafx.stage.Stage;
 
 import security.DBSecurity;
 import databaseManagement.Query;
+
 import ui.AlertBox;
+
+
+//import manager.ManagerController;
 
 /**
  * Controller class to handle all two button events from the 
@@ -47,9 +51,13 @@ public class LoginController implements Initializable{
 	@FXML
 	private Label missingPwd;
 	
-	private Parent parent;
-	private Scene scene;
-	private Stage stage;
+
+	//private ManagerController manager;
+	 private Parent parent;
+	    private Scene scene;
+	    private Stage stage;
+	
+
 	
 	/**
 	 * Constructor for the LoginController.
@@ -130,7 +138,9 @@ public class LoginController implements Initializable{
 			{
 			    System.out.println("Password Correct!");
 				System.out.println("The empType is : " + empType);
+
 				switchScreen(empType);
+
 			}
 			
 		} catch (SQLException e)
