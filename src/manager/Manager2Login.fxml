@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<?import limitTextFeild.*?>
+
+<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <Text fill="WHITE" text="Welcome" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="0" />
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="+Infinity" minWidth="600.0" prefWidth="1077.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="20.0" vgrow="NEVER" />
+    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+  <TabPane prefHeight="800.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+    <tabs>
+      <Tab text="Generate Report">
+        <content>
+          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <children>
+              <Label layoutX="18.0" layoutY="19.0" text="Select Report Type" />
+              <ComboBox layoutX="129.0" layoutY="17.0" prefHeight="21.0" prefWidth="105.0" promptText="select">
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Daily Rental" />
+                    <String fx:value="Weekly Rental" />
+                    <String fx:value="Daily Return" />
+                    <String fx:value="Weekly Return" />
+                  </FXCollections>
+                </items>
+              </ComboBox>
+            </children>
+          </AnchorPane>
+        </content>
+      </Tab>
+      <Tab fx:id="add" text="Add Vehicle">
+        <content>
+          <AnchorPane id="Content" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="1077.0">
+            <children>
+              <Label layoutX="17.0" layoutY="27.0" text="Vehicle ID" />
+              <RestrictiveTextField id="VehicleID" fx:id="vehicleID" layoutX="100.0" layoutY="21.0" prefWidth="200.0" />
+              <Label layoutX="17.0" layoutY="69.0" text="Vehicle Model" />
+              <TextField fx:id="model" layoutX="100.0" layoutY="66.0" prefWidth="200.0" promptText="Vehicle Model" />
+              <Label layoutX="17.0" layoutY="117.0" text="Vehicle Type" />
+              <Label layoutX="400.0" layoutY="24.0" text="Plate Number" />
+              <TextField id="Plate" fx:id="plate" layoutX="496.0" layoutY="24.0" prefWidth="200.0" />
+              <Label layoutX="400.0" layoutY="69.0" text="Make" />
+              <TextField fx:id="make" layoutX="496.0" layoutY="63.0" prefWidth="200.0" />
+              <Button id="addVehicle" layoutX="579.0" layoutY="200.0" mnemonicParsing="false" onAction="#addVehicle" prefWidth="117.0" text="Add Vehicle" />
+              <ComboBox fx:id="type" layoutX="100.0" layoutY="113.0"  prefHeight="21.0" prefWidth="105.0" promptText="select">
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Car" />
+                    <String fx:value="Truck" />
+                  </FXCollections>
+                </items>
+              </ComboBox>
+              <ComboBox id="type" fx:id="category" layoutX="486.0" layoutY="102.0" prefHeight="21.0" prefWidth="105.0" promptText="select">
+                <items>
+                  <FXCollections fx:factory="observableArrayList" />
+                </items>
+              </ComboBox>
+            </children>
+          </AnchorPane>
+        </content>
+      </Tab>
+      <Tab text="Vehicle List">
+        <content>
+          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <children>
+              <Button layoutX="317.0" layoutY="185.0" mnemonicParsing="false" text="Sell Vehicle" />
+              <Button layoutX="573.0" layoutY="185.0" mnemonicParsing="false" text="Remove Vehicle" />
+              <Button layoutX="434.0" layoutY="185.0" mnemonicParsing="false" text="Update Vehicle" />
+              <Label layoutX="14.0" layoutY="37.0" text="Vehicle ID" />
+              <TextField layoutX="94.0" layoutY="34.0" prefWidth="200.0" />
+              <Label layoutX="389.0" layoutY="35.0" text="Vehicle Model" />
+              <TextField layoutX="481.0" layoutY="32.0" prefWidth="200.0" />
+            </children>
+          </AnchorPane>
+        </content>
+      </Tab>
+    </tabs>
+  </TabPane>
+  <stylesheets>
+    <URL value="@style.css" />
+  </stylesheets>
+</GridPane>
