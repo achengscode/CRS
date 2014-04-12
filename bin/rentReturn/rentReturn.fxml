@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" minWidth="-Infinity" prefHeight="315.0" prefWidth="1306.0" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
-  <Text text="Welcome" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" minWidth="-Infinity" prefHeight="385.0" prefWidth="1306.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <Text fill="WHITE" text="Welcome" GridPane.columnIndex="0" GridPane.rowIndex="0" />
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1376.0" minWidth="600.0" prefWidth="1077.0" />
   </columnConstraints>
@@ -24,11 +24,11 @@
               <HBox id="HBox" alignment="CENTER" layoutX="36.0" layoutY="47.0" spacing="5.0" />
               <HBox id="HBox" alignment="CENTER" layoutX="15.0" layoutY="6.0" spacing="5.0" />
               <HBox id="HBox" alignment="CENTER" layoutX="368.0" layoutY="220.0" spacing="5.0" />
-              <Button fx:id="Pay" layoutX="135.0" layoutY="234.0" minHeight="15.3104248046875" mnemonicParsing="false" prefHeight="22.000099999997474" prefWidth="90.0" text="Payment" />
-              <Button fx:id="Cancel" cancelButton="true" layoutX="1185.0" layoutY="231.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="22.0" text="Cancel" />
-              <Button fx:id="addcustomer" layoutX="574.0" layoutY="234.0" mnemonicParsing="false" text="New Customer" />
+              <Button fx:id="Pay" layoutX="135.0" layoutY="291.0" minHeight="15.3104248046875" mnemonicParsing="false" prefHeight="22.000099999997474" prefWidth="90.0" text="Payment" />
+              <Button fx:id="Cancel" cancelButton="true" layoutX="1185.0" layoutY="288.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="22.0" text="Cancel" />
+              <Button fx:id="addcustomer" layoutX="574.0" layoutY="291.0" mnemonicParsing="false" text="New Customer" />
               <Group id="Group" layoutX="12.0" layoutY="-4.0" />
-              <SplitPane dividerPositions="0.6179245283018868" focusTraversable="true" layoutX="34.0" layoutY="12.0" orientation="VERTICAL" prefHeight="214.0" prefWidth="286.0">
+              <SplitPane dividerPositions="0.5961538461538461" focusTraversable="true" layoutX="34.0" layoutY="12.0" orientation="VERTICAL" prefHeight="262.0" prefWidth="286.0">
                 <items>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="143.0" prefWidth="295.0">
                     <children>
@@ -37,16 +37,16 @@
                           <ColorAdjust />
                         </effect>
                       </Text>
-                      <Group id="Group" layoutX="14.0" layoutY="25.0">
+                      <Group id="Group" layoutX="14.0" layoutY="25.0" scaleX="1.0" scaleY="1.0">
                         <children>
                           <TextField fx:id="type" editable="false" layoutX="145.0" layoutY="0.0" prefWidth="118.0" />
-                          <TextField fx:id="vehicleid" editable="false" layoutX="145.0" layoutY="44.0" prefWidth="118.0" />
-                          <TextField fx:id="date" editable="false" layoutX="145.0" layoutY="66.0" prefWidth="118.0" />
-                          <TextField fx:id="model" editable="false" layoutX="145.0" layoutY="22.0" prefWidth="118.0" />
+                          <TextField fx:id="vehicleid" editable="false" layoutX="145.0" layoutY="58.0" prefWidth="118.0" />
+                          <TextField fx:id="date" editable="false" layoutX="145.0" layoutY="87.0" prefWidth="118.0" />
+                          <TextField fx:id="model" editable="false" layoutX="145.0" layoutY="29.0" prefWidth="118.0" />
                           <Text layoutX="0.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" />
-                          <Text layoutX="0.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Model" />
-                          <Text layoutX="0.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehicle ID" />
-                          <Text layoutX="0.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" />
+                          <Text layoutX="0.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Model" />
+                          <Text layoutX="0.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehicle ID" />
+                          <Text layoutX="0.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" />
                         </children>
                       </Group>
                     </children>
@@ -57,8 +57,8 @@
                         <children>
                           <Text layoutX="0.0" layoutY="-1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Per Day" />
                           <TextField fx:id="calculateprice" editable="false" layoutX="152.0" layoutY="-17.0" prefWidth="118.0" />
-                          <Text layoutX="0.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Per Week" />
-                          <TextField fx:id="weeklyprice" editable="false" layoutX="152.0" layoutY="5.0" prefWidth="118.0" />
+                          <Text layoutX="0.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Per Week" />
+                          <TextField fx:id="weeklyprice" editable="false" layoutX="152.0" layoutY="12.0" prefWidth="118.0" />
                         </children>
                       </Group>
                       <Text layoutX="7.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price" />
@@ -66,36 +66,36 @@
                   </AnchorPane>
                 </items>
               </SplitPane>
-              <Button fx:id="updateButton" disable="true" layoutX="477.0" layoutY="234.0" mnemonicParsing="false" prefWidth="90.0" text="Update" visible="true" />
-              <Group id="Group" layoutX="919.0" layoutY="42.0">
+              <Button fx:id="updateButton" disable="true" layoutX="477.0" layoutY="291.0" mnemonicParsing="false" prefWidth="90.0" text="Update" visible="true" />
+              <Group id="Group" layoutX="919.0" layoutY="45.0">
                 <children>
-                  <RadioButton fx:id="phoneRadButton" layoutX="0.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleEnableRadPhone" selected="true" text="">
+                  <RadioButton fx:id="phoneRadButton" layoutX="0.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleEnableRadPhone" selected="true" text="">
                     <toggleGroup>
                       <ToggleGroup fx:id="search_x0" />
                     </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="nameRadButton" layoutX="0.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleEnableRadName" text="" toggleGroup="$search_x0" />
+                  <RadioButton fx:id="nameRadButton" layoutX="0.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleEnableRadName" text="" toggleGroup="$search_x0" />
                 </children>
               </Group>
               <Text layoutX="949.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number" />
-              <Text layoutX="949.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname" />
+              <Text layoutX="949.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname" />
               <TextField id="phonenum" fx:id="searchPhone" layoutX="1055.0" layoutY="43.0" prefWidth="126.0" />
-              <TextField fx:id="searchName" disable="true" layoutX="1055.0" layoutY="66.0" prefWidth="126.0" />
+              <TextField fx:id="searchName" disable="true" layoutX="1055.0" layoutY="73.0" prefWidth="126.0" />
               <Button id="search" fx:id="customersearch" layoutX="1018.0" layoutY="107.0" mnemonicParsing="false" onAction="#handleSearchCustomerButton" text="Search" />
               <Text layoutX="919.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Customer By" />
-              <SplitPane fx:id="CustomerInfo" dividerPositions="0.5188679245283019" focusTraversable="true" layoutX="410.0" layoutY="12.0" orientation="VERTICAL" prefHeight="214.0" prefWidth="359.0">
+              <SplitPane fx:id="CustomerInfo" dividerPositions="0.5135135135135135" focusTraversable="true" layoutX="410.0" layoutY="12.0" orientation="VERTICAL" prefHeight="261.0" prefWidth="359.0">
                 <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="106.0" prefWidth="356.0">
                     <children>
                       <Text layoutX="6.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Information" />
-                      <TextField id="name" fx:id="displayLname" editable="false" layoutX="89.0" layoutY="53.0" onKeyPressed="#handleEnableUpdate" prefWidth="96.6240234375" />
-                      <Text layoutX="14.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname" />
+                      <TextField id="name" fx:id="displayLname" editable="false" layoutX="90.0" layoutY="60.0" onKeyPressed="#handleEnableUpdate" prefWidth="96.6240234375" />
+                      <Text layoutX="13.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname" />
                       <TextField id="id" fx:id="displayId" editable="false" layoutX="294.0" layoutY="31.0" prefWidth="40.26953125" />
-                      <TextField fx:id="displayPhone" editable="false" layoutX="89.0" layoutY="31.0" onKeyPressed="#handleEnableUpdate" prefWidth="96.6240234375" />
+                      <TextField fx:id="displayPhone" editable="false" layoutX="90.0" layoutY="31.0" onKeyPressed="#handleEnableUpdate" prefWidth="96.6240234375" />
                       <Text layoutX="14.0" layoutY="47.0" scaleX="1.0" scaleY="0.9999999999563324" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone" />
-                      <Label layoutX="14.0" layoutY="77.0" text="Firstname" />
+                      <Label layoutX="13.0" layoutY="91.0" text="Firstname" />
                       <Label layoutX="194.0" layoutY="34.0" text="Customer Id" />
-                      <TextField fx:id="displayFname" editable="false" layoutX="89.0" layoutY="77.0" onKeyPressed="#handleEnableUpdate" prefWidth="97.0" />
+                      <TextField fx:id="displayFname" editable="false" layoutX="90.0" layoutY="91.0" onKeyPressed="#handleEnableUpdate" prefWidth="97.0" />
                     </children>
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -103,12 +103,12 @@
                       <Text layoutX="8.0" layoutY="19.0" scaleX="1.0" scaleY="0.9999981287599352" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" />
                       <TextField id="address" fx:id="displayStreet" editable="false" layoutX="89.0" layoutY="25.0" onKeyPressed="#handleEnableUpdate" prefHeight="21.0" prefWidth="247.99990000000253" />
                       <Label layoutX="14.0" layoutY="27.0" text="Street" />
-                      <Label layoutX="14.0" layoutY="50.0" text="City" />
-                      <TextField fx:id="displayCity" editable="false" layoutX="90.0" layoutY="47.0" onKeyPressed="#handleEnableUpdate" prefWidth="126.0" />
-                      <Label layoutX="221.0" layoutY="50.0" text="Province" />
-                      <TextField fx:id="displayProvince" editable="false" layoutX="284.0" layoutY="46.0" onKeyPressed="#handleEnableUpdate" prefWidth="52.28564453125" />
-                      <Label layoutX="15.0" layoutY="72.0" text="P. Code" />
-                      <TextField fx:id="displayPcode" editable="false" layoutX="89.0" layoutY="69.0" onKeyPressed="#handleEnableUpdate" prefWidth="248.0" />
+                      <Label layoutX="13.0" layoutY="58.0" text="City" />
+                      <TextField fx:id="displayCity" editable="false" layoutX="89.0" layoutY="55.0" onKeyPressed="#handleEnableUpdate" prefWidth="126.0" />
+                      <Label layoutX="220.0" layoutY="58.0" text="Province" />
+                      <TextField fx:id="displayProvince" editable="false" layoutX="283.0" layoutY="54.0" onKeyPressed="#handleEnableUpdate" prefWidth="52.28564453125" />
+                      <Label layoutX="15.0" layoutY="86.0" text="P. Code" />
+                      <TextField fx:id="displayPcode" editable="false" layoutX="90.0" layoutY="84.0" onKeyPressed="#handleEnableUpdate" prefWidth="246.0" />
                     </children>
                   </AnchorPane>
                 </items>
@@ -157,8 +157,8 @@
     </tabs>
   </TabPane>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" vgrow="NEVER" />
-    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="16.0" minHeight="10.0" prefHeight="16.0" vgrow="NEVER" />
+    <RowConstraints maxHeight="369.0" minHeight="10.0" prefHeight="369.0" vgrow="SOMETIMES" />
   </rowConstraints>
   <stylesheets>
     <URL value="@application.css" />
