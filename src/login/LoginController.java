@@ -52,6 +52,7 @@ public class LoginController implements Initializable {
 	private Scene scene;
 	private Stage stage;
 	
+	private ManagerController manager;
 	/**
 	 * Constructor for the LoginController.
 	 * Loads the loginScreen onto the stage.

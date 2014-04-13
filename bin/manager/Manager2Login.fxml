@@ -47,7 +47,7 @@
               <Label layoutX="25.0" layoutY="24.0" text="Vehicle ID" />
               <TextField id="VehicleID" fx:id="vehicleID" layoutX="158.0" layoutY="24.0" prefWidth="200.0" />
               <Label layoutX="25.0" layoutY="85.0" text="Vehicle Model" />
-              <TextField fx:id="model" layoutX="158.0" layoutY="82.0" prefWidth="200.0" promptText="Vehicle Model" />
+              <TextField fx:id="model" layoutX="158.0" layoutY="82.0" prefWidth="200.0" promptText="" />
               <Label layoutX="25.0" layoutY="142.0" text="Vehicle Type" />
               <Label layoutX="418.0" layoutY="24.0" text="Plate Number" />
               <TextField id="Plate" fx:id="plate" layoutX="496.0" layoutY="24.0" prefWidth="200.0" />
