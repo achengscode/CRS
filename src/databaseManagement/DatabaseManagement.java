@@ -36,7 +36,8 @@ public class DatabaseManagement
 	{
 		DriverManager.registerDriver(new Driver()); //register the driver class
 		//create the connection to the database.
-		dbCon = DriverManager.getConnection("jdbc:mysql://localhost/crs_database", "root", "");
+		dbCon = DriverManager.getConnection("jdbc:mysql://www.sourcesixsoftware.com/crs_database", "crsAdmin", 
+				"e=mc^2");
 	}
 
 	/**

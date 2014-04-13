@@ -107,4 +107,51 @@ public class Query {
 		ResultSet results = dbStatement.executeQuery("SELECT * FROM " + tableName);
 		return results;
 	}
+	
+	public static void autoCommitOn() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+		
+		
+			dbConn.setAutoCommit(true);
+		
+	}
+	
+	public static void autoCommitOff() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+		
+		
+			dbConn.setAutoCommit(false);
+		
+	}
+	
+	
+	public static void commit() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+		
+		
+			dbConn.commit();
+		
+		
+	}
+	
+	public static void rollback() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+		
+		
+			dbConn.rollback();
+		
+		
+	}
 }

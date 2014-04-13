@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
-<?import limitTextFeild.*?>
+<!--  <?import limitTextFeild.*?> -->
 
 <GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <Text fill="WHITE" text="Welcome" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="0" />
@@ -42,19 +42,19 @@
       </Tab>
       <Tab fx:id="add" text="Add Vehicle">
         <content>
-          <AnchorPane id="Content" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="1077.0">
+          <AnchorPane id="Content" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0" prefWidth="1077.0">
             <children>
-              <Label layoutX="17.0" layoutY="27.0" text="Vehicle ID" />
-              <RestrictiveTextField id="VehicleID" fx:id="vehicleID" layoutX="100.0" layoutY="21.0" prefWidth="200.0" />
-              <Label layoutX="17.0" layoutY="69.0" text="Vehicle Model" />
-              <TextField fx:id="model" layoutX="100.0" layoutY="66.0" prefWidth="200.0" promptText="Vehicle Model" />
-              <Label layoutX="17.0" layoutY="117.0" text="Vehicle Type" />
-              <Label layoutX="400.0" layoutY="24.0" text="Plate Number" />
+              <Label layoutX="25.0" layoutY="24.0" text="Vehicle ID" />
+              <TextField id="VehicleID" fx:id="vehicleID" layoutX="158.0" layoutY="24.0" prefWidth="200.0" />
+              <Label layoutX="25.0" layoutY="85.0" text="Vehicle Model" />
+              <TextField fx:id="model" layoutX="158.0" layoutY="82.0" prefWidth="200.0" promptText="Vehicle Model" />
+              <Label layoutX="25.0" layoutY="142.0" text="Vehicle Type" />
+              <Label layoutX="418.0" layoutY="24.0" text="Plate Number" />
               <TextField id="Plate" fx:id="plate" layoutX="496.0" layoutY="24.0" prefWidth="200.0" />
-              <Label layoutX="400.0" layoutY="69.0" text="Make" />
-              <TextField fx:id="make" layoutX="496.0" layoutY="63.0" prefWidth="200.0" />
-              <Button id="addVehicle" layoutX="579.0" layoutY="200.0" mnemonicParsing="false" onAction="#addVehicle" prefWidth="117.0" text="Add Vehicle" />
-              <ComboBox fx:id="type" layoutX="100.0" layoutY="113.0"  prefHeight="21.0" prefWidth="105.0" promptText="select">
+              <Label layoutX="418.0" layoutY="91.0" prefWidth="37.0" text="Make" />
+              <TextField fx:id="make" layoutX="496.0" layoutY="82.0" prefWidth="200.0" />
+              <Button id="addVehicle" layoutX="579.0" layoutY="321.0" mnemonicParsing="false" onAction="#addVehicle" prefWidth="117.0" text="Add Vehicle" />
+              <ComboBox fx:id="type" layoutX="158.0" layoutY="133.0" prefHeight="22.0" prefWidth="105.0" promptText="select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Car" />
@@ -62,11 +62,26 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <ComboBox id="type" fx:id="category" layoutX="486.0" layoutY="102.0" prefHeight="21.0" prefWidth="105.0" promptText="select">
+              <ComboBox id="type" fx:id="category" layoutX="491.0" layoutY="134.0" prefHeight="21.0" prefWidth="105.0" promptText="select">
                 <items>
                   <FXCollections fx:factory="observableArrayList" />
                 </items>
               </ComboBox>
+              <Label layoutX="418.0" layoutY="139.0" text="Category" />
+              <TextField id="make" fx:id="manufacturing" layoutX="158.0" layoutY="195.0" prefWidth="200.0" />
+              <Label layoutX="25.0" layoutY="201.0" text="Year of Manufacturing" />
+              <TextField id="make" fx:id="color" layoutX="496.0" layoutY="193.0" prefWidth="200.0" />
+              <Label layoutX="418.0" layoutY="193.0" text="Color" />
+              <Label fx:id="idLabel" layoutX="158.0" layoutY="46.0" text="Vehicle ID must be provided" textFill="RED" visible="false" />
+              <Label fx:id="plateLabel" layoutX="496.0" layoutY="49.0" text="Plate Number must be provided" textFill="RED" visible="false" />
+              <Label fx:id="modelLabel" layoutX="158.0" layoutY="104.0" text="Vehicle Model must be provided" textFill="RED" visible="false" />
+              <Label fx:id="makeLabel" layoutX="496.0" layoutY="107.0" text="Make should be provided" textFill="RED" visible="false" />
+              <Label fx:id="typeLabel" layoutX="158.0" layoutY="152.0" text="Please Select a Type" textFill="RED" visible="false" />
+              <Label fx:id="categoryLabel" layoutX="491.0" layoutY="160.0" text="Please Select a Category" textFill="RED" visible="false" />
+              <Label fx:id="yearLabel" layoutX="154.0" layoutY="226.0" text="Please provide a Year" textFill="RED" visible="false" />
+              <Label fx:id="numberLabel" layoutX="154.0" layoutY="229.0" text="Year must be a number" textFill="RED" visible="false" />
+              <Label fx:id="colorLabel" layoutX="496.0" layoutY="223.0" text="Please provide a Color" textFill="RED" visible="false" />
+              <Label fx:id="idInvalid" layoutX="158.0" layoutY="46.0" text="Invalid Vehicle ID" textFill="RED" visible="false" />
             </children>
           </AnchorPane>
         </content>
