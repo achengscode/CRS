@@ -91,11 +91,11 @@ public class ClerkScreenController implements Initializable{
 	
 	final ObservableList<String> carCategory =
             FXCollections.observableArrayList(
-            		"Economy","Compact","Mid-size","Standard","Full-size","Premium","Luxury","SUV","Van"
+            		"Economy","Compact","Mid-size","Standard","Full-size","Premium","Luxury","SUV","Van", "All"
             );
 	final ObservableList<String> truckCategory =
 	            FXCollections.observableArrayList(
-	            		"24-foot","15-foot","12-foot","box Truck","Cargo Van");
+	            		"24-foot","15-foot","12-foot","box Truck","Cargo Van", "All");
 	    
 	
 	
@@ -163,6 +163,7 @@ public class ClerkScreenController implements Initializable{
 		 
 		 
 		type.setItems(typeCategory);
+		
 		System.out.println("Hello");
 		type.getSelectionModel().selectedIndexProperty()
 				.addListener(new ChangeListener() {
@@ -195,19 +196,33 @@ public class ClerkScreenController implements Initializable{
 	{
 		//database call to search for customer info in database
 		// so far only search by phone number is implemented
+		if (type.getValue() == null || category.getValue() == null)
+			return;
 		try {
 			
 			
-			String phone = "111";
+			System.out.println("type: " + type.getValue());
+			System.out.println("category: " + category.getValue());
 			ResultSet result;
 			
 			// SQL Query must be adjusted depending on the search parameter given (phone or lastname)
-			if (true)
+			if (type.getValue() != "All")
 			{
-				result = Query.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour FROM Vehicle_Rent V, Vehicle_Category C WHERE V.vehicleID = C.vehicleID");
+				if (category.getValue() != "All")
+					result = Query.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour FROM Vehicle_Rent V, Vehicle_Category C WHERE V.vehicleID = C.vehicleID and V.vehicle_type = '" + type.getValue() + "'  AND C.vehicle_category = '" + category.getValue() + "'" );
+				else
+					result = Query.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour FROM Vehicle_Rent V, Vehicle_Category C WHERE V.vehicleID = C.vehicleID and V.vehicle_type = '" + type.getValue() + "'");
 			}
 			
+			else
+			{
+				if (category.getValue() != "All")
+					result = Query.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour FROM Vehicle_Rent V, Vehicle_Category C WHERE V.vehicleID = C.vehicleID  AND C.vehicle_category = '" + category.getValue() + "'");
+				else
+					result = Query.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour FROM Vehicle_Rent V, Vehicle_Category C WHERE V.vehicleID = C.vehicleID");
+			}
 			
+			resultList.clear();
 			while(result.next())
 		    {
 				VehicleSearchRow tuple = new VehicleSearchRow();
