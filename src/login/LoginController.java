@@ -14,12 +14,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+
 import security.DBSecurity;
 import databaseManagement.Query;
-import manager.ManagerController;
+import ui.AlertBox;
+
 /**
  * Controller class to handle all two button events from the 
  * Login form (namely the login button and the cancel button).
@@ -39,33 +42,45 @@ public class LoginController implements Initializable{
 	private TextField userName;
 	@FXML
 	private PasswordField passwd;
+	@FXML
+	private Label missingName;
+	@FXML
+	private Label missingPwd;
 	
-	private ManagerController manager;
-	 private Parent parent;
-	    private Scene scene;
-	    private Stage stage;
+	private Parent parent;
+	private Scene scene;
+	private Stage stage;
 	
-	
-	public LoginController() {
+	/**
+	 * Constructor for the LoginController.
+	 * Loads the loginScreen onto the stage.
+	 */
+	public LoginController() 
+	{
 	       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("loginScreen.fxml"));
-	        fxmlLoader.setController(this);
+	       fxmlLoader.setController(this);
 	        try {
 	            parent = (Parent) fxmlLoader.load();
 	            scene = new Scene(parent, 600, 400);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
-	    }
+	}
 
-	
-	 public void launchLogingController(Stage stage) {
+	/**
+	 * Loads the login page onto the stage.
+	 * @param stage
+	 */
+	 public void launchLoginController(Stage stage) 
+	 {
 	        this.stage = stage;
 	        stage.setTitle("User Login");
 	        stage.setScene(scene);
-	        stage.setResizable(true);
+	        stage.setResizable(false);
 	        stage.hide();
 	        stage.show();
-	    }
+	 }
+	 
 	//main method needed to be implemented by the controller class.
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) { 
@@ -74,6 +89,8 @@ public class LoginController implements Initializable{
 	
 	/**
 	 * Event handler for the login button.
+	 * Checks if the fields are empty and also
+	 * submits the query to the database.
 	 *  
 	 */
 	@FXML
@@ -85,10 +102,19 @@ public class LoginController implements Initializable{
 			String name = userName.getText();
 			String pwd = passwd.getText();
 			
+			//check if name and password are empty.
+			if (isFieldsEmpty(name, pwd))
+			{
+			    return;
+			}
 			//compare the name given and password with one in database.
 			//start by getting the salt.
 			ResultSet result = Query.select("SELECT pwdSalt, empPwd, empType FROM employee WHERE empID = " +"'" + name + "'");
-			result.next();
+			if (!result.next())
+			{
+			    AlertBox.show("No results found!");
+			    return;
+			}
 			String salt = result.getString(1);
 			String dbPwd = result.getString(2);
 			String empType = result.getString(3);
@@ -97,33 +123,25 @@ public class LoginController implements Initializable{
 			System.out.println("Hashed : " + hashedString);
 			if (!dbPwd.equals(hashedString))
 			{
-				System.out.println("Password Incorrect!");
+				AlertBox.show("Incorrect Password!");
+				return;
 			}
 			else
 			{
-			    // load the correct screen
-			    // create the actual session object to be used for the
-			    // rest of the application (for names and such)
-				System.out.println("Password Correct!");
+			    System.out.println("Password Correct!");
 				System.out.println("The empType is : " + empType);
-				if(empType.equalsIgnoreCase("clerk")){
-					System.out.println("Yes");
-				}
-				if(empType.equalsIgnoreCase("manager")){
-					manager = new ManagerController();
-					manager.redirectHome(stage);
-				}
+				switchScreen(empType);
 			}
 			
 		} catch (SQLException e)
 		{
-			e.printStackTrace();
+		    AlertBox.show(e.getMessage()); //if any errors occur
 		}
 	}
 	
 	/**
 	 * Event handler for the cancel/exit button
-	 * 
+	 * Exits out of the entire system.
 	 */
 	@FXML
 	private void handleCancelButton()
@@ -131,7 +149,48 @@ public class LoginController implements Initializable{
 		System.out.println("You pressed cancel!");
 		System.exit(0);
 	}
-
-
 	
+	/**
+	 * Function that switches screen to the new screen
+	 * @pre role.length > 0
+	 */
+	private void switchScreen(String role)
+	{
+	    switch(role)
+	    {
+	        //create screens here
+	        case "manager":
+	        	//manager = new ManagerController();
+				//manager.redirectHome(stage);
+	           break;
+	        case "clerk":
+	            
+	           break;
+	        case "sysadmin":
+	           break;
+	    }
+	}
+	
+	/**
+	 * Check to see if the username and password fields are empty.
+	 * @pre name.length > 0
+	 * @pre password.length > 0
+	 */
+	private boolean isFieldsEmpty(String name, String password)
+	{
+	    boolean anyMissing = false;
+	    missingName.setVisible(false);
+	    missingPwd.setVisible(false);
+	    if (name.length() == 0)
+	    {
+	        missingName.setVisible(true);
+	        anyMissing  = true;
+	    }
+	    if (password.length() == 0)
+	    {
+	        missingPwd.setVisible(true);
+	        anyMissing = true;
+	    }
+	    return anyMissing; 
+	}
 }
