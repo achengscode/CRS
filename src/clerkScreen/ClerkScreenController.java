@@ -31,7 +31,7 @@ import java.sql.ResultSet;
 
 
 /**
- * Controller class to ...
+ * Controller class to handle Clerk Screens related to Rent, Return and Reports
  * 
  * @author Ignacio Perez
  *
@@ -43,10 +43,27 @@ public class ClerkScreenController implements Initializable{
 	// Combo box declaration
 	@FXML
     private ComboBox type;
-    
     @FXML
     private ComboBox category;
-	
+	// Combo declarations to handle pick up and return dates
+    @FXML
+    private ComboBox fMonthBox;
+    @FXML
+    private ComboBox fDayBox;
+    @FXML
+    private ComboBox fYearBox;
+    @FXML
+    private ComboBox fTimeBox;
+    @FXML
+    private ComboBox tMonthBox;
+    @FXML
+    private ComboBox tDayBox;
+    @FXML
+    private ComboBox tYearBox;
+    @FXML
+    private ComboBox tTimeBox;
+    
+    
     // Declaring Table and Columns
     @FXML 
     private TableView<VehicleSearchRow> resultsTable;
@@ -78,6 +95,29 @@ public class ClerkScreenController implements Initializable{
 	
 	ObservableList<VehicleSearchRow> resultList;
 	
+	// List for date comboboxes
+	final ObservableList<String> yearCategory =
+            FXCollections.observableArrayList(
+            "2014","2015"
+            );
+	
+	ObservableList<String> dayCategory =
+            FXCollections.observableArrayList(
+            "1","2","3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+            "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", 
+            "25", "26", "27", "28", "29", "30", "31"
+            );
+	final ObservableList<String> monthCategory =
+            FXCollections.observableArrayList(
+            "01","02","03","04","05", "06", "07", "08", "09", "10", "11", "12"
+            );
+	final ObservableList<String> timeCategory =
+            FXCollections.observableArrayList(
+            "01:00","02:00","03:00","04:00", "05:00", "06:00", "07:00", "08:00", 
+            "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+            "18:00", "19:00","20:00", "21:00", "22:00", "23:00", "24:00"
+            );
+	// Vehicle selection comboboxes' lists.
     ObservableList<String> typeCategory =
             FXCollections.observableArrayList(
             "Car",
@@ -185,6 +225,16 @@ public class ClerkScreenController implements Initializable{
 						}
 					}
 				});
+		
+		// Populating Date comboboxes with FIXED values
+		fYearBox.setItems(yearCategory);
+		tYearBox.setItems(yearCategory);
+		fDayBox.setItems(dayCategory);
+		tDayBox.setItems(dayCategory);
+		fMonthBox.setItems(monthCategory);
+		tMonthBox.setItems(monthCategory);
+		fTimeBox.setItems(timeCategory);
+		tTimeBox.setItems(timeCategory);
 	}
 
 	/**
@@ -233,7 +283,7 @@ public class ClerkScreenController implements Initializable{
 		    	tuple.setCategory(result.getString(4));
 		    	tuple.setMake(result.getString(5));
 		    	tuple.setModel(result.getString(6));
-		    	tuple.setYear(result.getString(7));
+		    	tuple.setYear(result.getString(7).substring(0, 4));
 		    	tuple.setColour(result.getString(8));
 		    	
 		    	resultList.add(tuple);
