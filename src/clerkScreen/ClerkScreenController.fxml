@@ -11,22 +11,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="800.0" prefWidth="1439.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="719.0" prefWidth="1439.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <Text fill="WHITE" styleClass="null" text="Welcome" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.rowIndex="0" />
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1376.0" minWidth="800.0" prefWidth="1077.0" />
   </columnConstraints>
   <TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="472.0" prefWidth="1376.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="26.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
     <tabs>
-      <Tab text="Home">
+      <Tab text="Rent">
         <content>
           <AnchorPane id="Content" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="568.0" prefWidth="1376.0">
             <children>
               <Text layoutX="599.0" layoutY="27.0" scaleX="1.0" scaleY="1.0000065314451725" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to CRS" />
-              <Button id="Rent" fx:id="rentButton" layoutX="548.0" layoutY="389.0" mnemonicParsing="false" text="Rent" />
-              <Button fx:id="Return" layoutX="627.0" layoutY="389.0" mnemonicParsing="false" text="Return" />
+              <Button id="Return" fx:id="nextButton" disable="true" layoutX="768.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleNextButton" text="Next" />
               <Group id="Group" layoutX="74.0" layoutY="47.0" scaleX="1.0" scaleY="1.0" />
-              <TableView fx:id="resultsTable" editable="true" layoutX="380.0" layoutY="61.0" prefHeight="299.0" prefWidth="930.0">
+              <TableView fx:id="resultsTable" editable="true" layoutX="380.0" layoutY="61.0" onMouseClicked="#handleClickTable" prefHeight="299.0" prefWidth="930.0">
                 <columns>
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="172.0" text="Vehicle ID" fx:id="vehicleIDCol" />
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="104.0" text="Lic. Plate" fx:id="licPlateCol" />
@@ -42,7 +41,7 @@
               <Text layoutX="14.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" />
               <Label layoutX="50.0" layoutY="166.0" text="Pickup" />
               <Label layoutX="229.0" layoutY="166.0" text="Return" />
-              <ComboBox id="typeCombo" fx:id="type" layoutX="165.0" layoutY="61.0" prefWidth="107.90380859375" promptText="Select">
+              <ComboBox id="typeCombo" fx:id="type" layoutX="165.0" layoutY="61.0" onAction="#handleCombo" prefWidth="107.90380859375" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -52,7 +51,7 @@
                 </items>
               </ComboBox>
               <Label layoutX="14.0" layoutY="101.0" text="Category" />
-              <ComboBox id="categoryCombo" fx:id="category" layoutX="165.0" layoutY="98.0" prefWidth="108.0" promptText="Select">
+              <ComboBox id="categoryCombo" fx:id="category" layoutX="165.0" layoutY="98.0" onAction="#handleCombo" prefWidth="108.0" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -61,7 +60,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <Button fx:id="searchButton" defaultButton="false" disable="false" layoutX="177.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
+              <Button fx:id="searchButton" defaultButton="false" disable="true" layoutX="177.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
               <Label layoutX="14.0" layoutY="199.0" text="Month" />
               <Label layoutX="14.0" layoutY="227.0" text="Day" />
               <Label layoutX="15.0" layoutY="257.0" text="Year" />
@@ -92,7 +91,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <Button cancelButton="true" layoutX="1257.0" layoutY="389.0" mnemonicParsing="false" text="Exit" />
+              <Button fx:id="exitButton" cancelButton="true" layoutX="1257.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleExitButton" text="Exit" />
               <Label layoutX="15.0" layoutY="287.0" text="Time" />
               <ComboBox fx:id="fTimeBox" layoutX="70.0" layoutY="284.0" promptText="Select">
                 <items>
@@ -143,8 +142,18 @@
                   </FXCollections>
                 </items>
               </ComboBox>
+              <Label fx:id="notFoundMsg" disable="false" layoutX="273.0" layoutY="389.0" text="No Results Found!" textFill="RED" visible="false">
+                <font>
+                  <Font name="System Bold" size="18.0" />
+                </font>
+              </Label>
             </children>
           </AnchorPane>
+        </content>
+      </Tab>
+      <Tab text="Return">
+        <content>
+          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
         </content>
       </Tab>
       <Tab text="Daily Report">
