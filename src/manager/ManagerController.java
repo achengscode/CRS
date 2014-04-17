@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,14 +14,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import dataHold.ReportRow;
 
 
 
@@ -28,6 +36,7 @@ import java.util.ResourceBundle;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
+import dataHold.ReportRow;
 import databaseManagement.Query;
 import validator.Validator;
 import limitTextFeild.RestrictiveTextField;
@@ -121,6 +130,25 @@ public class ManagerController implements Validator,Initializable {
 	@FXML
     private ComboBox category;
     
+    // Declaring Table and Columns
+    @FXML 
+    private TableView<ReportRow> reportTable;
+    @FXML 
+    private TableColumn categoryyCol;
+    @FXML 
+    private TableColumn numberCol;
+    @FXML 
+    private TableColumn sumCol;
+    
+    @FXML
+    private ComboBox selectReport;
+    @FXML
+    private Button generate;
+    @FXML
+    private TextField sum;
+    @FXML
+    private Label reportLabel;
+    ObservableList<ReportRow> reportList;
     ObservableList<String> categories =
             FXCollections.observableArrayList(
             "Car",
@@ -148,7 +176,7 @@ public class ManagerController implements Validator,Initializable {
        
        
             parent = (Parent) fxmlLoader.load();
-            scene = new Scene(parent, 800, 400);
+            scene = new Scene(parent, 800, 600);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -426,8 +454,105 @@ public class ManagerController implements Validator,Initializable {
                     
                  }
              }
-                 });
+     
+		 });
+		 			
+		 reportList = FXCollections.observableArrayList();
+		 categoryyCol.setCellValueFactory(
+				    new PropertyValueFactory<ReportRow,String>("category")
+				);
+		 numberCol.setCellValueFactory(
+				    new PropertyValueFactory<ReportRow,String>("count")
+				);
+		 sumCol.setCellValueFactory(
+				    new PropertyValueFactory<ReportRow,String>("sum")
+				);
+		 sumCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		 sumCol.setOnEditCommit(
+				    new EventHandler<CellEditEvent<ReportRow, String>>() {
+				        @Override
+				        public void handle(CellEditEvent<ReportRow, String> t) {
+				            ((ReportRow) t.getTableView().getItems().get(
+				                t.getTablePosition().getRow())
+				                ).setSum(t.getNewValue());
+				        }
+				    }
+				);
+		
+		 
+		  
+		 reportTable.setItems(reportList); 
+
 	}
-    
+
+	 public boolean checkselectReport(){
+	    	try{
+	    		selectReport.getValue().toString();
+	    		return true;
+	    	}
+	    	catch(Exception e){
+	    		 	    return false;
+	    	}
+	    }
+	 
+	@FXML
+	private void handelGenerate()
+	{
+		
+		
+		try {
+			
+			
+			ResultSet result;
+			
+			if(!checkselectReport()){
+				return;
+			}
+
+			
+			// System.out.println(selectReport.getValue().toString());
+			String select = selectReport.getValue().toString();
+			System.out.println("Value selected is :"  + select);
+			if(select.equals("Daily Rental")){
+				
+			
+result = Query.select("SELECT C.vehicle_category, count(C.vehicleID) , sum(R.totalPrice) FROM Rents R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID GROUP BY C.vehicle_category");
+			}
+			else{
+				result = Query.select("SELECT C.vehicle_category, count(C.vehicleID) , sum(R.totalPrice) FROM Rents R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID GROUP BY C.vehicle_category");
+			}
+			double total = 0;
+			reportList.clear();
+			
+			while(result.next())
+		    {
+				ReportRow tuple = new ReportRow();
+
+		    	tuple.setCategory(result.getString(1));
+		    	tuple.setCount(result.getString(2));
+		    	tuple.setSum(result.getString(3));
+		    	total = total + Double.valueOf(result.getString(3));
+		    	
+		    	
+		    	
+		    	reportList.add(tuple);
+		    	
+		    	
+		    }	
+		    System.out.println("Total value is :" + total);
+		    
+		    sum.setText(Double.toString(total));
+
+		} catch (SQLException e)
+		{
+			
+/*			displayPhone.setText("Not found!");
+			cleanCustomerInfo();
+			searchPhone.setText("");
+			searchName.setText("");*/
+			e.printStackTrace();
+		}
+	}
+
  
 }
