@@ -114,7 +114,7 @@ public class VehicleSearchRow {
     	year.set(y);
     }
     public String getColour(){
-        return type.get();
+        return colour.get();
     }
     
     public void setColour(String col){

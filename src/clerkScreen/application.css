@@ -1,10 +1,11 @@
 .pane {
  -fx-background-color:red;
 
-}
+}/*
 
 
 /*************** tab styles ******************************** */
+
 .tab-pane *.tab-header-background {
     -fx-background-color:#9fc9eb;
 }
