@@ -327,8 +327,7 @@ public class ClerkScreenController implements Initializable {
 	 */
 	@FXML
 	private void handleNextButton() {
-		System.out.println(resultsTable.getSelectionModel().getSelectedItem()
-				.getVehicleID());
+		//System.out.println(resultsTable.getSelectionModel().getSelectedItem().getVehicleID());
 		
 		RentController rent = new RentController(resultsTable.getSelectionModel().getSelectedItem());
 		rent.launchRentController(stage);
