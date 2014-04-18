@@ -28,11 +28,14 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
 import dataHold.ReportRow;
 
 
 
 
+
+import dataHold.VehicleSearchRow;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
@@ -149,6 +152,30 @@ public class ManagerController implements Validator,Initializable {
     @FXML
     private Label reportLabel;
     ObservableList<ReportRow> reportList;
+    
+    
+ // Declaring Table and Columns
+ 	@FXML
+ 	private TableView<VehicleSearchRow> resultsTable;
+ 	@FXML
+ 	private TableColumn vehicleIDCol;
+ 	@FXML
+ 	private TableColumn licPlateCol;
+ 	@FXML
+ 	private TableColumn typeCol;
+ 	@FXML
+ 	private TableColumn categoryCol;
+ 	@FXML
+ 	private TableColumn makeCol;
+ 	@FXML
+ 	private TableColumn modelCol;
+ 	@FXML
+ 	private TableColumn yearCol;
+ 	@FXML
+ 	private TableColumn colourCol;
+ 	@FXML
+ 	private Button moveButton;
+ 	ObservableList<VehicleSearchRow> resultList;
     ObservableList<String> categories =
             FXCollections.observableArrayList(
             "Car",
@@ -478,10 +505,34 @@ public class ManagerController implements Validator,Initializable {
 				        }
 				    }
 				);
-		
+		 resultList = FXCollections.observableArrayList();
+			vehicleIDCol
+					.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+							"vehicleID"));
+			licPlateCol
+					.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+							"licPlate"));
+			typeCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+					"type"));
+			categoryCol
+					.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+							"category"));
+			makeCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+					"make"));
+			modelCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+					"model"));
+			yearCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+					"year"));
+			colourCol
+					.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+							"colour"));
+
+			resultsTable.setItems(resultList);
 		 
 		  
 		 reportTable.setItems(reportList); 
+		 
+		 
 
 	}
 
@@ -554,5 +605,46 @@ result = Query.select("SELECT C.vehicle_category, count(C.vehicleID) , sum(R.tot
 		}
 	}
 
- 
+	
+	@FXML
+	private void handleSearchButton(){
+		
+		try{
+			ResultSet result;
+			result = Query.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour "
+						+ "FROM Vehicle_Rent V, Vehicle_Category C "
+						+ "WHERE V.vehicleID = C.vehicleID");
+			
+			while (result.next()) {
+				VehicleSearchRow tuple = new VehicleSearchRow();
+
+				tuple.setVehicleID(result.getString(1));
+				tuple.setLicPlate(result.getString(2));
+				tuple.setType(result.getString(3));
+				tuple.setCategory(result.getString(4));
+				tuple.setMake(result.getString(5));
+				tuple.setModel(result.getString(6));
+				tuple.setYear(result.getString(7).substring(0, 4));
+				tuple.setColour(result.getString(8));
+				// System.out.println(result.getString(8));
+				resultList.add(tuple);
+
+			}
+	
+		}
+		catch(SQLException e){
+			System.out.println("Exception");
+			e.printStackTrace();
+		}
+	} 
+	
+	@FXML
+	private void handleClickTable() {
+		if (resultsTable.getSelectionModel().getSelectedItem() == null) {
+			// System.out.println("No row selected");
+			return;
+		}
+		// System.out.println("Row Successfully selected");
+		moveButton.setDisable(false);
+	}
 }
