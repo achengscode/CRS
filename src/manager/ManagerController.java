@@ -30,7 +30,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import dataHold.ReportRow;
-
 import dataHold.VehicleSearchRow;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
@@ -177,7 +176,55 @@ public class ManagerController implements Validator, Initializable {
 	@FXML
 	private TableColumn colourCol;
 	@FXML
+	private TableColumn listNumberCol;
+	@FXML
 	private Button moveButton;
+	@FXML
+	private Button removeButton;
+	@FXML
+	private ComboBox listVehicleType;
+	@FXML
+	private ComboBox listSearchType;
+	@FXML
+	private TextField listYear;
+	@FXML
+	private ComboBox listCategory;
+	@FXML
+	private Label listManuLabel;
+	@FXML
+	private Label listCategoryLabel;
+	@FXML
+	private Button listGetResult;
+	@FXML
+	private Label listVehicleIDLabel;
+	@FXML
+	private TextField listVehicleIDText;
+	@FXML
+	private Label listModelLabel;
+	@FXML
+	private TextField listModelText;
+	@FXML
+	private Label listMakeLabel;
+	@FXML
+	private TextField listMakeText;
+	@FXML
+	private Label listTypeLabel;
+	@FXML
+	private ComboBox listTypeComboBox;
+	@FXML
+	private Label listColorLabel;
+	@FXML
+	private TextField listColorText;
+	@FXML
+	private Label listPlateLabel;
+	@FXML
+	private TextField listPlateText;
+	@FXML
+	private Button listSearch;
+	@FXML
+	private Label listPriceLabel;
+	@FXML
+	private TextField listPriceText;
 	ObservableList<VehicleSearchRow> resultList;
 	ObservableList<String> categories = FXCollections.observableArrayList(
 			"Car", "Truck");
@@ -197,7 +244,7 @@ public class ManagerController implements Validator, Initializable {
 		try {
 
 			parent = (Parent) fxmlLoader.load();
-			scene = new Scene(parent, 800, 600);
+			scene = new Scene(parent, 1400, 600);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -503,9 +550,39 @@ public class ManagerController implements Validator, Initializable {
 		reportTable.setItems(reportList);
 
 		reportTable.getColumns().get(2).setVisible(false);
-		reportTable
-				.setColumnResizePolicy(reportTable.CONSTRAINED_RESIZE_POLICY);
-
+		reportTable.setColumnResizePolicy(reportTable.CONSTRAINED_RESIZE_POLICY);
+        initial();
+		/*resultList = FXCollections.observableArrayList();
+		vehicleIDCol
+				.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+						"vehicleID"));
+		licPlateCol
+				.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+						"licPlate"));
+		typeCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+				"type"));
+		categoryCol
+				.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+						"category"));
+		makeCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+				"make"));
+		modelCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+				"model"));
+		yearCol.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+				"year"));
+		colourCol
+				.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+						"colour"));
+		listNumberCol
+		.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+				"number"));
+		resultsTable.setItems(resultList);
+        resultsTable.setColumnResizePolicy(resultsTable.CONSTRAINED_RESIZE_POLICY);
+	  */
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void initial(){
 		resultList = FXCollections.observableArrayList();
 		vehicleIDCol
 				.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
@@ -527,9 +604,12 @@ public class ManagerController implements Validator, Initializable {
 		colourCol
 				.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
 						"colour"));
-
+		listNumberCol
+		.setCellValueFactory(new PropertyValueFactory<VehicleSearchRow, String>(
+				"number"));
 		resultsTable.setItems(resultList);
-
+        resultsTable.setColumnResizePolicy(resultsTable.CONSTRAINED_RESIZE_POLICY);
+		
 	}
 
 	public boolean checkselectReport() {
@@ -609,13 +689,140 @@ public class ManagerController implements Validator, Initializable {
 		}
 	}
 
+	private void displayVehicleRent(){
+		try {
+			setVisibleAll();
+			//setVisibleNone();
+			ResultSet result;
+			resultList.removeAll(resultList);
+			//initial();
+		    resultsTable.getItems().removeAll(resultList);
+			initial();
+		    resultList.clear();
+		    //resultsTable.setVisible(false);
+		    
+			result = Query
+					.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
+							+ "FROM Vehicle_Rent V, Vehicle_Category C "
+							+ "WHERE V.vehicleID = C.vehicleID");
+
+			while (result.next()) {
+				VehicleSearchRow tuple = new VehicleSearchRow();
+
+				tuple.setVehicleID(result.getString(1));
+				tuple.setLicPlate(result.getString(2));
+				tuple.setType(result.getString(3));
+				tuple.setCategory(result.getString(4));
+				tuple.setMake(result.getString(5));
+				tuple.setModel(result.getString(6));
+				tuple.setYear(result.getString(7).substring(0, 4));
+				tuple.setColour(result.getString(8));
+				// System.out.println(result.getString(8));
+				resultList.add(tuple);
+
+			}
+			resultsTable.getColumns().get(3).setVisible(false);
+            resultsTable.getColumns().get(8).setVisible(false);
+
+		} catch (SQLException e) {
+			System.out.println("Exception");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void setVisibleAll(){
+		resultsTable.getColumns().get(0).setVisible(true);
+        resultsTable.getColumns().get(1).setVisible(true);
+        resultsTable.getColumns().get(2).setVisible(true);
+        resultsTable.getColumns().get(3).setVisible(true);
+        resultsTable.getColumns().get(4).setVisible(true);
+        resultsTable.getColumns().get(5).setVisible(true);
+        resultsTable.getColumns().get(6).setVisible(true);
+        resultsTable.getColumns().get(7).setVisible(true);
+        resultsTable.getColumns().get(8).setVisible(true);
+		
+	}
+	
+	private void setVisibleNone(){
+		   resultsTable.getColumns().get(0).setVisible(false);
+           resultsTable.getColumns().get(1).setVisible(false);
+           resultsTable.getColumns().get(2).setVisible(false);
+           resultsTable.getColumns().get(3).setVisible(false);
+           resultsTable.getColumns().get(4).setVisible(false);
+           resultsTable.getColumns().get(5).setVisible(false);
+           resultsTable.getColumns().get(6).setVisible(false);
+           resultsTable.getColumns().get(7).setVisible(false);
+           resultsTable.getColumns().get(8).setVisible(false);
+	}
+	
+	private void setVisibleThis(int n){
+		resultsTable.getColumns().get(n).setVisible(true);
+	}
+	private void displayRentYear(int year, String category){
+		try {
+			setVisibleAll();
+			ResultSet result;
+			System.out.println("Category value is " + category);
+			resultList.clear();
+	       
+			/*result = Query
+					.select("SELECT rentCategory, count(vehicleID) "
+							+ "FROM Vehicle_Rent "
+							+ " GROUP BY rentCategory");
+			*/
+			if(category.equals("")){
+				System.out.println("Here");
+				result = Query
+						.select("SELECT C.rentCategory, count(C.vehicleID) FROM Vehicle_Rent R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.vehicle_year <  '" + year +"' GROUP BY C.rentCategory");
+			}
+			else{
+			result = Query
+					.select("SELECT C.rentCategory, count(C.vehicleID) FROM Vehicle_Rent R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.vehicle_year <  '" + year +"' and C.rentCategory = '" + category + "'GROUP BY C.rentCategory");
+			}
+			while (result.next()) {
+				VehicleSearchRow tuple = new VehicleSearchRow();
+
+				
+				tuple.setCategory(result.getString(1));
+				tuple.setNumber(result.getString(2));
+				// System.out.println(result.getString(8));
+				resultList.add(tuple);
+
+			}
+            resultsTable.getColumns().get(0).setVisible(false);
+            resultsTable.getColumns().get(1).setVisible(false);
+            resultsTable.getColumns().get(2).setVisible(false);
+            resultsTable.getColumns().get(4).setVisible(false);
+            resultsTable.getColumns().get(5).setVisible(false);
+            resultsTable.getColumns().get(6).setVisible(false);
+            resultsTable.getColumns().get(7).setVisible(false);
+		} catch (SQLException e) {
+			System.out.println("Exception");
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean checkBox(ComboBox s) {
+		try {
+			s.getValue().toString();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 	@FXML
 	private void handleSearchButton() {
-
-		try {
+        if(listVehicleType.getValue().toString().equalsIgnoreCase("For Rent")){
+        	displayVehicleRent();
+        }
+        
+		
+		/*try {
 			ResultSet result;
+			resultList.clear();
 			result = Query
-					.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour "
+					.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 							+ "FROM Vehicle_Rent V, Vehicle_Category C "
 							+ "WHERE V.vehicleID = C.vehicleID");
 
@@ -638,7 +845,89 @@ public class ManagerController implements Validator, Initializable {
 		} catch (SQLException e) {
 			System.out.println("Exception");
 			e.printStackTrace();
-		}
+		}*/
+	}
+	@FXML
+	private void handleListSearchType(){
+		System.out.println("Hello");
+		 if(!checkBox(listVehicleType)){
+	        	System.out.println("Select a type first");
+	        	return;
+	        }
+		 if(listSearchType.getValue().toString().equalsIgnoreCase("By Year")){
+			 listManuLabel.setVisible(true);
+			 listYear.setVisible(true);
+			 listCategoryLabel.setVisible(true);
+			 listCategory.setVisible(true);
+			 listGetResult.setVisible(true);
+			 
+			 listVehicleIDLabel.setVisible(false);
+			 listVehicleIDText.setVisible(false);
+			 listMakeLabel.setVisible(false);
+			 listMakeText.setVisible(false);
+			 listModelLabel.setVisible(false);
+			 listModelText.setVisible(false);
+			 listColorLabel.setVisible(false);
+			 listColorText.setVisible(false);
+			 listPlateLabel.setVisible(false);
+			 listPlateText.setVisible(false);
+			 listTypeLabel.setVisible(false);
+			 listTypeComboBox.setVisible(false);
+			 listSearch.setVisible(false);
+	
+		 }
+		 if(listSearchType.getValue().toString().equalsIgnoreCase("General")){
+			 listVehicleIDLabel.setVisible(true);
+			 listVehicleIDText.setVisible(true);
+			 listMakeLabel.setVisible(true);
+			 listMakeText.setVisible(true);
+			 listModelLabel.setVisible(true);
+			 listModelText.setVisible(true);
+			 listColorLabel.setVisible(true);
+			 listColorText.setVisible(true);
+			 listPlateLabel.setVisible(true);
+			 listPlateText.setVisible(true);
+			 listTypeLabel.setVisible(true);
+			 listTypeComboBox.setVisible(true);
+			 listSearch.setVisible(true);
+			 
+			 listManuLabel.setVisible(false);
+			 listYear.setVisible(false);
+			 listCategoryLabel.setVisible(false);
+			 listCategory.setVisible(false);
+			 listGetResult.setVisible(false);
+		 }
+		 
+	}
+	
+	@FXML
+	private void handleGetResult(){
+		 if(!checkBox(listVehicleType)){
+	        	System.out.println("Select a type");
+	        	return;
+	        }
+	        if(!checkBox(listSearchType)){
+	        	System.out.println("Select an option");
+	        	return;
+	        }
+	        if(listSearchType.getValue().toString().equalsIgnoreCase("By Year")){
+	        	if(isNull(listYear.getText())){
+	        		System.out.println("Select a year");
+	        		return;
+	        	}
+	        	if(!isInt(listYear.getText())){
+	        		System.out.println("Value should be an integer");
+	        		return;
+	        	}
+	        	int year = Integer.parseInt(listYear.getText());
+	        	if(!checkBox(listCategory)){
+	        	displayRentYear(year,"");
+	        	}
+	        	else{
+	        		String s = listCategory.getValue().toString();
+	        		displayRentYear(year, s);
+	        	}
+	        }
 	}
 
 	@FXML
@@ -649,5 +938,93 @@ public class ManagerController implements Validator, Initializable {
 		}
 		// System.out.println("Row Successfully selected");
 		moveButton.setDisable(false);
+		removeButton.setDisable(false);
 	}
-}
+	
+	@FXML
+	private void handleRemoveButton(){
+	   String vID =resultsTable.getSelectionModel().getSelectedItem().getVehicleID();	
+	   System.out.println("Vehicle id selected is : " +vID);
+	   String test = "20";
+	   try {
+			Query.autoCommitOff();
+			Query.delete("DELETE FROM Vehicle_Rent  WHERE vehicleID ='" + vID + "'");
+			//Query.delete("DELETE FROM `Vehicle_Rent`  WHERE vehicleID ='" + test + "'");
+			System.out.println("Hello");
+			// Query.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.amount) FROM RentPayment R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.dateFrom = CAST(CURRENT_TIMESTAMP () AS DATE)GROUP BY C.rentCategory");
+	        displayVehicleRent();
+			Query.commit();
+			Query.autoCommitOn();
+			System.out.println("Deleted");
+			
+		} catch (MySQLIntegrityConstraintViolationException iCV) {
+			try {
+				Query.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("Value Already Present");
+		} catch (SQLException e) {
+
+			// TODO Auto-generated catch block
+			try {
+				Query.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			e.printStackTrace();
+			System.out.println("OOPS");
+		}
+
+	}
+	  
+	@FXML
+	protected void handleMoveButton(){
+		listPriceLabel.setVisible(true);
+		listPriceText.setVisible(true);
+		
+		if(isNull(listPriceText.getText())){
+		
+			System.out.println("Provide a value");
+		    return;
+		}
+		if(!isInt(listPriceText.getText())){
+			System.out.println("Value to be a number");
+		}
+		try {
+			String vID =resultsTable.getSelectionModel().getSelectedItem().getVehicleID();	
+			System.out.println("Vehicle id selected is : " +vID);
+			Query.autoCommitOff();
+			Query.insert("INSERT INTO `Vehicle_Sale`(`vehicleID`, `model`, `make`, `vehicle_year`, `vehicle_type`, `colour`, `license_plate`) "
+					+ "    SELECT `vehicleID`, `model`, `make`, `vehicle_year`, `vehicle_type`, `colour`, `license_plate` FROM `Vehicle_Rent` WHERE vehicleID ='" + vID + "'");
+			Query.delete("DELETE FROM Vehicle_Rent  WHERE vehicleID ='" + vID + "'");
+			//Query.delete("DELETE FROM `Vehicle_Rent`  WHERE vehicleID ='" + test + "'");
+			System.out.println("Hello");
+			// Query.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.amount) FROM RentPayment R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.dateFrom = CAST(CURRENT_TIMESTAMP () AS DATE)GROUP BY C.rentCategory");
+	        displayVehicleRent();
+			Query.commit();
+			Query.autoCommitOn();
+			System.out.println("Deleted");
+			
+		} catch (MySQLIntegrityConstraintViolationException iCV) {
+			try {
+				Query.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("Value Already Present");
+		} catch (SQLException e) {
+
+			// TODO Auto-generated catch block
+			try {
+				Query.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			e.printStackTrace();
+			System.out.println("OOPS");
+		}
+		
+		
+	}
+	}

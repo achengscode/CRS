@@ -13,6 +13,7 @@ public class VehicleSearchRow {
     private SimpleStringProperty model;
     private SimpleStringProperty year;
     private SimpleStringProperty colour;
+    private SimpleStringProperty number;
     /**
      * Default constructor
      * @pre none
@@ -28,6 +29,7 @@ public class VehicleSearchRow {
     	this.model = new SimpleStringProperty("");
     	this.year = new SimpleStringProperty("");
     	this.colour = new SimpleStringProperty("");
+    	this.number = new SimpleStringProperty("");
     }
     
     /**
@@ -119,5 +121,11 @@ public class VehicleSearchRow {
     
     public void setColour(String col){
     	colour.set(col);
+    }
+    public String getNumber(){
+    	return number.get();
+    }
+    public void setNumber(String num){
+    	number.set(num);
     }
 }

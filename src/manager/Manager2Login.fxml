@@ -10,16 +10,12 @@
 <?import javafx.scene.text.*?>
 <!--  <?import limitTextFeild.*?> -->
 
-<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" prefHeight="940.0" prefWidth="1235.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <Text fill="WHITE" text="Welcome" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="0" />
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="+Infinity" minWidth="600.0" prefWidth="1077.0" />
   </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="20.0" vgrow="NEVER" />
-    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-  <TabPane prefHeight="800.0" prefWidth="1151.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+  <TabPane prefHeight="820.0" prefWidth="1231.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="1">
     <tabs>
       <Tab text="Generate Report">
         <content>
@@ -100,23 +96,23 @@
       </Tab>
       <Tab text="Vehicle List">
         <content>
-          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="826.0" prefWidth="1300.0">
+          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1112.0">
             <children>
               <Button layoutX="307.0" layoutY="422.0" mnemonicParsing="false" text="Sell Vehicle" />
-              <Button layoutX="539.0" layoutY="422.0" mnemonicParsing="false" text="Remove Vehicle" />
-              <Button fx:id="moveButton" disable="true" layoutX="406.0" layoutY="422.0" mnemonicParsing="false" text="Move Vehicle" />
+              <Button id="remove" fx:id="removeButton" disable="true" layoutX="539.0" layoutY="422.0" mnemonicParsing="false" onAction="#handleRemoveButton" text="Remove Vehicle" />
+              <Button fx:id="moveButton" disable="true" layoutX="406.0" layoutY="422.0" mnemonicParsing="false" onAction="#handleMoveButton" text="Move Vehicle" />
               <Label layoutX="14.0" layoutY="37.0" text="Vehicle Type" />
-              <Label layoutX="14.0" layoutY="111.0" text="Year Of Manufacturing" />
-              <TextField layoutX="148.0" layoutY="111.0" prefWidth="80.0" />
-              <ComboBox id="type" layoutX="95.0" layoutY="34.0" prefHeight="22.0" prefWidth="105.0" promptText="select">
+              <Label fx:id="listManuLabel" layoutX="14.0" layoutY="111.0" text="Year Of Manufacturing" visible="false" />
+              <TextField fx:id="listYear" layoutX="148.0" layoutY="111.0" prefWidth="80.0" visible="false" />
+              <ComboBox id="type" fx:id="listVehicleType" layoutX="95.0" layoutY="34.0" prefHeight="22.0" prefWidth="105.0" promptText="select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Car" />
-                    <String fx:value="Truck" />
+                    <String fx:value="For Rent" />
+                    <String fx:value="For Sale" />
                   </FXCollections>
                 </items>
               </ComboBox>
-              <TableView fx:id="resultsTable" editable="true" layoutX="237.0" layoutY="69.0" onMouseClicked="#handleClickTable" prefHeight="299.0" prefWidth="840.0">
+              <TableView fx:id="resultsTable" editable="true" layoutX="237.0" layoutY="69.0" onMouseClicked="#handleClickTable" prefHeight="299.0" prefWidth="974.0">
                 <columns>
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="172.0" text="Vehicle ID" fx:id="vehicleIDCol" />
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="104.0" text="Lic. Plate" fx:id="licPlateCol" />
@@ -126,16 +122,77 @@
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="106.0" text="Model" fx:id="modelCol" />
                   <TableColumn prefWidth="75.0" text="Year" fx:id="yearCol" />
                   <TableColumn prefWidth="75.0" text="Colour" fx:id="colourCol" />
+                  <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="125.0" text="Number Of Vehicle" fx:id="listNumberCol" />
                 </columns>
               </TableView>
-              <Button layoutX="35.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
+              <Button fx:id="listSearch" layoutX="35.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" visible="false" />
+              <Label layoutX="14.0" layoutY="69.0" text="Search Type" />
+              <ComboBox id="type" fx:id="listSearchType" layoutX="95.0" layoutY="69.0" onAction="#handleListSearchType" prefHeight="22.0" prefWidth="105.0" promptText="select">
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="By Year" />
+                    <String fx:value="General" />
+                  </FXCollections>
+                </items>
+              </ComboBox>
+              <ComboBox id="type" fx:id="listCategory" layoutX="112.0" layoutY="162.0" prefHeight="22.0" prefWidth="105.0" promptText="select" visible="false">
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Economy" />
+                    <String fx:value="Compact" />
+                    <String fx:value="Mid-size" />
+                    <String fx:value="Standard" />
+                    <String fx:value="Full-size" />
+                    <String fx:value="Premium" />
+                    <String fx:value="Luxury" />
+                    <String fx:value="SUV" />
+                    <String fx:value="Van" />
+                    <String fx:value="24-Foot" />
+                    <String fx:value="15-Foot" />
+                    <String fx:value="12-Foot" />
+                    <String fx:value="Box Truck" />
+                    <String fx:value="Cargo Van" />
+                  </FXCollections>
+                </items>
+              </ComboBox>
+              <Label fx:id="listCategoryLabel" layoutX="27.0" layoutY="162.0" text="Category" visible="false" />
+              <Button fx:id="listGetResult" layoutX="95.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleGetResult" text="GetResult" visible="false" />
+              <Label id="listVe" fx:id="listVehicleIDLabel" layoutX="21.0" layoutY="109.0" text="Vehicle ID" visible="false" />
+              <Label fx:id="listModelLabel" layoutX="21.0" layoutY="145.0" text="Model" visible="false" />
+              <Label fx:id="listMakeLabel" layoutX="21.0" layoutY="177.0" text="Make" visible="false" />
+              <ComboBox id="type" fx:id="listTypeComboBox" layoutX="91.0" layoutY="208.0" prefHeight="22.0001220703125" prefWidth="105.00009999999747" promptText="select" visible="false">
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Car" />
+                    <String fx:value="Truck" />
+                  </FXCollections>
+                </items>
+              </ComboBox>
+              <Label fx:id="listTypeLabel" layoutX="21.0" layoutY="212.0" text="Type" visible="false" />
+              <Label fx:id="listColorLabel" layoutX="22.0" layoutY="248.0" text="Color" visible="false" />
+              <Label fx:id="listPlateLabel" layoutX="21.0" layoutY="279.0" text="Licence Plate" visible="false" />
+              <TextField id="list" fx:id="listVehicleIDText" layoutX="95.0" layoutY="106.0" prefWidth="132.0" visible="false" />
+              <TextField fx:id="listModelText" layoutX="95.0" layoutY="145.0" prefWidth="132.0" visible="false" />
+              <TextField id="listPlateLabel" fx:id="listPlateText" layoutX="95.0" layoutY="279.0" prefWidth="132.0" visible="false" />
+              <TextField fx:id="listColorText" layoutX="95.0" layoutY="248.0" prefWidth="132.0" visible="false" />
+              <TextField fx:id="listMakeText" layoutX="95.0" layoutY="174.0" prefWidth="132.0" visible="false" />
+              <Label fx:id="listPriceLabel" layoutX="319.0" layoutY="380.0" text="Enter Selling Price" />
+              <TextField fx:id="listPriceText" layoutX="430.0" layoutY="380.0" prefWidth="200.0" />
             </children>
           </AnchorPane>
         </content>
       </Tab>
     </tabs>
   </TabPane>
+  <padding>
+    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+  </padding>
+  <rowConstraints>
+    <RowConstraints minHeight="20.0" vgrow="NEVER" />
+    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+  </rowConstraints>
   <stylesheets>
     <URL value="@style.css" />
   </stylesheets>
+  <TextField prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 </GridPane>
