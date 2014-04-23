@@ -15,7 +15,7 @@ public class Main extends Application {
 		try {
 			
 		    LoginController loginController = new LoginController();
-		    loginController.launchLogingController(primaryStage);
+		    loginController.launchLoginController(primaryStage);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -242,15 +242,15 @@ public class ClerkScreenController implements Initializable {
 			if (type.getValue() != "All") {
 				if (category.getValue() != "All")
 					result = Query
-							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour "
+							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
 									+ "WHERE V.vehicleID = C.vehicleID AND V.vehicle_type = '"
 									+ type.getValue()
-									+ "'  AND C.vehicle_category = '"
+									+ "'  AND C.rentCategory = '"
 									+ category.getValue() + "'");
 				else
 					result = Query
-							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour "
+							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
 									+ "WHERE V.vehicleID = C.vehicleID and V.vehicle_type = '"
 									+ type.getValue() + "'");
@@ -259,13 +259,13 @@ public class ClerkScreenController implements Initializable {
 			else {
 				if (category.getValue() != "All")
 					result = Query
-							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour "
+							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
-									+ "WHERE V.vehicleID = C.vehicleID  AND C.vehicle_category = '"
+									+ "WHERE V.vehicleID = C.vehicleID  AND C.rentCategory = '"
 									+ category.getValue() + "'");
 				else
 					result = Query
-							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.vehicle_category, V.make, V.model, V.vehicle_year, V.colour "
+							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
 									+ "WHERE V.vehicleID = C.vehicleID");
 			}
