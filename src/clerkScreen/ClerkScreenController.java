@@ -236,6 +236,10 @@ public class ClerkScreenController implements Initializable {
 
 			// Declaring a variable to store temporarily query result result
 			ResultSet result;
+			String dateFrom;
+			String dateTo;
+			fillDateFrom();
+			fillDateTo();
 
 			// SQL Query must be adjusted depending on the search parameter
 			// given (phone or lastname)
@@ -247,7 +251,13 @@ public class ClerkScreenController implements Initializable {
 									+ "WHERE V.vehicleID = C.vehicleID AND V.vehicle_type = '"
 									+ type.getValue()
 									+ "'  AND C.rentCategory = '"
-									+ category.getValue() + "'");
+									+ category.getValue() + "' "
+									+ "AND V.VehicleID IN "
+									+ "(SELECT vehicleID FROM Vehicle_Rent " 
+									+ "WHERE vehicleID NOT IN "
+									+ "(SELECT vehicleID FROM Rents WHERE (rentStart - timestamp('" + timefrom(2014-04-17 10:01:00) +"')) < 0 and (rentEnd - timestamp('" + timefrom(2014-04-17 10:01:00) + "')) > 0" 
+									+ "union" 
+									+ "SELECT VehicleID FROM Rents  WHERE  (rentStart - timestamp('" + timefrom(2014-04-17 10:01:00) + "')) > 0 and (rentStart - timestamp('" + timeto(2014-04-18 11:00:00) + "')) <  0)))");
 				else
 					result = Query
 							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
@@ -363,4 +373,7 @@ public class ClerkScreenController implements Initializable {
 		// System.out.println("Row Successfully selected");
 		nextButton.setDisable(false);
 	}
+	
+	private void fillDateFrom()
+	fillDateTo();
 }
