@@ -236,11 +236,13 @@ public class ClerkScreenController implements Initializable {
 
 			// Declaring a variable to store temporarily query result result
 			ResultSet result;
-			String dateFrom = "";
-			String dateTo = "";
-			fillDateFrom(dateFrom);
-			fillDateTo(dateTo);
-
+			String dateFrom = fillDateFrom();
+			String dateTo = fillDateTo();
+			
+			
+			System.out.println(dateFrom);
+			System.out.println(dateTo);
+			
 			// SQL Query must be adjusted depending on the search parameter
 			// given (phone or lastname)
 			if (type.getValue() != "All") {
@@ -256,14 +258,20 @@ public class ClerkScreenController implements Initializable {
 									+ "(SELECT vehicleID FROM Vehicle_Rent " 
 									+ "WHERE vehicleID NOT IN "
 									+ "(SELECT vehicleID FROM Rents WHERE (rentStart - timestamp('" + dateFrom +"')) < 0 and (rentEnd - timestamp('" + dateFrom + "')) > 0" 
-									+ "union" 
-									+ "SELECT VehicleID FROM Rents  WHERE  (rentStart - timestamp('" + dateFrom + "')) > 0 and (rentStart - timestamp('" + dateTo + "')) <  0)))");
+									+ " union " 
+									+ "SELECT VehicleID FROM Rents  WHERE  (rentStart - timestamp('" + dateFrom + "')) > 0 and (rentStart - timestamp('" + dateTo + "')) <  0))");
 				else
 					result = Query
 							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
 									+ "WHERE V.vehicleID = C.vehicleID and V.vehicle_type = '"
-									+ type.getValue() + "'");
+									+ type.getValue() + "' "
+									+ "AND V.VehicleID IN "
+									+ "(SELECT vehicleID FROM Vehicle_Rent " 
+									+ "WHERE vehicleID NOT IN "
+									+ "(SELECT vehicleID FROM Rents WHERE (rentStart - timestamp('" + dateFrom +"')) < 0 and (rentEnd - timestamp('" + dateFrom + "')) > 0" 
+									+ " union " 
+									+ "SELECT VehicleID FROM Rents  WHERE  (rentStart - timestamp('" + dateFrom + "')) > 0 and (rentStart - timestamp('" + dateTo + "')) <  0))");
 			}
 
 			else {
@@ -272,12 +280,24 @@ public class ClerkScreenController implements Initializable {
 							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
 									+ "WHERE V.vehicleID = C.vehicleID  AND C.rentCategory = '"
-									+ category.getValue() + "'");
+									+ category.getValue() + "' "
+									+ "AND V.VehicleID IN "
+									+ "(SELECT vehicleID FROM Vehicle_Rent " 
+									+ "WHERE vehicleID NOT IN "
+									+ "(SELECT vehicleID FROM Rents WHERE (rentStart - timestamp('" + dateFrom +"')) < 0 and (rentEnd - timestamp('" + dateFrom + "')) > 0" 
+									+ " union " 
+									+ "SELECT VehicleID FROM Rents  WHERE  (rentStart - timestamp('" + dateFrom + "')) > 0 and (rentStart - timestamp('" + dateTo + "')) <  0))");
 				else
 					result = Query
 							.select("SELECT V.vehicleID, V.license_plate, V.vehicle_type, C.rentCategory, V.make, V.model, V.vehicle_year, V.colour "
 									+ "FROM Vehicle_Rent V, Vehicle_Category C "
-									+ "WHERE V.vehicleID = C.vehicleID");
+									+ "WHERE V.vehicleID = C.vehicleID "
+									+ "AND V.VehicleID IN "
+									+ "(SELECT vehicleID FROM Vehicle_Rent " 
+									+ "WHERE vehicleID NOT IN "
+									+ "(SELECT vehicleID FROM Rents WHERE (rentStart - timestamp('" + dateFrom +"')) < 0 and (rentEnd - timestamp('" + dateFrom + "')) > 0" 
+									+ " union " 
+									+ "SELECT VehicleID FROM Rents  WHERE  (rentStart - timestamp('" + dateFrom + "')) > 0 and (rentStart - timestamp('" + dateTo + "')) <  0))");
 			}
 
 			resultList.clear();
@@ -353,7 +373,11 @@ public class ClerkScreenController implements Initializable {
 		// System.out.println("type: " + type.getValue());
 		// System.out.println("category: " + category.getValue());
 		notFoundMsg.setVisible(false);
-		if (type.getValue() == null || category.getValue() == null)
+		if (type.getValue() == null || category.getValue() == null
+				|| fMonthBox.getValue() == null || tMonthBox.getValue() == null
+				|| fYearBox.getValue() == null || tYearBox.getValue() == null
+				|| fDayBox.getValue() == null || tDayBox.getValue() == null
+				|| fTimeBox.getValue() == null || tTimeBox.getValue() == null)
 			return;
 		searchButton.setDisable(false);
 	}
@@ -374,12 +398,28 @@ public class ClerkScreenController implements Initializable {
 		nextButton.setDisable(false);
 	}
 	
-	private void fillDateFrom(String s)
+	/**
+	 * Private method to convert the starting rental date and time given into SQL timestamp format
+	 * @pre None
+	 * @post A string containing a valid timestamp sql format is returned
+	 * @return a string with timestamp format filled according to the comoboxes values
+	 */
+	private String fillDateFrom()
 	{
-		
+		return fYearBox.getValue() + "-" + fMonthBox.getValue() + "-" + fDayBox.getValue() + " " + fTimeBox.getValue() + ":00";
+		//System.out.println(fYearBox.getValue() + "-" + fMonthBox.getValue() + "-" + fDayBox.getValue() + " " + fTimeBox.getValue() + ":00");
+		//return "2014-04-17 10:01:00";
 	}
-	private void fillDateTo(String s)
+	
+	/**
+	 * Private method to convert the ending rental date and time given into SQL timestamp format
+	 * @pre None
+	 * @post A string containing a valid timestamp sql format is returned
+	 * @return a string with timestamp format filled according to the comoboxes values
+	 */
+	private String fillDateTo()
 	{
-		
+		return tYearBox.getValue() + "-" + tMonthBox.getValue() + "-" + tDayBox.getValue() + " " + tTimeBox.getValue() + ":00";
+		//return "2014-04-18 11:00:00";
 	}
 }

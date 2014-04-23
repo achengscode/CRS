@@ -64,7 +64,7 @@
               <Label layoutX="14.0" layoutY="199.0" text="Month" />
               <Label layoutX="14.0" layoutY="227.0" text="Day" />
               <Label layoutX="15.0" layoutY="257.0" text="Year" />
-              <ComboBox fx:id="fMonthBox" layoutX="70.0" layoutY="194.0" promptText="Select">
+              <ComboBox fx:id="fMonthBox" layoutX="70.0" layoutY="194.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -73,7 +73,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <ComboBox fx:id="fDayBox" layoutX="70.0" layoutY="224.0" promptText="Select">
+              <ComboBox fx:id="fDayBox" layoutX="70.0" layoutY="224.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -82,7 +82,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <ComboBox fx:id="fYearBox" layoutX="70.0" layoutY="254.0" promptText="Select">
+              <ComboBox fx:id="fYearBox" layoutX="70.0" layoutY="254.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -93,7 +93,7 @@
               </ComboBox>
               <Button fx:id="exitButton" cancelButton="true" layoutX="1257.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleExitButton" text="Exit" />
               <Label layoutX="15.0" layoutY="287.0" text="Time" />
-              <ComboBox fx:id="fTimeBox" layoutX="70.0" layoutY="284.0" promptText="Select">
+              <ComboBox fx:id="fTimeBox" layoutX="70.0" layoutY="284.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -106,7 +106,7 @@
               <Label layoutX="175.0" layoutY="227.0" text="Day" />
               <Label layoutX="175.0" layoutY="257.0" text="Year" />
               <Label layoutX="175.0" layoutY="287.0" text="Time" />
-              <ComboBox fx:id="tMonthBox" layoutX="251.0" layoutY="194.0" promptText="Select">
+              <ComboBox fx:id="tMonthBox" layoutX="251.0" layoutY="194.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -115,7 +115,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <ComboBox fx:id="tDayBox" layoutX="251.0" layoutY="224.0" promptText="Select">
+              <ComboBox fx:id="tDayBox" layoutX="251.0" layoutY="224.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -124,7 +124,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <ComboBox fx:id="tYearBox" layoutX="251.0" layoutY="255.0" promptText="Select">
+              <ComboBox fx:id="tYearBox" layoutX="251.0" layoutY="255.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -133,7 +133,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <ComboBox fx:id="tTimeBox" layoutX="251.0" layoutY="285.0" promptText="Select">
+              <ComboBox fx:id="tTimeBox" layoutX="251.0" layoutY="285.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
