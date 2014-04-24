@@ -1,7 +1,5 @@
 package login;
 
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -14,14 +12,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
+
 import security.DBSecurity;
 import databaseManagement.Query;
-import ui.AlertBox;
 
 /**
  * Controller class to handle all two button events from the 
@@ -112,7 +111,7 @@ public class LoginController implements Initializable{
 			ResultSet result = Query.select("SELECT pwdSalt, empPwd, empType FROM employee WHERE empID = " +"'" + name + "'");
 			if (!result.next())
 			{
-			    AlertBox.show("No results found!");
+			    Dialogs.showErrorDialog(stage, "No matching password or username!");
 			    return;
 			}
 			String salt = result.getString(1);
@@ -123,7 +122,7 @@ public class LoginController implements Initializable{
 			System.out.println("Hashed : " + hashedString);
 			if (!dbPwd.equals(hashedString))
 			{
-				AlertBox.show("Incorrect Password!");
+			    Dialogs.showErrorDialog(stage, "No matching password for that username!");
 				return;
 			}
 			else
@@ -135,7 +134,7 @@ public class LoginController implements Initializable{
 			
 		} catch (SQLException e)
 		{
-		    AlertBox.show(e.getMessage()); //if any errors occur
+		    Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 	
