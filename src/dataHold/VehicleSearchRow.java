@@ -14,6 +14,7 @@ public class VehicleSearchRow {
     private SimpleStringProperty year;
     private SimpleStringProperty colour;
     private SimpleStringProperty number;
+    private SimpleStringProperty sellingPrice;
     /**
      * Default constructor
      * @pre none
@@ -30,6 +31,7 @@ public class VehicleSearchRow {
     	this.year = new SimpleStringProperty("");
     	this.colour = new SimpleStringProperty("");
     	this.number = new SimpleStringProperty("");
+    	this.sellingPrice = new SimpleStringProperty("");
     }
     
     /**
@@ -116,7 +118,7 @@ public class VehicleSearchRow {
     	year.set(y);
     }
     public String getColour(){
-        return type.get();
+        return colour.get();
     }
     
     public void setColour(String col){
@@ -127,5 +129,11 @@ public class VehicleSearchRow {
     }
     public void setNumber(String num){
     	number.set(num);
+    }
+    public void setSellingPrice(String sp){
+    	sellingPrice.set(sp);
+    }
+    public String getSellingPrice(){
+    	return sellingPrice.get();
     }
 }

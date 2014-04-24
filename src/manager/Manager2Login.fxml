@@ -7,10 +7,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <!--  <?import limitTextFeild.*?> -->
 
-<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" prefHeight="940.0" prefWidth="1235.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1354.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <Text fill="WHITE" text="Welcome" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="0" />
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="+Infinity" minWidth="600.0" prefWidth="1077.0" />
@@ -43,7 +44,11 @@
               <TextField fx:id="sum" layoutX="325.0" layoutY="401.0" prefWidth="100.0" visible="false" />
               <Label layoutX="221.0" layoutY="370.0" text="Total Vehicle" />
               <TextField id="sum" fx:id="reportVehicle" layoutX="325.0" layoutY="367.0" prefWidth="100.0" />
-              <Label fx:id="reportDisplay" layoutX="129.0" layoutY="44.0" text="Select Report Type" textFill="#ff3333" visible="false" />
+              <Label fx:id="reportDisplay" layoutX="129.0" layoutY="44.0" text="Select Report Type" visible="false">
+                <textFill>
+                  <Color blue="0.200" green="0.200" red="1.000" fx:id="x1" />
+                </textFill>
+              </Label>
             </children>
           </AnchorPane>
         </content>
@@ -104,7 +109,7 @@
               <Label layoutX="14.0" layoutY="37.0" text="Vehicle Type" />
               <Label fx:id="listManuLabel" layoutX="14.0" layoutY="111.0" text="Year Of Manufacturing" visible="false" />
               <TextField fx:id="listYear" layoutX="148.0" layoutY="111.0" prefWidth="80.0" visible="false" />
-              <ComboBox id="type" fx:id="listVehicleType" layoutX="95.0" layoutY="34.0" prefHeight="22.0" prefWidth="105.0" promptText="select">
+              <ComboBox id="type" fx:id="listVehicleType" layoutX="95.0" layoutY="34.0" onAction="#handleListVehicleType" prefHeight="22.0" prefWidth="105.0" promptText="select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="For Rent" />
@@ -112,7 +117,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <TableView fx:id="resultsTable" editable="true" layoutX="237.0" layoutY="69.0" onMouseClicked="#handleClickTable" prefHeight="299.0" prefWidth="974.0">
+              <TableView fx:id="resultsTable" editable="true" layoutX="237.0" layoutY="69.0" onMouseClicked="#handleClickTable" prefHeight="299.0" prefWidth="1098.0">
                 <columns>
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="172.0" text="Vehicle ID" fx:id="vehicleIDCol" />
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="104.0" text="Lic. Plate" fx:id="licPlateCol" />
@@ -123,11 +128,12 @@
                   <TableColumn prefWidth="75.0" text="Year" fx:id="yearCol" />
                   <TableColumn prefWidth="75.0" text="Colour" fx:id="colourCol" />
                   <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="125.0" text="Number Of Vehicle" fx:id="listNumberCol" />
+                  <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="125.0" text="Selling Price" fx:id="listSellingPriceCol" />
                 </columns>
               </TableView>
               <Button fx:id="listSearch" layoutX="35.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" visible="false" />
-              <Label layoutX="14.0" layoutY="69.0" text="Search Type" />
-              <ComboBox id="type" fx:id="listSearchType" layoutX="95.0" layoutY="69.0" onAction="#handleListSearchType" prefHeight="22.0" prefWidth="105.0" promptText="select">
+              <Label fx:id="listSearchTypeLabel" layoutX="14.0" layoutY="69.0" text="Search Type" visible="false" />
+              <ComboBox id="type" fx:id="listSearchType" layoutX="95.0" layoutY="69.0" onAction="#handleListSearchType" prefHeight="22.0" prefWidth="105.0" promptText="select" visible="false">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
                     <String fx:value="By Year" />
@@ -178,6 +184,46 @@
               <TextField fx:id="listMakeText" layoutX="95.0" layoutY="174.0" prefWidth="132.0" visible="false" />
               <Label fx:id="listPriceLabel" layoutX="319.0" layoutY="380.0" text="Enter Selling Price" />
               <TextField fx:id="listPriceText" layoutX="430.0" layoutY="380.0" prefWidth="200.0" />
+            </children>
+          </AnchorPane>
+        </content>
+      </Tab>
+      <Tab text="Set Price">
+        <content>
+          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <children>
+              <Label layoutX="44.0" layoutY="22.0" text="Select " />
+              <ComboBox id="selectReport" fx:id="priceSelect" layoutX="129.0" layoutY="17.0" prefHeight="21.0" prefWidth="105.0" promptText="select">
+                <items>
+                  <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="For Category" />
+                    <String fx:value="For Extra Equipment" />
+                  </FXCollections>
+                </items>
+              </ComboBox>
+              <TableView fx:id="priceTable" editable="true" layoutX="44.0" layoutY="146.0" onMouseClicked="#handlePriceTable" prefHeight="200.0" prefWidth="510.0">
+                <columns>
+                  <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="172.0" text="Type" fx:id="priceTypeCol" />
+                  <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="132.0" text="Hourly Price" fx:id="priceHourCol" />
+                  <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="103.0" text="Daily Price" fx:id="priceDayCol" />
+                  <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="103.0" text="Weekly Price" fx:id="priceWeekCol" />
+                </columns>
+              </TableView>
+              <Button id="generate" fx:id="priceGenerate" layoutX="311.0" layoutY="17.0" mnemonicParsing="false" onAction="#handlePriceGenerate" text="Generate" />
+              <Label id="reportLabel" layoutX="129.0" layoutY="48.0" text="Type must be selected" textFill="RED" visible="false" />
+              <Label id="reportAmount" layoutX="219.0" layoutY="404.0" text="Total Amount" visible="false" />
+              <TextField id="sum" layoutX="325.0" layoutY="401.0" prefWidth="100.0" visible="false" />
+              <Label id="reportDisplay" layoutX="129.0" layoutY="44.0" text="Select Report Type" textFill="$x1" visible="false" />
+              <Button id="generate" fx:id="priceUpdate" disable="true" layoutX="495.0" layoutY="418.0" mnemonicParsing="false" onAction="#handelPriceUpdate" text="Update" />
+              <Label fx:id="priceCategoryLabel" layoutX="616.0" layoutY="146.0" text="Category" visible="false" />
+              <Label fx:id="priceHourLabel" layoutX="616.0" layoutY="197.0" text="Hourly Price" visible="false" />
+              <Label fx:id="priceDayLabel" layoutX="616.0" layoutY="238.0" text="Daily Price" visible="false" />
+              <Label fx:id="priceWeekLabel" layoutX="615.0" layoutY="280.0" text="Weekly Price" visible="false" />
+              <TextField fx:id="priceCategoryText" layoutX="686.0" layoutY="143.0" prefWidth="200.0" visible="false" />
+              <TextField fx:id="priceHourText" layoutX="686.0" layoutY="197.0" prefWidth="200.0" visible="false" />
+              <TextField fx:id="priceDayText" layoutX="686.0" layoutY="238.0" prefWidth="200.0" visible="false" />
+              <TextField fx:id="priceWeekText" layoutX="686.0" layoutY="277.0" prefWidth="200.0" visible="false" />
+              <Button id="priceButton" fx:id="priceChangeButton" layoutX="683.0" layoutY="418.0" mnemonicParsing="false" onAction="#handlePriceChangeButton" text="Change" />
             </children>
           </AnchorPane>
         </content>
