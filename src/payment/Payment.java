@@ -32,12 +32,12 @@ public class Payment {
     {
         try
         {
-            ResultSet prices = Query.select("SELECT hourlyPrice, dailyPrice, weeklyPrice FROM rentalrates WHERE rent_category IN "
-                    + "(SELECT rent_category FROM Vehicle_Category WHERE vehicleID = ' "+ vehicleID + " '");
-            
-            hourlyRate = prices.getDouble(1);
-            dailyRate = prices.getDouble(2);
-            weeklyRate = prices.getDouble(3);
+            ResultSet prices = Query.select("SELECT * FROM rentalrates WHERE rentCategory IN "
+                    + "(SELECT rentCategory FROM Vehicle_Category WHERE vehicleID = '" + vehicleID + "')");
+            prices.next();
+            hourlyRate = prices.getDouble(2);
+            dailyRate = prices.getDouble(3);
+            weeklyRate = prices.getDouble(4);
         } catch (SQLException e) 
         {
             e.printStackTrace();
@@ -70,9 +70,10 @@ public class Payment {
         int rentalDay = DateOperations.getDayDifference(startDate, dueDate);
         rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
         
-        double totalPrice = rentalWeek * weeklyRate;
-        totalPrice += rentalDay * dailyRate; 
+        double totalPrice = (rentalWeek * weeklyRate);
+        totalPrice += (rentalDay * dailyRate);
         
+        //calculate overdue prices (if any)
         if (isOverdue(dueDate, returnDate))
         {
             int overdueHours = DateOperations.getHourDifference(dueDate, returnDate);
@@ -80,7 +81,9 @@ public class Payment {
             int overdueWeek = DateOperations.getWeekDifference(dueDate, returnDate);
             overdueDay -= (overdueWeek * 7);
             
-            totalPrice += overdueHours * hourlyRate;
+            totalPrice += overdueHours * hourlyRate * 1.5;
+            totalPrice += overdueDay * dailyRate * 1.5;
+            totalPrice += overdueWeek * weeklyRate * 1.5;
         }
         
         totalPrice *= TAX_RATE;
@@ -95,7 +98,7 @@ public class Payment {
      * @param returnDate
      * @return true if the rental is overdue, false otherwise.
      */
-    private boolean isOverdue(Date dueDate, Date returnDate)
+    public boolean isOverdue(Date dueDate, Date returnDate)
     {
         return dueDate.after(returnDate);
     }
