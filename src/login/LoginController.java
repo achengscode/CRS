@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import clerkScreen.ClerkScreenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,10 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-
 import security.DBSecurity;
 import databaseManagement.Query;
-
 import ui.AlertBox;
 
 
@@ -174,7 +173,9 @@ public class LoginController implements Initializable{
 				//manager.redirectHome(stage);
 	           break;
 	        case "clerk":
-	            
+	        	// Launching Clerk Screen 
+	        	ClerkScreenController clerk = new ClerkScreenController();
+				clerk.redirectHome(stage);
 	           break;
 	        case "sysadmin":
 	           break;

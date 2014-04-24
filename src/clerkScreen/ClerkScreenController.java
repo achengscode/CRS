@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.sql.ResultSet;
 
+import login.LoginController;
 import rentScreen.RentController;
 
 /**
@@ -66,6 +67,8 @@ public class ClerkScreenController implements Initializable {
 	// Text Label to display "Not found Message"
 	@FXML
 	private Label notFoundMsg;
+	
+	
 
 	// Declaring Table and Columns
 	@FXML
@@ -140,6 +143,9 @@ public class ClerkScreenController implements Initializable {
 		try {
 			parent = (Parent) fxmlLoader.load();
 			scene = new Scene(parent);
+			
+	
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -344,10 +350,13 @@ public class ClerkScreenController implements Initializable {
 	 */
 	@FXML
 	private void handleExitButton() {
-		System.out.println("You pressed Exit!");
+		// System.out.println("You pressed Exit!");
 		// Instead of exiting the program, cancel button should move the user to
 		// previous screen
-		System.exit(0);
+		LoginController log = new LoginController();
+		// log.redirectHome(stage);
+		
+		// System.exit(0);
 	}
 
 	/**
@@ -357,9 +366,8 @@ public class ClerkScreenController implements Initializable {
 	 */
 	@FXML
 	private void handleNextButton() {
-		//System.out.println(resultsTable.getSelectionModel().getSelectedItem().getVehicleID());
-		
-		RentController rent = new RentController(resultsTable.getSelectionModel().getSelectedItem());
+				
+		RentController rent = new RentController(resultsTable.getSelectionModel().getSelectedItem(),fillDateFrom(), fillDateTo());
 		rent.launchRentController(stage);
 		rent.redirectHome(stage);
 	}
@@ -421,5 +429,14 @@ public class ClerkScreenController implements Initializable {
 	{
 		return tYearBox.getValue() + "-" + tMonthBox.getValue() + "-" + tDayBox.getValue() + " " + tTimeBox.getValue() + ":00";
 		//return "2014-04-18 11:00:00";
+	}
+	
+	public void redirectHome(Stage stage) {
+		this.stage = stage;
+		stage.setTitle("Clerk Rent");
+		stage.setScene(scene);
+
+		stage.hide();
+		stage.show();
 	}
 }

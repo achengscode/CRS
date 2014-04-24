@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import clerkScreen.ClerkScreenController;
 import clerkScreen.VehicleSearchRow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -39,11 +41,25 @@ public class RentController implements Initializable {
 
 	// Fields containing information of vehicle selected in previous screen
 	@FXML
+	private TextField selectedVehicleID;
+	@FXML
+	private TextField selectedLicencePlate;
+	@FXML
 	private TextField selectedType;
 	@FXML
 	private TextField selectedCategory;
 	@FXML
-	private TextField selectedVehicleID;
+	private TextField selectedMake;
+	@FXML
+	private TextField selectedModel;
+	@FXML
+	private TextField selectedYear;
+	@FXML
+	private TextField selectedColour;
+	@FXML
+	private TextField displayFrom;
+	@FXML
+	private TextField displayTo;
 	@FXML
 	private TextField selectedDate;
 	
@@ -64,16 +80,32 @@ public class RentController implements Initializable {
 	private TextField displayProvince;
 	@FXML
 	private TextField displayPcode;
+	@FXML
+	private TextField displayTotal;
 
 	// Button declaration
 	@FXML
 	private Button updateButton;
+	@FXML
+	private Button backButton;
 
 	// Radio Buttons declaration
 	@FXML
 	private RadioButton nameRadButton;
 	@FXML
 	private RadioButton phoneRadButton;
+	
+	// Checkboxes for Additional Equipment
+	@FXML
+	private CheckBox skiRackCheck;
+	@FXML
+	private CheckBox childSeatCheck;
+	@FXML
+	private CheckBox liftGateCheck;
+	@FXML
+	private CheckBox towingEqCheck;
+	
+	
 
 	private Parent parent;
 	private Scene scene;
@@ -88,7 +120,7 @@ public class RentController implements Initializable {
 	 * @pre tuple is a valid object of VehicleSearchRow class
 	 * @post a new RentController object is created and corresponding fields are filled with information passed as argument
 	 */
-	public RentController(VehicleSearchRow selection) {
+	public RentController(VehicleSearchRow selection, String from, String to) {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 				"RentScreen.fxml"));
@@ -97,8 +129,35 @@ public class RentController implements Initializable {
 		try {
 			parent = (Parent) fxmlLoader.load();
 			scene = new Scene(parent);
-			tuple = new VehicleSearchRow(selection.getVehicleID(),"",selection.getType(),selection.getCategory(),"","","","");
-
+			tuple = new VehicleSearchRow(selection.getVehicleID(),selection.getLicPlate(),selection.getType(),selection.getCategory(),selection.getMake(),selection.getModel(),selection.getYear(),selection.getColour());
+			
+			// filling fields with arguments
+			selectedVehicleID.setText(tuple.getVehicleID());
+			selectedLicencePlate.setText(tuple.getLicPlate());
+			selectedType.setText(tuple.getType());
+			selectedCategory.setText(tuple.getCategory());
+			selectedMake.setText(tuple.getMake());
+			selectedModel.setText(tuple.getModel());
+			selectedYear.setText(tuple.getYear());
+			selectedColour.setText(tuple.getColour());
+			displayFrom.setText(from);
+			displayTo.setText(to);
+			// NOT IMPLEMENTING PRICE CALCULATION YET!!
+			displayTotal.setText("125.00");
+			
+			
+			// Setting on checkboxes according to selected vehicle type
+			if (tuple.getType().equals("Car")) {
+				skiRackCheck.setDisable(false);
+				childSeatCheck.setDisable(false);
+			}
+			// Otherwise, for Truck vehicle type
+			else {
+				liftGateCheck.setDisable(false);
+				towingEqCheck.setDisable(false);
+			}
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,19 +171,12 @@ public class RentController implements Initializable {
 		stage.hide();
 		stage.show();
 		
-		// filling fields with arguments
-		selectedType.setText(tuple.getType());
-		selectedCategory.setText(tuple.getCategory());
-		selectedVehicleID.setText(tuple.getVehicleID());
 	}
 
 	
 	// main method needed to be implemented by the controller class.
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		
-		
 		
 	}
 
@@ -224,23 +276,29 @@ public class RentController implements Initializable {
 	 * @post NotFoundMessage is set to invisible
 	 */
 	@FXML
-	private void handleNotFoundMsg() {
-		System.out.println("Cleaning");
-
-	}
-
-	@FXML
 	private void handleEnableRadName() {
 		searchName.setDisable(false);
 		searchPhone.setDisable(true);
 	}
-
+	/**
+	 * Event Handler launched when the search fields are modified.
+	 * Multithreading candidate
+	 * 
+	 * @pre phone textfield is edited
+	 * @post NotFoundMessage is set to invisible
+	 */
 	@FXML
 	private void handleEnableRadPhone() {
 		searchPhone.setDisable(false);
 		searchName.setDisable(true);
 	}
-
+	/**
+	 * Event Handler launched when the search fields are modified.
+	 * Multithreading candidate
+	 * 
+	 * @pre phone textfield is edited
+	 * @post NotFoundMessage is set to invisible
+	 */
 	@FXML
 	private void handleEnableUpdate() {
 		updateButton.setDisable(false);
@@ -282,4 +340,29 @@ public class RentController implements Initializable {
 		stage.hide();
 		stage.show();
 	}
+	
+	/**
+	 * Handler for back button.
+	 * @pre The RentScreen is running
+	 * @post RentScreen is closed and the previous screen (ClerkScreen) is relaunched
+	 */
+	@FXML
+	private void handleBackButton() {
+		// System.out.println("BackButton");
+		ClerkScreenController clerk = new ClerkScreenController();
+		clerk.redirectHome(stage);
+	}
+	
+	/**
+	 * Handler for NextButton
+	 * @pre The RentScreen is running and a valid customer from the database has been selected
+	 */
+	@FXML
+	private void handleNextButton() {
+		CosignerScreenController cosigner = new CosignerScreenController(new SelectedCustomer(displayPhone.getText(), displayLname.getText(), displayFname.getText(),displayId.getText()),displayFrom.getText(), displayTo.getText(), displayTotal.getText());
+		cosigner.launchCosignerController(stage);
+		cosigner.redirectHome(stage);	
+		
+	}
+	
 }

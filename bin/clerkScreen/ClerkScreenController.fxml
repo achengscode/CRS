@@ -91,7 +91,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
-              <Button fx:id="exitButton" cancelButton="true" layoutX="1257.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleExitButton" text="Exit" />
+              <Button fx:id="exitButton" cancelButton="true" layoutX="1236.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleExitButton" text="Logout" />
               <Label layoutX="15.0" layoutY="287.0" text="Time" />
               <ComboBox fx:id="fTimeBox" layoutX="70.0" layoutY="284.0" onAction="#handleCombo" promptText="Select">
                 <items>
@@ -149,6 +149,11 @@
               </Label>
             </children>
           </AnchorPane>
+        </content>
+      </Tab>
+      <Tab text="Reservations">
+        <content>
+          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
         </content>
       </Tab>
       <Tab text="Return">
