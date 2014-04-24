@@ -2,12 +2,8 @@ package rentScreen;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import clerkScreen.ClerkScreenController;
-import clerkScreen.VehicleSearchRow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,16 +11,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import databaseManagement.Query;
+
 
 /**
  * Controller class to handle final screen of rental process
@@ -37,6 +29,9 @@ import databaseManagement.Query;
 
 
 public class CosignerScreenController implements Initializable{
+	
+	private RentalInfo info;
+	
 	
 	// Final Screen Buttons and Textfields declaration
 	// Text fields
@@ -53,8 +48,17 @@ public class CosignerScreenController implements Initializable{
 	@FXML
 	private TextField cosignerLicense;
 	@FXML
+	private TextField cosignerLastname;
+	@FXML
+	private TextField cosignerFirstname;
+	@FXML
 	private TextField finalAmount;
+	@FXML
+	private TextField cardNumber;
+	@FXML
+	private TextField holderName;
 
+	
 	// Labels
 	@FXML
 	private Label cosignerInfoLabel;
@@ -68,11 +72,24 @@ public class CosignerScreenController implements Initializable{
 	private ComboBox customerAge;
 	@FXML
 	private ComboBox cosignerAge;
+	@FXML
+	private ComboBox cardCompany;
+	@FXML
+	private ComboBox expMonth;
+	@FXML
+	private ComboBox expYear;
 	
 	private Parent parent;
 	private Scene scene;
 	private Stage stage;
 	
+	final ObservableList<String> cardValues = FXCollections
+			.observableArrayList("Master Card", "American Express", "Visa" );
+	
+	final ObservableList<String> monthValues = FXCollections
+			.observableArrayList("01", "02", "03","04", "05","06","07","08","09","10","11","12" );
+	final ObservableList<String> yearValues = FXCollections
+			.observableArrayList("2014", "2015", "2016","2017", "2018","2019","2020","2021","2022","2023","2024","2025" );
 	
 	final ObservableList<String> customerAgeValues = FXCollections
 			.observableArrayList("18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "33", "34", "35",
@@ -101,6 +118,8 @@ public class CosignerScreenController implements Initializable{
 			displayFinalFname.setText(customer.getFirstname());
 			displayFinalId.setText(customer.getId());
 			finalAmount.setText(total);
+			
+			info = RentalInfo.getRentalInfo();
 						
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -131,6 +150,9 @@ public class CosignerScreenController implements Initializable{
 		// TODO Auto-generated method stub
 		customerAge.setItems(customerAgeValues);
 		cosignerAge.setItems(cosignerAgeValues);
+		expMonth.setItems(monthValues);
+		expYear.setItems(yearValues);
+		cardCompany.setItems(cardValues);
 	}
 	
 	@FXML
@@ -151,10 +173,11 @@ public class CosignerScreenController implements Initializable{
 	
 	@FXML
 	private void handleFinishButton() {
-		// System.out.println("You pressed cancel!");
-		// Instead of exiting the program, cancel button should move the user to
-		// previous screen
-		System.exit(0);
+		fillInfo();
+		FinalScreenController finalSc = new FinalScreenController();
+		finalSc.launchFinalScreenController(stage);
+		finalSc.redirectHome(stage);	
+		
 	}
 	
 	/**
@@ -179,5 +202,29 @@ public class CosignerScreenController implements Initializable{
 		}
 		
 			
+	}
+	
+	/**
+	 * Private method used internally to fill the shared variables object (Singleton)
+	 */
+	private void fillInfo() {
+		
+		RentalInfo.setCardNumber(cardNumber.getText());
+		RentalInfo.setHolderName(holderName.getText());
+		RentalInfo.setExpMonth(expMonth.getValue().toString());
+		RentalInfo.setExpYear(expYear.getValue().toString());
+		RentalInfo.setCardCompany(cardCompany.getValue().toString());
+		RentalInfo.setCustomerLicense(customerLicense.getText());
+		RentalInfo.setCustomerAge(customerAge.getValue().toString());
+		
+		// Information also necessary in case of Cosigner
+		if (Integer.parseInt(customerAge.getValue().toString()) < 25)
+		{
+			RentalInfo.setCosignerLastname(cosignerLastname.getText());
+			RentalInfo.setCosignerFirstname(cosignerFirstname.getText());
+			RentalInfo.setCosignerLicense(cosignerLicense.getText());
+			RentalInfo.setCosignerAge(cosignerAge.getValue().toString());
+		}
+				
 	}
 }

@@ -52,24 +52,22 @@
               </GridPane>
               <Label layoutX="172.0" layoutY="14.0" text="Customer Information" />
               <Button fx:id="backButton" layoutX="105.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleBackButton" text="Back" />
-              <Button disable="true" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleFinishButton" text="Finish" />
+              <Button disable="false" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleFinishButton" text="Next" />
               <Label layoutX="887.0" layoutY="14.0" text="Payment Information" />
-              <GridPane layoutX="887.0" layoutY="40.0" prefHeight="151.0" prefWidth="354.0">
+              <GridPane layoutX="887.0" layoutY="40.0" prefHeight="151.0" prefWidth="459.0">
                 <children>
                   <Label text="Credit Card Number" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.rowIndex="1">
                     <GridPane.margin>
                       <Insets fx:id="x1" />
                     </GridPane.margin>
                   </Label>
-                  <TextField id="displayTo" fx:id="verificationCode" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x1" GridPane.rowIndex="2" />
                   <Label text="Expiration Date" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                   <TextField id="displayFrom" fx:id="cardNumber" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.margin="$x1" GridPane.rowIndex="1" />
-                  <Label text="Verification Code" GridPane.columnIndex="0" GridPane.margin="$x1" GridPane.rowIndex="2" />
                   <Label text="Holder's Name" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                   <TextField fx:id="holderName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                     <children>
-                      <ComboBox fx:id="expMonth" promptText="Select">
+                      <ComboBox fx:id="expMonth" prefWidth="96.0" promptText="Select">
                         <items>
                           <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Item 1" />
@@ -78,7 +76,7 @@
                           </FXCollections>
                         </items>
                       </ComboBox>
-                      <ComboBox fx:id="expYear" promptText="Select">
+                      <ComboBox fx:id="expYear" prefWidth="96.0" promptText="Select">
                         <items>
                           <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Item 1" />
@@ -91,6 +89,19 @@
                   </HBox>
                   <Label text="Total Amount" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                   <TextField fx:id="finalAmount" editable="false" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  <Label text="Card Company" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="cardCompany" prefWidth="96.0" promptText="Select" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Item 1" />
+                        <String fx:value="Item 2" />
+                        <String fx:value="Item 3" />
+                      </FXCollections>
+                    </items>
+                    <GridPane.margin>
+                      <Insets fx:id="x1" />
+                    </GridPane.margin>
+                  </ComboBox>
                 </children>
                 <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

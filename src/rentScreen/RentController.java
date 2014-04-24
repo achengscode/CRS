@@ -33,6 +33,8 @@ import databaseManagement.Query;
 
 public class RentController implements Initializable {
 
+	private RentalInfo info;
+	
 	// Search Text fields
 	@FXML
 	private TextField searchPhone;
@@ -80,8 +82,14 @@ public class RentController implements Initializable {
 	private TextField displayProvince;
 	@FXML
 	private TextField displayPcode;
+	
+	// Price Information
 	@FXML
 	private TextField displayTotal;
+	@FXML
+	private TextField displayVehiclePrice;
+	@FXML
+	private TextField displayEqPrice;
 
 	// Button declaration
 	@FXML
@@ -145,6 +153,7 @@ public class RentController implements Initializable {
 			// NOT IMPLEMENTING PRICE CALCULATION YET!!
 			displayTotal.setText("125.00");
 			
+			info = RentalInfo.getRentalInfo();
 			
 			// Setting on checkboxes according to selected vehicle type
 			if (tuple.getType().equals("Car")) {
@@ -359,10 +368,40 @@ public class RentController implements Initializable {
 	 */
 	@FXML
 	private void handleNextButton() {
+		fillRentalInfo();
 		CosignerScreenController cosigner = new CosignerScreenController(new SelectedCustomer(displayPhone.getText(), displayLname.getText(), displayFname.getText(),displayId.getText()),displayFrom.getText(), displayTo.getText(), displayTotal.getText());
 		cosigner.launchCosignerController(stage);
 		cosigner.redirectHome(stage);	
 		
+	}
+	
+	/**
+	 * Private method to fill all requested information from this screen into the singleton class to pass information to folowing screens.
+	 */
+	private void fillRentalInfo() {
+		
+		RentalInfo.setVehicleID(selectedVehicleID.getText());
+		RentalInfo.setLicense(selectedLicencePlate.getText());
+		RentalInfo.setType(selectedType.getText());
+		RentalInfo.setCategory(selectedCategory.getText());
+		RentalInfo.setMake(selectedMake.getText());
+		RentalInfo.setModel(selectedModel.getText());
+		RentalInfo.setYear(selectedYear.getText());
+		RentalInfo.setColour(selectedColour.getText());
+		RentalInfo.setId(displayId.getText());
+		RentalInfo.setPhone(displayPhone.getText());
+		RentalInfo.setLastname(displayLname.getText());
+		RentalInfo.setFirstname(displayFname.getText());
+		RentalInfo.setChildSeat(childSeatCheck.isSelected());
+		RentalInfo.setSkiRack(skiRackCheck.isSelected());
+		RentalInfo.setLiftGate(liftGateCheck.isSelected());
+		RentalInfo.setTowingEq(towingEqCheck.isSelected());
+		RentalInfo.setFrom(displayFrom.getText());
+		RentalInfo.setTo(displayTo.getText());
+		RentalInfo.setVehiclePrice(displayVehiclePrice.getText());
+		RentalInfo.setEquipmentPrice(displayEqPrice.getText());
+		RentalInfo.setTotalPrice(displayTotal.getText());
+						
 	}
 	
 }
