@@ -19,7 +19,7 @@ public class Payment {
     /**
      * Tax rate, currently at 12% tax.
      */
-    private static final double TAX_RATE = 1.12;
+    private final double TAX_RATE = 1.12;
     private double weeklyRate;
     private double hourlyRate;
     private double dailyRate;
@@ -66,8 +66,8 @@ public class Payment {
             return null; //should really throw exceptions here.
         }
         
-        int rentalWeek = DateOperations.getWeekDifference(startDate, dueDate);
-        int rentalDay = DateOperations.getDayDifference(startDate, dueDate);
+        double rentalWeek = DateOperations.getWeekDifference(startDate, dueDate);
+        double rentalDay = DateOperations.getDayDifference(startDate, dueDate);
         rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
         
         double totalPrice = (rentalWeek * weeklyRate);
@@ -76,20 +76,31 @@ public class Payment {
         //calculate overdue prices (if any)
         if (isOverdue(dueDate, returnDate))
         {
-            int overdueHours = DateOperations.getHourDifference(dueDate, returnDate);
-            int overdueDay = DateOperations.getDayDifference(dueDate, returnDate);
-            int overdueWeek = DateOperations.getWeekDifference(dueDate, returnDate);
+            double overdueHours = DateOperations.getHourDifference(dueDate, returnDate);
+            double overdueDay = DateOperations.getDayDifference(dueDate, returnDate);
+            double overdueWeek = DateOperations.getWeekDifference(dueDate, returnDate);
             overdueDay -= (overdueWeek * 7);
             
-            totalPrice += overdueHours * hourlyRate * 1.5;
-            totalPrice += overdueDay * dailyRate * 1.5;
-            totalPrice += overdueWeek * weeklyRate * 1.5;
+            totalPrice += (overdueHours * hourlyRate * 1.5);
+            totalPrice += (overdueDay * dailyRate * 1.5);
+            totalPrice += (overdueWeek * weeklyRate * 1.5);
         }
-        
+        System.out.println(totalPrice);
         totalPrice *= TAX_RATE;
-        
+        System.out.println(totalPrice);
         return formatter.format(totalPrice);
         
+    }
+    /**
+     * Wrapper method for estimating rental prices.
+     * @param startDate Start date for the rental.
+     * @param endDate End date for the rental.
+     * @return the price.
+     */
+    public String estimatePrice(Date startDate, Date endDate)
+    {
+        Date returnDate = endDate;
+        return calculatePrice(startDate, endDate, returnDate);
     }
     
     /**
@@ -100,6 +111,6 @@ public class Payment {
      */
     public boolean isOverdue(Date dueDate, Date returnDate)
     {
-        return dueDate.after(returnDate);
+        return returnDate.after(dueDate);
     }
 }
