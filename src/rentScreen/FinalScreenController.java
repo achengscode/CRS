@@ -13,7 +13,12 @@ import javafx.scene.control.TextArea;
 
 import javafx.stage.Stage;
 
-
+/**
+ * Controller class for final screen of rental process
+ * Displays a text summary with rental information in a printable format
+ * @author ignacio
+ *
+ */
 
 public class FinalScreenController implements Initializable{
 
@@ -82,7 +87,7 @@ public class FinalScreenController implements Initializable{
 		// Customer Info Field
 		summary.appendText("Customer Information\n");
 		summary.appendText("-----------------------------------------------------------------------------------------------------\n");
-		summary.appendText("Rental ID: " + rentalId);
+		summary.appendText("Rental ID: " + rentalId + "\n");
 		summary.appendText("Customer Name: " + info.getLastname() + ", " + info.getFirstname() +"\n");
 		summary.appendText("Drivers License Number: " + info.getCustomerLicense() + "\n");
 		summary.appendText("-----------------------------------------------------------------------------------------------------\n");
