@@ -24,9 +24,9 @@
             <children>
               <Button fx:id="Cancel" cancelButton="true" layoutX="1241.0" layoutY="476.0" mnemonicParsing="false" prefHeight="22.0" text="Logout" />
               <Label layoutX="337.0" layoutY="14.0" text="Rental Summary" />
-              <Button disable="true" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" text="Finish" />
+              <Button fx:id="finishButton" disable="false" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleFinishButton" text="Finish" />
               <TextArea fx:id="summary" editable="false" layoutX="337.0" layoutY="37.0" prefHeight="423.0" prefWidth="657.0" wrapText="true" />
-              <Button layoutX="640.0" layoutY="476.0" mnemonicParsing="false" text="Print" />
+              <Button fx:id="printButton" disable="true" layoutX="640.0" layoutY="476.0" mnemonicParsing="false" onAction="#handlePrintButton" text="Print" />
             </children>
             <padding>
               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

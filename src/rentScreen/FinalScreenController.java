@@ -3,14 +3,15 @@ package rentScreen;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import databaseManagement.Query;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-
 import javafx.stage.Stage;
 
 /**
@@ -25,6 +26,11 @@ public class FinalScreenController implements Initializable{
 	@FXML
 	private TextArea summary;
 	
+	// Button
+	@FXML
+	private Button finishButton;
+	@FXML
+	private Button printButton;
 	
 	private Parent parent;
 	private Scene scene;
@@ -179,5 +185,27 @@ public class FinalScreenController implements Initializable{
 		summary.appendText("-----------------------------------------------------------------------------------------------------\n");
 		
 	}
+	
+	@FXML
+	private void handleFinishButton() {
+		
+		printButton.setDisable(false);	
+		
+	}
 
+	@FXML
+	private void handlePrintButton() {
+	
+		Query rentinsertion = new Query();
+		rentinsertion.autoCommitOff();
+	    rentinsertion.insert();
+
+	Query.commit();
+
+	Query.autoCommitOn();
+
+	System.out.println("The employee is addded");
+		System.out.println("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values (" + info.getVehicleID() + "," + info.getId() + "," + info.getFrom() + "," + info.getTo() + ", 0)");	
+		
+	}
 }

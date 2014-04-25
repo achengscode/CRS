@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
+import payment.Payment;
 import clerkScreen.ClerkScreenController;
 import clerkScreen.VehicleSearchRow;
 import javafx.fxml.FXML;
@@ -19,6 +21,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import databaseManagement.Query;
+
+import java.sql.Date;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Controller class to handle rent tab Controls Search Customer button to search
@@ -96,6 +103,8 @@ public class RentController implements Initializable {
 	private Button updateButton;
 	@FXML
 	private Button backButton;
+	@FXML
+	private Button nextButton;
 
 	// Radio Buttons declaration
 	@FXML
@@ -113,15 +122,14 @@ public class RentController implements Initializable {
 	@FXML
 	private CheckBox towingEqCheck;
 	
-	
-
 	private Parent parent;
 	private Scene scene;
 	private Stage stage;
-	
-	
+		
 	private VehicleSearchRow tuple;
 
+	private Payment priceCalculator;
+	
 	/**
 	 * Controller constructor
 	 * @param tuple
@@ -166,12 +174,100 @@ public class RentController implements Initializable {
 				towingEqCheck.setDisable(false);
 			}
 			
+			// Computing Vehicle Price using payment package
+			priceCalculator = new Payment(tuple.getVehicleID());
+			SimpleDateFormat formatter = new SimpleDateFormat("Yyyyy-MM-dd HH:mm:ss", Locale.US);
+			try {
+				Date startDate = new Date(formatter.parse(from).getTime());
+				Date endDate = new Date(formatter.parse(to).getTime());
+				displayVehiclePrice.setText(priceCalculator.estimatePrice(startDate, endDate));
+					
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			// Setting intial Equipment ammount to zero
+			displayEqPrice.setText("$0.00");
+			
+			// Calling method to set total Price Text Field
+			setTotalPrice();
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Default constructor used when back button on next screen is pushed
+	 */
+	public RentController() {
+
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+				"RentScreen.fxml"));
+
+		fxmlLoader.setController(this);
+		try {
+			parent = (Parent) fxmlLoader.load();
+			scene = new Scene(parent);
+						
+			// filling fields with arguments
+			selectedVehicleID.setText(info.getVehicleID());
+			selectedLicencePlate.setText(info.getLicense());
+			selectedType.setText(info.getType());
+			selectedCategory.setText(info.getCategory());
+			selectedMake.setText(info.getMake());
+			selectedModel.setText(info.getModel());
+			selectedYear.setText(info.getYear());
+			selectedColour.setText(info.getColour());
+			displayFrom.setText(info.getFrom());
+			displayTo.setText(info.getTo());
+			
+			// Setting previously selected customer info
+			displayPhone.setText(info.getPhone());
+			displayId.setText(info.getId());
+			displayLname.setText(info.getLastname());
+			displayFname.setText(info.getFirstname());
+			// displayStreet.setText(info);
+			
+			info = RentalInfo.getRentalInfo();
+			
+			// Setting on checkboxes according to selected vehicle type
+			if (info.getType().equals("Car")) {
+				skiRackCheck.setDisable(false);
+				childSeatCheck.setDisable(false);
+			}
+			// Otherwise, for Truck vehicle type
+			else {
+				liftGateCheck.setDisable(false);
+				towingEqCheck.setDisable(false);
+			}
+			
+			// Computing Vehicle Price using payment package
+			priceCalculator = new Payment(info.getVehicleID());
+			SimpleDateFormat formatter = new SimpleDateFormat("Yyyyy-MM-dd HH:mm:ss", Locale.US);
+			try {
+				Date startDate = new Date(formatter.parse(info.getFrom()).getTime());
+				Date endDate = new Date(formatter.parse(info.getTo()).getTime());
+				displayVehiclePrice.setText(priceCalculator.estimatePrice(startDate, endDate));
+					
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			// Setting intial Equipment ammount to zero
+			displayEqPrice.setText("$0.00");
+			
+			// Calling method to set total Price Text Field
+			setTotalPrice();
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void launchRentController(Stage stage) {
 		this.stage = stage;
 		stage.setTitle("Rent Vehicle");
@@ -199,6 +295,7 @@ public class RentController implements Initializable {
 		// so far only search by phone number is implemented
 		try {
 
+			cleanCustomerInfo();
 			String phone = searchPhone.getText();
 			String lastname = searchName.getText();
 
@@ -241,6 +338,10 @@ public class RentController implements Initializable {
 			displayCity.setText(city);
 			displayProvince.setText(province);
 			displayPcode.setText(pCode);
+			
+			// Activating the Next Button 
+			if (!displayId.getText().equals(""))
+				nextButton.setDisable(false);
 
 			// Setting fields as editable
 			displayPhone.setEditable(true);
@@ -376,6 +477,37 @@ public class RentController implements Initializable {
 	}
 	
 	/**
+	 * Handler for checkboxes.
+	 * @pre one of the additional equipment checkboxes is activated
+	 * @post The price corresponding to the additional equipments is updated according to current selection
+	 */
+	@FXML
+	private void handleAdditionalEq() {
+		double total = 0;
+		if (skiRackCheck.isSelected())
+		{
+			total = total + 100;
+		}
+		if (childSeatCheck.isSelected())
+		{
+			total = total + 50;
+		}
+		if (liftGateCheck.isSelected())
+		{
+			total = total + 250;
+		}
+		if (towingEqCheck.isSelected())
+		{
+			total = total + 550;
+		}
+		NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+		
+		displayEqPrice.setText(formatter.format(total));
+		setTotalPrice();
+		
+	}
+	
+	/**
 	 * Private method to fill all requested information from this screen into the singleton class to pass information to folowing screens.
 	 */
 	private void fillRentalInfo() {
@@ -404,4 +536,30 @@ public class RentController implements Initializable {
 						
 	}
 	
+	/**
+	 * Private Method to calculate and set total price field
+	 */
+	private void setTotalPrice()
+	{
+		double totalPrice;
+		
+		// Setting the total value based on the sum of both values
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+		
+		try {
+		totalPrice = currencyFormatter.parse(displayVehiclePrice.getText()).doubleValue();
+		totalPrice = totalPrice + currencyFormatter.parse(displayEqPrice.getText()).doubleValue();
+		
+		// Changing format and displaying the total amount
+		displayTotal.setText(currencyFormatter.format(totalPrice));
+				
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+	}
+	
+	
+
 }

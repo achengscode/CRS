@@ -163,12 +163,16 @@ public class CosignerScreenController implements Initializable{
 		System.exit(0);
 	}
 	
+	/**
+	 * handler to go back to previous screen
+	 */
 	@FXML
 	private void handleBackButton() {
-		// System.out.println("You pressed cancel!");
-		// Instead of exiting the program, cancel button should move the user to
-		// previous screen
-		// System.exit(0);
+		
+		RentController back = new RentController();
+		back.launchRentController(stage);
+		back.redirectHome(stage);
+		
 	}
 	
 	@FXML

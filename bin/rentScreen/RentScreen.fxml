@@ -62,10 +62,10 @@
                   <Label text="Additional Equipment" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
                   <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.valignment="CENTER">
                     <children>
-                      <CheckBox fx:id="skiRackCheck" disable="true" mnemonicParsing="false" text="Ski Rack" />
-                      <CheckBox fx:id="childSeatCheck" disable="true" mnemonicParsing="false" text="Child Seat" />
-                      <CheckBox fx:id="liftGateCheck" disable="true" mnemonicParsing="false" text="Lift Gate" />
-                      <CheckBox id="towingEqChek" fx:id="towingEqCheck" disable="true" mnemonicParsing="false" text="Car-towing Equip." />
+                      <CheckBox fx:id="skiRackCheck" disable="true" mnemonicParsing="false" onAction="#handleAdditionalEq" text="Ski Rack" />
+                      <CheckBox fx:id="childSeatCheck" disable="true" mnemonicParsing="false" onAction="#handleAdditionalEq" text="Child Seat" />
+                      <CheckBox fx:id="liftGateCheck" disable="true" mnemonicParsing="false" onAction="#handleAdditionalEq" text="Lift Gate" />
+                      <CheckBox id="towingEqChek" fx:id="towingEqCheck" disable="true" mnemonicParsing="false" onAction="#handleAdditionalEq" text="Car-towing Equip." />
                     </children>
                     <GridPane.margin>
                       <Insets top="10.0" />
@@ -145,7 +145,7 @@
                 </rowConstraints>
               </GridPane>
               <Button fx:id="backButton" layoutX="60.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleBackButton" text="Back" />
-              <Button disable="false" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleNextButton" text="Next" />
+              <Button fx:id="nextButton" disable="true" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleNextButton" text="Next" />
               <Label layoutX="1011.0" layoutY="14.0" text="Price" />
               <GridPane layoutX="1011.0" layoutY="38.0" prefWidth="290.0">
                 <children>
