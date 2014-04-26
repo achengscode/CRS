@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import eu.schudt.javafx.controls.calendar.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import javafx.collections.*?>
@@ -64,6 +65,7 @@
               <Label layoutX="14.0" layoutY="199.0" text="Month" />
               <Label layoutX="14.0" layoutY="227.0" text="Day" />
               <Label layoutX="15.0" layoutY="257.0" text="Year" />
+              <!-- 
               <ComboBox fx:id="fMonthBox" layoutX="70.0" layoutY="194.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -92,7 +94,8 @@
                 </items>
               </ComboBox>
               <Button fx:id="exitButton" cancelButton="true" layoutX="1236.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleExitButton" text="Logout" />
-              <Label layoutX="15.0" layoutY="287.0" text="Time" />
+              <Label layoutX="15.0" layoutY="287.0" text="Time" /> -->
+              
               <ComboBox fx:id="fTimeBox" layoutX="70.0" layoutY="284.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -102,6 +105,7 @@
                   </FXCollections>
                 </items>
               </ComboBox>
+              <!-- 
               <Label layoutX="175.0" layoutY="199.0" text="Month" />
               <Label layoutX="175.0" layoutY="227.0" text="Day" />
               <Label layoutX="175.0" layoutY="257.0" text="Year" />
@@ -132,7 +136,7 @@
                     <String fx:value="Item 3" />
                   </FXCollections>
                 </items>
-              </ComboBox>
+              </ComboBox> -->
               <ComboBox fx:id="tTimeBox" layoutX="251.0" layoutY="285.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -147,6 +151,18 @@
                   <Font name="System Bold" size="18.0" />
                 </font>
               </Label>
+              <DatePicker fx:id="startDatePicker" layoutX="35.0" layoutY="345.0" >
+              	<stylesheets>
+              		<URL value="@DatePicker.css"/>
+              	</stylesheets>
+              </DatePicker>
+              <DatePicker fx:id="endDatePicker" layoutX="216.0" layoutY="345.0">
+              	<stylesheets>
+              		<URL value="@DatePicker.css"/>
+              	</stylesheets>
+              </DatePicker>
+              <Label layoutX="39.0" layoutY="320.0" text="Pickup Date:" />
+              <Label layoutX="216.0" layoutY="323.0" text="Return Date: " />
             </children>
           </AnchorPane>
         </content>
@@ -158,7 +174,7 @@
       </Tab>
       <Tab text="Return">
         <content>
-          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <fx:include source="returnPage.fxml" />
         </content>
       </Tab>
       <Tab text="Daily Report">

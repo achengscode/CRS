@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import eu.schudt.javafx.controls.calendar.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +29,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 
 import login.LoginController;
 import rentScreen.RentController;
@@ -98,6 +100,12 @@ public class ClerkScreenController implements Initializable {
 	@FXML
 	private Button exitButton;
 
+	@FXML
+	private DatePicker startDatePicker;
+	
+	@FXML
+	private DatePicker endDatePicker;
+	
 	private Parent parent;
 	private Scene scene;
 	@SuppressWarnings("unused")
@@ -221,14 +229,18 @@ public class ClerkScreenController implements Initializable {
 				});
 
 		// Populating Date comboboxes with FIXED values
+		/*
 		fYearBox.setItems(yearCategory);
 		tYearBox.setItems(yearCategory);
 		fDayBox.setItems(dayCategory);
 		tDayBox.setItems(dayCategory);
 		fMonthBox.setItems(monthCategory);
-		tMonthBox.setItems(monthCategory);
+		tMonthBox.setItems(monthCategory);*/
 		fTimeBox.setItems(timeCategory);
 		tTimeBox.setItems(timeCategory);
+		
+		startDatePicker.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+		endDatePicker.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 	}
 
 	/**
@@ -375,12 +387,13 @@ public class ClerkScreenController implements Initializable {
 	private void handleCombo() {
 		
 		notFoundMsg.setVisible(false);
+		/*
 		if (type.getValue() == null || category.getValue() == null
 				|| fMonthBox.getValue() == null || tMonthBox.getValue() == null
 				|| fYearBox.getValue() == null || tYearBox.getValue() == null
 				|| fDayBox.getValue() == null || tDayBox.getValue() == null
 				|| fTimeBox.getValue() == null || tTimeBox.getValue() == null)
-			return;
+			return;*/
 		searchButton.setDisable(false);
 	}
 
@@ -408,7 +421,8 @@ public class ClerkScreenController implements Initializable {
 	 */
 	private String fillDateFrom()
 	{
-		return fYearBox.getValue() + "-" + fMonthBox.getValue() + "-" + fDayBox.getValue() + " " + fTimeBox.getValue() + ":00";
+	    SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		return fmt.format(startDatePicker.getSelectedDate()) + " " + fTimeBox.getValue() + ":00";
 		
 		
 	}
@@ -421,7 +435,9 @@ public class ClerkScreenController implements Initializable {
 	 */
 	private String fillDateTo()
 	{
-		return tYearBox.getValue() + "-" + tMonthBox.getValue() + "-" + tDayBox.getValue() + " " + tTimeBox.getValue() + ":00";
+
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		return fmt.format(endDatePicker.getSelectedDate()) + " " + tTimeBox.getValue() + ":00";
 		//return "2014-04-18 11:00:00";
 	}
 	
