@@ -1,7 +1,5 @@
 package login;
 
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -14,14 +12,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
+
 import security.DBSecurity;
 import databaseManagement.Query;
-import ui.AlertBox;
 import manager.ManagerController;
 
 /**
@@ -33,7 +32,7 @@ import manager.ManagerController;
  *
  */
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable{
 
 	@FXML
 	private Button loginBtn;
@@ -51,8 +50,9 @@ public class LoginController implements Initializable {
 	private Parent parent;
 	private Scene scene;
 	private Stage stage;
-	
 	private ManagerController manager;
+	
+	
 	/**
 	 * Constructor for the LoginController.
 	 * Loads the loginScreen onto the stage.
@@ -103,6 +103,7 @@ public class LoginController implements Initializable {
 			
 			String name = userName.getText();
 			String pwd = passwd.getText();
+		
 			
 			//check if name and password are empty.
 			if (isFieldsEmpty(name, pwd))
@@ -114,7 +115,7 @@ public class LoginController implements Initializable {
 			ResultSet result = Query.select("SELECT pwdSalt, empPwd, empType FROM employee WHERE empID = " +"'" + name + "'");
 			if (!result.next())
 			{
-			    AlertBox.show("No results found!");
+			    Dialogs.showErrorDialog(stage, "No matching password or username!");
 			    return;
 			}
 			String salt = result.getString(1);
@@ -125,7 +126,7 @@ public class LoginController implements Initializable {
 			System.out.println("Hashed : " + hashedString);
 			if (!dbPwd.equals(hashedString))
 			{
-				AlertBox.show("Incorrect Password!");
+			    Dialogs.showErrorDialog(stage, "No matching password for that username!");
 				return;
 			}
 			else
@@ -137,7 +138,7 @@ public class LoginController implements Initializable {
 			
 		} catch (SQLException e)
 		{
-		    AlertBox.show(e.getMessage()); //if any errors occur
+		    Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 	
@@ -163,9 +164,10 @@ public class LoginController implements Initializable {
 	        //create screens here
 	        case "manager":
 	        	manager = new ManagerController();
-				manager.redirectHome(stage);
+				manager.redirectHome(stage, userName.getText());
 	           break;
 	        case "clerk":
+	            
 	           break;
 	        case "sysadmin":
 	           break;
@@ -193,5 +195,5 @@ public class LoginController implements Initializable {
 	        anyMissing = true;
 	    }
 	    return anyMissing; 
-	}	
+	}
 }

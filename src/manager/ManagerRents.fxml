@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="rent" fx:id="rentTab" prefHeight="400.0" prefWidth="998.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="manager.ManagerRentsController">
+  <!-- TODO Add Nodes -->
+  <children>
+    <TableView id="resultTable" fx:id="rentTable" layoutX="55.0" layoutY="127.0" prefHeight="200.0" prefWidth="780.0">
+      <columns>
+        <TableColumn prefWidth="75.0" text="rentID" fx:id="rentIDCol" />
+        <TableColumn prefWidth="75.0" text="vehicleID" fx:id="vehicleIDCol" />
+        <TableColumn prefWidth="75.0" text="custID" fx:id="custIDCol" />
+        <TableColumn prefWidth="75.0" text="rentStart" fx:id="rentStartCol" />
+        <TableColumn prefWidth="75.0" text="rentEnd" fx:id="rentEndCol" />
+        <TableColumn prefWidth="75.0" text="isBooked" fx:id="isBookedCol" />
+        <TableColumn prefWidth="75.0" text="LastName" fx:id="lastNameCol" />
+        <TableColumn prefWidth="75.0" text="Make" fx:id="makeCol" />
+        <TableColumn prefWidth="75.0" text="Model" fx:id="modelCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="107.0" text="Co-Signer" fx:id="coSignerCol" />
+      </columns>
+    </TableView>
+    <Button fx:id="generateButton" layoutX="68.0" layoutY="73.0" mnemonicParsing="false" onAction="#handleGenerateButton" text="Generate" />
+  </children>
+  <padding>
+    <Insets />
+  </padding>
+</AnchorPane>

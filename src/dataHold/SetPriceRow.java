@@ -8,12 +8,14 @@ public class SetPriceRow {
 	private SimpleStringProperty hour;
 	private SimpleStringProperty day;
 	private SimpleStringProperty week;
+	private SimpleStringProperty equipmentType;
 	
 	public SetPriceRow(){
 		this.type = new SimpleStringProperty("");
     	this.hour = new SimpleStringProperty("");
     	this.day = new SimpleStringProperty("");
     	this.week = new SimpleStringProperty("");
+    	this.equipmentType = new SimpleStringProperty("");
 	}
 	public String getType() {
 		return this.type.get();
@@ -38,5 +40,11 @@ public class SetPriceRow {
 	}
 	public String getWeek(){
 		return week.get();
+	}
+	public String getEquipmentType() {
+		return equipmentType.get();
+	}
+	public void setEquipmentType(String equipmentType) {
+		this.equipmentType.set(equipmentType);
 	}
 }
