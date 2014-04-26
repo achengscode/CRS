@@ -14,9 +14,9 @@ import java.sql.Statement;
  *
  */
 public class Query {
-	
+
 	private static Connection dbConn;
-	
+
 	/**
 	 * Performs one of the INSERT, UPDATE or DELETE SQL queries.
 	 * 
@@ -39,7 +39,7 @@ public class Query {
 		insert.close();
 		return rowsAffected;
 	}
-	
+
 	/**
 	 * Alias of the create() method. Ideally, this is called whenever
 	 * we make an UPDATE SQL query.
@@ -53,8 +53,8 @@ public class Query {
 	{
 		return insert(userQuery);
 	}
-	
-	
+
+
 	/**
 	 * Alias of the create() method. Ideally, this is called whenever
 	 * we make a DELETE SQL query.
@@ -67,7 +67,7 @@ public class Query {
 	{
 		return insert(userQuery);
 	}
-	
+
 	/**
 	 * Performs the general SELECT statement.
 	 * 
@@ -82,12 +82,12 @@ public class Query {
 		{
 			dbConn = DatabaseManagement.getConnection();
 		}
-		
+
 		Statement dbStatement = dbConn.createStatement();
 		ResultSet results = dbStatement.executeQuery(userQuery);
 		return results;
 	}
-	
+
 	/**
 	 * Runs a SELECT * FROM query to return every row of a specified table.
 	 * 
@@ -102,9 +102,56 @@ public class Query {
 		{
 			dbConn = DatabaseManagement.getConnection();
 		}
-		
+
 		Statement dbStatement = dbConn.createStatement();
 		ResultSet results = dbStatement.executeQuery("SELECT * FROM " + tableName);
 		return results;
+	}
+
+	public static void autoCommitOn() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+
+
+			dbConn.setAutoCommit(true);
+
+	}
+
+	public static void autoCommitOff() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+
+
+			dbConn.setAutoCommit(false);
+
+	}
+
+
+	public static void commit() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+
+
+			dbConn.commit();
+
+
+	}
+
+	public static void rollback() throws SQLException{
+		if (dbConn == null)
+		{
+			dbConn = DatabaseManagement.getConnection();
+		}
+
+
+			dbConn.rollback();
+
+
 	}
 }

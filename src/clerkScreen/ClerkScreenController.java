@@ -201,7 +201,7 @@ public class ClerkScreenController implements Initializable {
 					@SuppressWarnings("rawtypes")
 					@Override
 					public void changed(ObservableValue ov, Object t, Object t1) {
-						System.out.println("Here" + t1.toString());
+						
 						switch (t1.toString()) {
 						case "0":
 							category.setItems(carCategory);
@@ -244,10 +244,6 @@ public class ClerkScreenController implements Initializable {
 			ResultSet result;
 			String dateFrom = fillDateFrom();
 			String dateTo = fillDateTo();
-			
-			
-			System.out.println(dateFrom);
-			System.out.println(dateTo);
 			
 			// SQL Query must be adjusted depending on the search parameter
 			// given (phone or lastname)
@@ -332,7 +328,6 @@ public class ClerkScreenController implements Initializable {
 				tuple.setModel(result.getString(6));
 				tuple.setYear(result.getString(7).substring(0, 4));
 				tuple.setColour(result.getString(8));
-				// System.out.println(result.getString(8));
 				resultList.add(tuple);
 
 			}
@@ -350,7 +345,7 @@ public class ClerkScreenController implements Initializable {
 	 */
 	@FXML
 	private void handleExitButton() {
-		// System.out.println("You pressed Exit!");
+		
 		// Instead of exiting the program, cancel button should move the user to
 		// previous screen
 		LoginController log = new LoginController();
@@ -378,8 +373,7 @@ public class ClerkScreenController implements Initializable {
 	 */
 	@FXML
 	private void handleCombo() {
-		// System.out.println("type: " + type.getValue());
-		// System.out.println("category: " + category.getValue());
+		
 		notFoundMsg.setVisible(false);
 		if (type.getValue() == null || category.getValue() == null
 				|| fMonthBox.getValue() == null || tMonthBox.getValue() == null
@@ -399,10 +393,10 @@ public class ClerkScreenController implements Initializable {
 	@FXML
 	private void handleClickTable() {
 		if (resultsTable.getSelectionModel().getSelectedItem() == null) {
-			// System.out.println("No row selected");
+			
 			return;
 		}
-		// System.out.println("Row Successfully selected");
+		
 		nextButton.setDisable(false);
 	}
 	
@@ -415,8 +409,8 @@ public class ClerkScreenController implements Initializable {
 	private String fillDateFrom()
 	{
 		return fYearBox.getValue() + "-" + fMonthBox.getValue() + "-" + fDayBox.getValue() + " " + fTimeBox.getValue() + ":00";
-		//System.out.println(fYearBox.getValue() + "-" + fMonthBox.getValue() + "-" + fDayBox.getValue() + " " + fTimeBox.getValue() + ":00");
-		//return "2014-04-17 10:01:00";
+		
+		
 	}
 	
 	/**

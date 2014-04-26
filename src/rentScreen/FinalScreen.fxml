@@ -22,11 +22,14 @@
         <content>
           <AnchorPane id="Content" disable="false" minHeight="0.0" minWidth="0.0" prefHeight="545.0" prefWidth="1376.0">
             <children>
-              <Button fx:id="Cancel" cancelButton="true" layoutX="1241.0" layoutY="476.0" mnemonicParsing="false" prefHeight="22.0" text="Logout" />
+              <Button id="Cancel" fx:id="returnButton" cancelButton="true" disable="true" layoutX="1238.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleReturn" prefHeight="22.0" text="Return Home" />
               <Label layoutX="337.0" layoutY="14.0" text="Rental Summary" />
-              <Button fx:id="finishButton" disable="false" layoutX="1171.0" layoutY="476.0" mnemonicParsing="false" onAction="#handleFinishButton" text="Finish" />
+              <Button fx:id="finishButton" disable="false" layoutX="1158.0" layoutY="477.0" mnemonicParsing="false" onAction="#handleFinishButton" text="Submit" />
               <TextArea fx:id="summary" editable="false" layoutX="337.0" layoutY="37.0" prefHeight="423.0" prefWidth="657.0" wrapText="true" />
               <Button fx:id="printButton" disable="true" layoutX="640.0" layoutY="476.0" mnemonicParsing="false" onAction="#handlePrintButton" text="Print" />
+              <Label fx:id="finalMessage" layoutX="1090.0" layoutY="37.0" text="Transaction Completed Successfully" visible="false" />
+              <Label fx:id="rentalNumberMessage" layoutX="1090.0" layoutY="72.0" text="Rental Number" visible="false" />
+              <Label fx:id="rentalIdMessage" layoutX="1238.0" layoutY="69.0" text="" />
             </children>
             <padding>
               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

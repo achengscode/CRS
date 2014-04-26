@@ -2,8 +2,11 @@ package rentScreen;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import clerkScreen.ClerkScreenController;
 import databaseManagement.Query;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
@@ -31,6 +35,16 @@ public class FinalScreenController implements Initializable{
 	private Button finishButton;
 	@FXML
 	private Button printButton;
+	@FXML
+	private Button returnButton;
+	
+	// Labels
+	@FXML
+	private Label finalMessage;
+	@FXML
+	private Label rentalIdMessage;
+	@FXML
+	private Label rentalNumberMessage;
 	
 	private Parent parent;
 	private Scene scene;
@@ -189,23 +203,122 @@ public class FinalScreenController implements Initializable{
 	@FXML
 	private void handleFinishButton() {
 		
-		printButton.setDisable(false);	
+		try {
+			Query.autoCommitOff();
+			String newId;
+			
+			// Getting next available ID in Rents Table
+			ResultSet result;
+			result = Query.select("SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'crs_database' AND   TABLE_NAME   = 'Rents'");
+			result.next();
+			newId = result.getString(1);
+			
+			
+			// Insert query to Rents Table
+			Query.insert("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values ('"
+					+ info.getVehicleID()
+					+ "',"
+					+ info.getId()
+					+ ",'"
+					+ info.getFrom() + "','" + info.getTo() + "', 0)");
+			
+//			System.out.println("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values ('"
+//					+ info.getVehicleID()
+//					+ "',"
+//					+ info.getId()
+//					+ ",'"
+//					+ info.getFrom() + "','" + info.getTo() + "', 0)");
+
+
+			// Insert Query to rentCardInfo Table
+			Query.insert("INSERT INTO rentCardInfo values (" + newId + ",'"
+					+ info.getCardNumber() + "','" + info.getCardCompany() + "','" + info.getExpYear() + "','"
+					+ info.getExpMonth() + "')");
+			
+//			System.out.println("INSERT INTO rentCardInfo values (" + newId + ",'"
+//					+ info.getCardNumber() + "','" + info.getCardCompany() + "','" + info.getExpYear() + "','"
+//					+ info.getExpMonth() + "')");
+			
+			// Insert into equipmentUsed Table
+			if (info.isSkiRack())
+				Query.insert("INSERT INTO EquipmentUsed values (" + newId + ",1)");
+			if (info.isChildSeat())
+				Query.insert("INSERT INTO EquipmentUsed values (" + newId + ",2)");
+			if (info.isLiftGate())
+				Query.insert("INSERT INTO EquipmentUsed values (" + newId + ",3)");
+			if (info.isTowingEq())
+				Query.insert("INSERT INTO EquipmentUsed values (" + newId + ",4)");
+			
+//			System.out.println("INSERT INTO EquipmentUsed values (" + newId + ",1)");
+			
+			// Insert into Cosigner Table if age is under 25
+			// Converting cosigner age into birth date.
+			// To be modified later!!
+			
+			
+			if (Integer.parseInt(info.getCustomerAge()) < 25) {
+				int birthYearNumber = 2014 - Integer.parseInt(info.getCosignerAge());
+				String birthDate = birthYearNumber + "-01-01";
+
+				Query.insert("INSERT INTO cosigner values (" + info.getId()
+						+ ",'" + info.getCosignerLicense() + "','" + birthDate
+						+ "','" + info.getCosignerLastname() + ", "
+						+ info.getCosignerFirstname() + "')");
+
+				// System.out.println("INSERT INTO cosigner values (" +
+				// info.getId() + ",'"
+				// + info.getCosignerLicense() + "','" + birthDate + "','"
+				// + info.getCosignerLastname() + ", "
+				// + info.getCosignerFirstname() + "')");
+			}
+			
+			
+			// End and commit queries
+			Query.commit();
+			Query.autoCommitOn();
+			
+			// Displaying successful transaction operation
+			finalMessage.setVisible(true);
+			rentalNumberMessage.setVisible(true);
+			rentalIdMessage.setText(newId);
+			
+			// Reprinting report including Rental ID
+			fillSummary(newId);
+			
+			// Cleaning RentalInfo object
+			info.flushInfo();
+			
+			// Activating printing Button
+			printButton.setDisable(false);
+			// Activating ReturnHome Button
+			returnButton.setDisable(false);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		
 		
 	}
 
+	/**
+	 * Handler for printing button
+	 */
 	@FXML
 	private void handlePrintButton() {
 	
-		Query rentinsertion = new Query();
-		rentinsertion.autoCommitOff();
-	    rentinsertion.insert();
+	// Not implemented yet
+	// Should launch a dialogbox indicating that the document was sent to printer
 
-	Query.commit();
-
-	Query.autoCommitOn();
-
-	System.out.println("The employee is addded");
-		System.out.println("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values (" + info.getVehicleID() + "," + info.getId() + "," + info.getFrom() + "," + info.getTo() + ", 0)");	
-		
 	}
+	
+	@FXML
+	private void handleReturn() {
+		ClerkScreenController returnSc = new ClerkScreenController();
+		returnSc.launchClerkController(stage);
+		returnSc.redirectHome(stage);
+	}
+	
 }

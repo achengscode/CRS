@@ -19,7 +19,7 @@ public class DatabaseManagement
 	 * Static DatabaseManagement instance.
 	 */
 	private static DatabaseManagement instance;
-	
+
 	/**
 	 * Connection to the database.
 	 * 
@@ -36,7 +36,8 @@ public class DatabaseManagement
 	{
 		DriverManager.registerDriver(new Driver()); //register the driver class
 		//create the connection to the database.
-		dbCon = DriverManager.getConnection("jdbc:mysql://www.sourcesixsoftware.com/crs_database", "crsAdmin", "e=mc^2");
+		dbCon = DriverManager.getConnection("jdbc:mysql://www.sourcesixsoftware.com/crs_database", "crsAdmin", 
+				"e=mc^2");
 	}
 
 	/**
@@ -55,7 +56,7 @@ public class DatabaseManagement
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Returns the database connection. 
 	 * 
@@ -68,9 +69,9 @@ public class DatabaseManagement
 	public static synchronized Connection getConnection() throws SQLException
 	{
 		instance = getInstance(); 
-		
+
 		return dbCon;
 	}
-	
-	
+
+
 }

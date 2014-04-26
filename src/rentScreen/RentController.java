@@ -128,7 +128,12 @@ public class RentController implements Initializable {
 		
 	private VehicleSearchRow tuple;
 
+	// Price calculation object
 	private Payment priceCalculator;
+	private double skiRackPrice;
+	private double childSeatPrice;
+	private double liftGatePrice;
+	private double towingEqPrice;
 	
 	/**
 	 * Controller constructor
@@ -174,14 +179,26 @@ public class RentController implements Initializable {
 				towingEqCheck.setDisable(false);
 			}
 			
-			// Computing Vehicle Price using payment package
+			// Computing Prices using payment package
 			priceCalculator = new Payment(tuple.getVehicleID());
 			SimpleDateFormat formatter = new SimpleDateFormat("Yyyyy-MM-dd HH:mm:ss", Locale.US);
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+			
 			try {
 				Date startDate = new Date(formatter.parse(from).getTime());
 				Date endDate = new Date(formatter.parse(to).getTime());
+				
+				// Getting Vehicle Price
 				displayVehiclePrice.setText(priceCalculator.estimatePrice(startDate, endDate));
-					
+				
+				// Additional Equipment prices
+				skiRackPrice = currencyFormatter.parse(priceCalculator.estimateEquipmentPrice("1", startDate, endDate)).doubleValue();
+				childSeatPrice = currencyFormatter.parse(priceCalculator.estimateEquipmentPrice("2", startDate, endDate)).doubleValue();
+				liftGatePrice = currencyFormatter.parse(priceCalculator.estimateEquipmentPrice("3", startDate, endDate)).doubleValue();
+				towingEqPrice = currencyFormatter.parse(priceCalculator.estimateEquipmentPrice("4", startDate, endDate)).doubleValue();
+				
+
+				
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -191,8 +208,7 @@ public class RentController implements Initializable {
 			
 			// Calling method to set total Price Text Field
 			setTotalPrice();
-			
-			
+				
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -255,6 +271,31 @@ public class RentController implements Initializable {
 				e.printStackTrace();
 			}
 			
+			// Computing Additional Equipment prices
+			NumberFormat currencyFormatter = NumberFormat
+					.getCurrencyInstance(Locale.US);
+			try {
+				Date startDate = new Date(formatter.parse(info.getFrom())
+						.getTime());
+				Date endDate = new Date(formatter.parse(info.getTo()).getTime());
+
+				skiRackPrice = currencyFormatter.parse(
+						priceCalculator.estimateEquipmentPrice("1", startDate,
+								endDate)).doubleValue();
+				childSeatPrice = currencyFormatter.parse(
+						priceCalculator.estimateEquipmentPrice("2", startDate,
+								endDate)).doubleValue();
+				liftGatePrice = currencyFormatter.parse(
+						priceCalculator.estimateEquipmentPrice("3", startDate,
+								endDate)).doubleValue();
+				towingEqPrice = currencyFormatter.parse(
+						priceCalculator.estimateEquipmentPrice("4", startDate,
+								endDate)).doubleValue();
+
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
 			// Setting intial Equipment ammount to zero
 			displayEqPrice.setText("$0.00");
 			
@@ -293,6 +334,7 @@ public class RentController implements Initializable {
 	private void handleSearchCustomerButton() {
 		// database call to search for customer info in database
 		// so far only search by phone number is implemented
+		
 		try {
 
 			cleanCustomerInfo();
@@ -328,7 +370,7 @@ public class RentController implements Initializable {
 			String province = result.getString(7);
 			String pCode = result.getString(8);
 
-			System.out.println("Customer with PhoneNo: " + phone + " found!");
+			
 			// Setting fields in customer information
 			displayPhone.setText(phone);
 			displayFname.setText(fname);
@@ -483,23 +525,26 @@ public class RentController implements Initializable {
 	 */
 	@FXML
 	private void handleAdditionalEq() {
+	
 		double total = 0;
 		if (skiRackCheck.isSelected())
 		{
-			total = total + 100;
+			total = total + skiRackPrice;
 		}
 		if (childSeatCheck.isSelected())
 		{
-			total = total + 50;
+			total = total + childSeatPrice;
 		}
 		if (liftGateCheck.isSelected())
 		{
-			total = total + 250;
+			total = total + liftGatePrice;
 		}
 		if (towingEqCheck.isSelected())
 		{
-			total = total + 550;
+			total = total + towingEqPrice;
 		}
+		
+		
 		NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 		
 		displayEqPrice.setText(formatter.format(total));

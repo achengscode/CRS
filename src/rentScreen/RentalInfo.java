@@ -51,6 +51,56 @@ public class RentalInfo {
 	private static String holderName;
 	
 
+	public static void flushInfo()
+	{
+		// Car attributes
+		vehicleID = "";
+		license = "";
+		type = "";
+		category = "";
+		make = "";
+		model = "";
+		year = "";
+		colour = "";
+		
+		// Additional Equipment
+		skiRack = false;
+		childSeat = false;
+		liftGate = false;
+		towingEq = false;
+		
+		//Customer attributes
+		id = "";
+		phone = "";
+		lastname = "";
+		firstname = "";
+		
+		// Rental Period
+		from = "";
+		to = "";
+		
+		// Price information
+		vehiclePrice = "";
+		equipmentPrice = "";
+		totalPrice = "";
+		
+		// Cosigner Screen fields and information
+		// License Information
+		customerLicense = "";
+		customerAge = "";
+		cosignerLastname = "";
+		cosignerFirstname = "";
+		cosignerLicense = "";
+		cosignerAge = "";
+		
+		// Payment Information
+		cardNumber = "";
+		cardCompany = "";
+		expMonth = "";
+		expYear = "";
+		holderName = "";
+	}
+	
 	public static String getId() {
 		return id;
 	}
