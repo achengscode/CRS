@@ -52,7 +52,6 @@ public class LoginController implements Initializable{
 	private Stage stage;
 	private ManagerController manager;
 	
-	
 	/**
 	 * Constructor for the LoginController.
 	 * Loads the loginScreen onto the stage.
@@ -165,7 +164,7 @@ public class LoginController implements Initializable{
 	        case "manager":
 	        	manager = new ManagerController();
 				manager.redirectHome(stage, userName.getText());
-	           break;
+				break;
 	        case "clerk":
 	            
 	           break;
