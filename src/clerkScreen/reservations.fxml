@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="568.0" prefWidth="1368.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="clerkScreen.reservationsController">
+  <children>
+    <RadioButton fx:id="searchRent" layoutX="54.0" layoutY="125.0" mnemonicParsing="false" text="Rent ID">
+      <toggleGroup>
+        <ToggleGroup fx:id="rentParam" />
+      </toggleGroup>
+    </RadioButton>
+    <RadioButton fx:id="searchNo" layoutX="55.0" layoutY="171.0" mnemonicParsing="false" text="Phone No." toggleGroup="$rentParam" />
+    <Label layoutX="151.0" layoutY="64.0" text="Search Criteria" />
+    <TextField fx:id="rentID" layoutX="150.0" layoutY="122.0" prefWidth="200.0" />
+    <TextField fx:id="phoneNo" layoutX="150.0" layoutY="171.0" prefWidth="200.0" />
+    <Label fx:id="errorID" layoutX="150.0" layoutY="144.0" text="Numbers Only" textFill="RED" visible="false" />
+    <Label fx:id="errorPhone" layoutX="150.0" layoutY="193.0" text="Format XXX-XXX-XXXXX Only" textFill="RED" visible="false" />
+    <TableView fx:id="resultsTable" editable="true" layoutX="491.0" layoutY="47.0" onMouseClicked="#clickedRow" prefHeight="299.0" prefWidth="646.0">
+      <columns>
+        <TableColumn prefWidth="75.0" text="Rent ID" fx:id="rentIDCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="97.0" text="Vehicle Make" fx:id="makeCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="99.0" text="Vehicle Model" fx:id="modelCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="83.0" text="License Plate" fx:id="plateCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="145.0" text="Rent Start" fx:id="startCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="145.0" text="Rent End" fx:id="endCol" />
+      </columns>
+    </TableView>
+    <Button layoutX="194.0" layoutY="263.0" mnemonicParsing="false" onAction="#findRent" text="Find Rent" />
+    <Label fx:id="completeCriteria" layoutX="56.0" layoutY="99.0" text="Must choose a search Criteria" textFill="RED" visible="false" />
+    <Button fx:id="completeRent" disable="true" layoutX="803.0" layoutY="483.0" mnemonicParsing="false" onAction="#completeRent" text="Next" />
+  </children>
+</AnchorPane>
