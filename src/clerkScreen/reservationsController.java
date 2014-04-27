@@ -20,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import databaseManagement.Query;
 import rentScreen.RentController;
+import rentScreen.RentalInfo;
 
 /**
  * Controller class for the reservations screen.
@@ -198,6 +199,9 @@ public class reservationsController implements Initializable{
      */
     private void completeRent()
     {
+    	RentalInfo info = RentalInfo.getCurrentInstance();
+    	RentalInfo.setBooking(true);
+    	RentalInfo.setRentId(tableRow.getRentID());
         stage = (Stage)resultsTable.getScene().getWindow();
         RentController controller = new RentController(row, tableRow.getRentStart(), tableRow.getRentEnd());
         controller.launchRentController(stage);

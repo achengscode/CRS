@@ -67,9 +67,14 @@ public class FinalScreenController implements Initializable{
 			scene = new Scene(parent);
 						
 			info = RentalInfo.getRentalInfo();
-			
-			fillSummary("Undefined");
-			
+			if (info.getBookingStatus())
+			{
+				fillSummary(info.getRentId());
+			}
+			else
+			{
+				fillSummary("Undefined");
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -217,27 +222,34 @@ public class FinalScreenController implements Initializable{
 			result.next();
 			newId = result.getString(1);
 			
-			
-			// Insert query to Rents Table
-			Query.insert("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values ('"
-					+ info.getVehicleID()
-					+ "',"
-					+ info.getId()
-					+ ",'"
-					+ info.getFrom() + "','" + info.getTo() + "', 0)");
-			
-//			System.out.println("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values ('"
-//					+ info.getVehicleID()
-//					+ "',"
-//					+ info.getId()
-//					+ ",'"
-//					+ info.getFrom() + "','" + info.getTo() + "', 0)");
+			if (info.getBookingStatus())
+			{
+				String query = String.format("UPDATE Rents SET isBooked='0' WHERE rentID='%s'", info.getId());
+				Query.update(query);
+			}
+			else
+			{
+				// Insert query to Rents Table
+				Query.insert("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values ('"
+						+ info.getVehicleID()
+						+ "',"
+						+ info.getId()
+						+ ",'"
+						+ info.getFrom() + "','" + info.getTo() + "', 0)");
 
+				// System.out.println("INSERT INTO Rents (vehicleID,custID, RentStart, rentEnd, isBooked) values ('"
+				// + info.getVehicleID()
+				// + "',"
+				// + info.getId()
+				// + ",'"
+				// + info.getFrom() + "','" + info.getTo() + "', 0)");
 
-			// Insert Query to rentCardInfo Table
-			Query.insert("INSERT INTO rentCardInfo values (" + newId + ",'"
-					+ info.getCardNumber() + "','" + info.getCardCompany() + "','" + info.getExpYear() + "','"
-					+ info.getExpMonth() + "')");
+				// Insert Query to rentCardInfo Table
+				Query.insert("INSERT INTO rentCardInfo values (" + newId + ",'"
+						+ info.getCardNumber() + "','" + info.getCardCompany()
+						+ "','" + info.getExpYear() + "','"
+						+ info.getExpMonth() + "')");
+			}
 			
 //			System.out.println("INSERT INTO rentCardInfo values (" + newId + ",'"
 //					+ info.getCardNumber() + "','" + info.getCardCompany() + "','" + info.getExpYear() + "','"
@@ -282,7 +294,15 @@ public class FinalScreenController implements Initializable{
 			Query.autoCommitOn();
 			
 			// Displaying successful transaction operation
-			Dialogs.showInformationDialog(stage, "Transaction Successfully Completed\n" + "Rent ID Number: " + newId,"Transaction Completed");
+			if (info.getBookingStatus())
+			{
+				Dialogs.showInformationDialog(stage, "Transaction Successfully Completed\n" + "Rent ID Number: " + newId,"Transaction Completed");
+			}
+			else
+			{
+				Dialogs.showInformationDialog(stage, "Transaction Successfully Completed\n!" + "Rent ID Number: " + info.getRentId(),
+						"Transaction Completed");	
+			}
 			
 			backButton.setDisable(true);
 			finalMessage.setVisible(true);
@@ -293,7 +313,7 @@ public class FinalScreenController implements Initializable{
 			fillSummary(newId);
 			
 			// Cleaning RentalInfo object
-			info.flushInfo();
+		    info.flushInfo();
 			
 			// Activating printing Button
 			printButton.setDisable(false);

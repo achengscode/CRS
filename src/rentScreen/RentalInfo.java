@@ -29,6 +29,9 @@ public class RentalInfo {
 	private static String from;
 	private static String to;
 	
+	// Rent information
+	private static String rentID;
+	
 	// Price information
 	private static String vehiclePrice;
 	private static String equipmentPrice;
@@ -50,7 +53,9 @@ public class RentalInfo {
 	private static String expYear;
 	private static String holderName;
 	
-
+	// Booking status (previous or not)
+	private static boolean isBooking;
+	
 	public static void flushInfo()
 	{
 		// Car attributes
@@ -78,6 +83,7 @@ public class RentalInfo {
 		// Rental Period
 		from = "";
 		to = "";
+		rentID = "";
 		
 		// Price information
 		vehiclePrice = "";
@@ -101,7 +107,7 @@ public class RentalInfo {
 		holderName = "";
 	}
 	
-	public static String getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -111,7 +117,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
@@ -121,7 +127,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getLastname() {
+	public String getLastname() {
 		return lastname;
 	}
 
@@ -131,7 +137,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getFirstname() {
+	public String getFirstname() {
 		return firstname;
 	}
 
@@ -141,7 +147,7 @@ public class RentalInfo {
 	}
 	
 	
-	public static String getFrom() {
+	public  String getFrom() {
 		return from;
 	}
 
@@ -151,7 +157,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getTo() {
+	public String getTo() {
 		return to;
 	}
 
@@ -161,7 +167,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getVehiclePrice() {
+	public String getVehiclePrice() {
 		return vehiclePrice;
 	}
 
@@ -171,7 +177,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getEquipmentPrice() {
+	public String getEquipmentPrice() {
 		return equipmentPrice;
 	}
 
@@ -181,7 +187,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getTotalPrice() {
+	public String getTotalPrice() {
 		return totalPrice;
 	}
 
@@ -192,16 +198,11 @@ public class RentalInfo {
 
 
 	public static RentalInfo getCurrentInstance() {
-		return currentInstance;
+		return getRentalInfo();
 	}
 
 
-	public static void setCurrentInstance(RentalInfo currentInstance) {
-		RentalInfo.currentInstance = currentInstance;
-	}
-
-
-	public static String getVehicleID() {
+	public String getVehicleID() {
 		return vehicleID;
 	}
 
@@ -211,7 +212,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getLicense() {
+	public String getLicense() {
 		return license;
 	}
 
@@ -221,7 +222,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getType() {
+	public String getType() {
 		return type;
 	}
 
@@ -231,7 +232,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
@@ -241,7 +242,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getMake() {
+	public String getMake() {
 		return make;
 	}
 
@@ -251,7 +252,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getModel() {
+	public String getModel() {
 		return model;
 	}
 
@@ -261,7 +262,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getYear() {
+	public String getYear() {
 		return year;
 	}
 
@@ -271,7 +272,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getColour() {
+	public String getColour() {
 		return colour;
 	}
 
@@ -281,7 +282,7 @@ public class RentalInfo {
 	}
 
 
-	public static boolean isSkiRack() {
+	public boolean isSkiRack() {
 		return skiRack;
 	}
 
@@ -291,7 +292,7 @@ public class RentalInfo {
 	}
 
 
-	public static boolean isChildSeat() {
+	public boolean isChildSeat() {
 		return childSeat;
 	}
 
@@ -301,7 +302,7 @@ public class RentalInfo {
 	}
 
 
-	public static boolean isLiftGate() {
+	public boolean isLiftGate() {
 		return liftGate;
 	}
 
@@ -311,7 +312,7 @@ public class RentalInfo {
 	}
 
 
-	public static boolean isTowingEq() {
+	public boolean isTowingEq() {
 		return towingEq;
 	}
 
@@ -321,7 +322,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCustomerLicense() {
+	public String getCustomerLicense() {
 		return customerLicense;
 	}
 
@@ -331,7 +332,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCustomerAge() {
+	public String getCustomerAge() {
 		return customerAge;
 	}
 
@@ -341,7 +342,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCosignerLastname() {
+	public String getCosignerLastname() {
 		return cosignerLastname;
 	}
 
@@ -351,7 +352,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCosignerFirstname() {
+	public String getCosignerFirstname() {
 		return cosignerFirstname;
 	}
 
@@ -361,7 +362,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCosignerLicense() {
+	public String getCosignerLicense() {
 		return cosignerLicense;
 	}
 
@@ -371,7 +372,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCosignerAge() {
+	public String getCosignerAge() {
 		return cosignerAge;
 	}
 
@@ -381,7 +382,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCardNumber() {
+	public String getCardNumber() {
 		return cardNumber;
 	}
 
@@ -391,7 +392,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getCardCompany() {
+	public String getCardCompany() {
 		return cardCompany;
 	}
 
@@ -401,7 +402,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getExpMonth() {
+	public String getExpMonth() {
 		return expMonth;
 	}
 
@@ -411,7 +412,7 @@ public class RentalInfo {
 	}
 
 
-	public static String getExpYear() {
+	public String getExpYear() {
 		return expYear;
 	}
 
@@ -430,7 +431,14 @@ public class RentalInfo {
 		RentalInfo.holderName = holderName;
 	}
 
-
+	public static void setBooking(boolean status) {
+		isBooking = status;
+	}
+	
+	public boolean getBookingStatus() {
+		return isBooking;
+	}
+	
 	private RentalInfo() {
 		flushInfo();
 	
@@ -441,5 +449,13 @@ public class RentalInfo {
 			currentInstance = new RentalInfo();
 		return currentInstance;
 	}
-
+	
+	public static void setRentId(String id){
+		rentID = id;
+	}
+	
+	public String getRentId() {
+		return rentID;
+	}
+	
 }

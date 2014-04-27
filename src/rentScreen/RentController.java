@@ -167,9 +167,7 @@ public class RentController implements Initializable {
 			selectedColour.setText(tuple.getColour());
 			displayFrom.setText(from);
 			displayTo.setText(to);
-			// NOT IMPLEMENTING PRICE CALCULATION YET!!
-			displayTotal.setText("125.00");
-			
+						
 			info = RentalInfo.getRentalInfo();
 						
 			// Setting on checkboxes according to selected vehicle type
@@ -228,6 +226,7 @@ public class RentController implements Initializable {
 
 		fxmlLoader.setController(this);
 		try {
+			info = RentalInfo.getRentalInfo();
 			parent = (Parent) fxmlLoader.load();
 			scene = new Scene(parent);
 						
@@ -256,7 +255,7 @@ public class RentController implements Initializable {
 			// setting next button available
 			nextButton.setDisable(false);
 
-			info = RentalInfo.getRentalInfo();
+			
 			
 			// Setting on checkboxes according to selected vehicle type
 			if (info.getType().equals("Car")) {
@@ -425,7 +424,7 @@ public class RentController implements Initializable {
 	 */
 	@FXML
 	private void handleCancelButton() {
-		info.flushInfo();
+		RentalInfo.flushInfo();
 		LoginController login = new LoginController();
 		login.launchLoginController(stage);
 			
