@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -53,6 +54,9 @@ public class ManagerController implements Validator, Initializable {
 	private Parent parent;
 	private Scene scene;
 	private Stage stage;
+	/**
+	 * managerID is used to hold the current managerID information.
+	 */
     private String managerID;
 	
 	@FXML
@@ -120,7 +124,7 @@ public class ManagerController implements Validator, Initializable {
 	/**
 	 * Below is the list of attributes used by manager for the ADD VEHICLE TAB
 	 */
-// Declaring Table and Columns
+
 	@FXML
 	private TableView<ReportRow> reportTable;
 	@FXML
@@ -145,10 +149,12 @@ public class ManagerController implements Validator, Initializable {
 	@FXML
 	private Label reportDisplay;
 	ObservableList<ReportRow> reportList;
+	@FXML
+	private Label plateIncorrectLabel;
     /**
      * Declaring below variables for Vehicle List tab of Manager
      */
-	// Declaring Table and Columns
+	
 	@FXML
 	private TableView<VehicleSearchRow> resultsTable;
 	@FXML
@@ -275,6 +281,8 @@ public class ManagerController implements Validator, Initializable {
 	private TextField priceEquipmentText;
 	@FXML
 	private Button sellButton;
+	@FXML
+	private Label priceWarningLabel;
 	
 	ObservableList<SetPriceRow> priceList;
 	ObservableList<VehicleSearchRow> resultList;
@@ -304,6 +312,8 @@ public class ManagerController implements Validator, Initializable {
 
 	/**
 	 * This method is called by the Login Controller class.
+	 * @pre The manager provides the correct credentials.
+	 * @post The manger login screen is displayed.
 	 * @param stage
 	 */
 	public void redirectHome(Stage stage, String name) {
@@ -327,14 +337,13 @@ public class ManagerController implements Validator, Initializable {
 		// vehicleID.setMaxLength(17);
 		vehicleID.setPromptText("VIN NUMBER");
 
-		System.out.println("Hello");
-
+		
 		type.getSelectionModel().selectedIndexProperty()
 				.addListener(new ChangeListener() {
 					@SuppressWarnings("rawtypes")
 					@Override
 					public void changed(ObservableValue ov, Object t, Object t1) {
-						System.out.println("Here" + t1.toString());
+						
 						switch (t1.toString()) {
 						case "0":
 							category.setItems(carCategory);
@@ -378,6 +387,8 @@ public class ManagerController implements Validator, Initializable {
 
 /**
  * This method is used to verify the VIN number.
+ * @pre The string provided should be not null
+ * @post A boolean value is returned.
  */
 	public boolean validator(String valid) {
 		int[] values = { 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 0, 7, 0, 9,
@@ -457,6 +468,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 /**
  * To check if the input in the text field is and Integer or not.
+ * @pre The string provided should be not null.
  * @param s
  * @return
  */
@@ -475,13 +487,11 @@ public class ManagerController implements Validator, Initializable {
  * @return
  */
 	public boolean isNull(String s) {
-		if (s.equalsIgnoreCase("")) {
-			return true;
-		}
-		return false;
+		return s.equalsIgnoreCase("");
 	}
 	/**
 	 * To set the visibility of the Labels in the ADD VEHICLE TAB.
+	 * @post The visibility of the warning labels is set to false.
 	 */
 
 	protected void setVisibleFalse() {
@@ -494,6 +504,7 @@ public class ManagerController implements Validator, Initializable {
 		numberLabel.setVisible(false);
 		yearLabel.setVisible(false);
 		idInvalid.setVisible(false);
+		plateIncorrectLabel.setVisible(false);
 
 	}
 /**
@@ -511,6 +522,7 @@ public class ManagerController implements Validator, Initializable {
 		int count = 0;
 		int flag = 0;
 		int flag2 = 0;
+		int flag3 =0;
 		if (isNull(vID)) {
 			idLabel.setVisible(true);
 			count++;
@@ -520,6 +532,11 @@ public class ManagerController implements Validator, Initializable {
 
 		if (isNull(plateValue)) {
 			plateLabel.setVisible(true);
+			count++;
+			flag3++;
+		}
+		if(!checkPlate(plateValue) && flag3 == 0){
+			plateIncorrectLabel.setVisible(true);
 			count++;
 		}
 
@@ -566,7 +583,17 @@ public class ManagerController implements Validator, Initializable {
 
 	}
 	/**
+	 * Method used to verify Plate Number.
+	 * @pre The string provided should be not null.
+	 */
+	private boolean checkPlate(String s){
+		String plate = "\\d{3}[A-Z]{3}";
+		return s.matches(plate);
+	}
+	/**
 	 * Method used to add the Vehicle to the Database.
+	 * @pre Manager is logged into the system.
+	 * @post Vehicle is added to the database.
 	 * @param event
 	 */
 
@@ -590,7 +617,7 @@ public class ManagerController implements Validator, Initializable {
 			return;
 		}
 		String type2 = type.getValue().toString();
-		System.out.println(type2);
+		
 		String categoryValue = category.getValue().toString();
 
 		int manufacturingValue = Integer.parseInt(manufacturing.getText());
@@ -614,10 +641,11 @@ public class ManagerController implements Validator, Initializable {
 					+ colorValue + "')");
 			Query.insert("INSERT INTO `Vehicle_Category`(`vehicleID`,`rentCategory`) "
 					+ "VALUES ('" + vID + "','" + categoryValue + "')");
-
+            Dialogs.showInformationDialog(stage, "Vehicle Added");
 			Query.commit();
 			Query.autoCommitOn();
-			System.out.println("Inserted");
+			
+			
 			vehicleID.clear();
 			model.clear();
 			make.clear();
@@ -630,25 +658,28 @@ public class ManagerController implements Validator, Initializable {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
+				//ex.printStackTrace();
 			}
-			System.out.println("Value Already Present");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
+			
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
+			
 		}
 
 	}
 
 		/**
-		 * Used for linking the Observable list to the Table for List Of Vehicle table 
+		 * Used for linking the Observable list to the Table for List Of Vehicle table
+		 * @post The observable list is linked to the table. 
 		 */
 	@SuppressWarnings("unchecked")
 	public void initial(){
@@ -684,6 +715,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Used for linking the observable list to the table for SET PRICE table.
+	 * @post The observable list is linked to the table for the SET PRICE TAB.
 	 */
 	@SuppressWarnings("unchecked")
 	public void initializeSetPrice(){
@@ -712,6 +744,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 /**
  * Generates the report when the Generate Button is pressed.
+ * @post The report list is produced.
  */
 	@FXML
 	private void handelGenerate() {
@@ -729,7 +762,7 @@ public class ManagerController implements Validator, Initializable {
 
 			
 			String select = selectReport.getValue().toString();
-			System.out.println("Value selected is :" + select);
+			
 			if (select.equals("Daily Rental")) {
 
 				flag = 1;
@@ -740,7 +773,7 @@ public class ManagerController implements Validator, Initializable {
 						.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.amount) FROM RentPayment R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.returnDate = CAST(CURRENT_TIMESTAMP () AS DATE) GROUP BY C.rentCategory");
 			}
 			double totalAmount = 0;
-			double totalVehicle = 0;
+			int totalVehicle = 0;
 			reportList.clear();
 
 			while (result.next()) {
@@ -751,13 +784,12 @@ public class ManagerController implements Validator, Initializable {
 				tuple.setSum(result.getString(3));
 				totalAmount = totalAmount + Double.valueOf(result.getString(3));
 				totalVehicle = totalVehicle
-						+ Double.valueOf(result.getString(2));
+						+ Integer.parseInt(result.getString(2));
 
 				reportList.add(tuple);
 
 			}
-			System.out.println("Total value is :" + totalAmount);
-
+			
 			sum.setText(Double.toString(totalAmount));
 			reportVehicle.setText(Double.toString(totalVehicle));
 
@@ -774,25 +806,22 @@ public class ManagerController implements Validator, Initializable {
 		} catch (SQLException e) {
 
 			
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 /**
  * Method used to select vehicle from the Database's Sells Table.
+ * @pre The Manager is in the VEHICLE LIST TAB
+ * @post List of vehicle's to sell is generated.
  */
 	private void displayVehicleSell(){
 		try {
 			setVisibleAll();
-			//setVisibleNone();
+			
 			ResultSet result;
-			///resultList.removeAll(resultList);
-			//initial();
-		    ///resultsTable.getItems().removeAll(resultList);
-			//initial();
+			
 		    resultList.clear();
-		    //resultsTable.setVisible(false);
-		   
-		    //n =3;
+		    
 		   
 		    if(!isNull(listVehicleIDText.getText())){
 		    	String vid = listVehicleIDText.getText();
@@ -810,7 +839,7 @@ public class ManagerController implements Validator, Initializable {
 		  
 		    }
 		    else {
-		    	System.out.println("Inside Sale");
+		    	
 		    	String make = listMakeText.getText();
 		    	String model = listModelText.getText();
 		    	String color  = listColorText.getText();
@@ -818,7 +847,7 @@ public class ManagerController implements Validator, Initializable {
 		    	if(checkBox(listTypeComboBox)){
 		    		type  = listTypeComboBox.getValue().toString();
 		    	}
-		    	//String type = listTypeComboBox.getValue().toString();
+		    	
 		    	if(isNull(make)){
 		    		make = "%";
 		    	}
@@ -853,19 +882,23 @@ public class ManagerController implements Validator, Initializable {
 
 			}
 			resultsTable.getColumns().get(8).setVisible(false);
+			resultsTable.getColumns().get(3).setVisible(false);
 
 		} catch (SQLException e) {
-			System.out.println("Exception");
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 
 		
 	}
+
 	/**
 	 * Selects Vehicle from the Vehicle_Rent table in Database.
+	 * @pre The Generate Button is clicked.
+	 * @post The list of vehicle is generated.
 	 */
 	private void displayVehicleRent(){
 		try {
+			
 			setVisibleAll();
 			
 			ResultSet result;
@@ -931,15 +964,16 @@ public class ManagerController implements Validator, Initializable {
 			
             resultsTable.getColumns().get(8).setVisible(false);
             resultsTable.getColumns().get(9).setVisible(false);
+            adjustVehicleListColumns();
 
 		} catch (SQLException e) {
-			System.out.println("Exception");
-			e.printStackTrace();
-		}
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
+			}
 		
 	}
 	/**
 	 * Set All the Columns in the VEHICLE LIST TAB Table visible.
+	 * @post The columns of the Result Table become visible.
 	 */
 	private void setVisibleAll(){
 		resultsTable.getColumns().get(0).setVisible(true);
@@ -956,6 +990,8 @@ public class ManagerController implements Validator, Initializable {
 	
 	/**
 	 * Selects the Vechile's from the Database for a particular year.
+	 * @pre The Get Result button is pressed.
+	 * @post The List of Vehicle is generated.
 	 * @param year
 	 * @param category
 	 */
@@ -963,12 +999,12 @@ public class ManagerController implements Validator, Initializable {
 		try {
 			setVisibleAll();
 			ResultSet result;
-			System.out.println("Category value is " + category);
+			
 			resultList.clear();
 	       
 			
 			if(category.equals("")){
-				System.out.println("Here");
+				
 				result = Query
 						.select("SELECT C.rentCategory, count(C.vehicleID) FROM Vehicle_Rent R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.vehicle_year <  '" + year +"' GROUP BY C.rentCategory");
 			}
@@ -995,8 +1031,7 @@ public class ManagerController implements Validator, Initializable {
             resultsTable.getColumns().get(7).setVisible(false);
             resultsTable.getColumns().get(9).setVisible(false);
 		} catch (SQLException e) {
-			System.out.println("Exception");
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 	/**
@@ -1013,10 +1048,24 @@ public class ManagerController implements Validator, Initializable {
 		}
 	}
 	/**
-	 * Displays the resuld according to the value selected when the Search Button is pressed.
+	 * Method to adjust the column's width.
+	 * @post The columns width in the resultsTable is adjusted.
+	 */
+	private void adjustVehicleListColumns(){
+		vehicleIDCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.15));
+		licPlateCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.15));
+		categoryCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.10));
+		colourCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.10));
+		
+	}
+	/**
+	 * Displays the result according to the value selected when the Search Button is pressed.
+	 * @pre The Search Button is pressed.
+	 * @post The List of vehicle is generated.
 	 */
 	@FXML
 	private void handleSearchButton() {
+		//adjustVehicleListColumns();
         if(listVehicleType.getValue().toString().equalsIgnoreCase("For Rent")){
         	
         	displayVehicleRent();
@@ -1030,6 +1079,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Hide or Shows Labels and Text Fields according to the type of vehicle selected.
+	 * 
 	 */
 	@FXML
 	private void handleListVehicleType(){
@@ -1070,7 +1120,9 @@ public class ManagerController implements Validator, Initializable {
 	private void handleListSearchType(){
 		
 		 if(!checkBox(listVehicleType)){
+			   
 	        	System.out.println("Select a type first");
+	        	
 	        	return;
 	        }
 		 if(listSearchType.getValue().toString().equalsIgnoreCase("By Year")){
@@ -1120,24 +1172,28 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Displays the result when the Get Result Button is pressed.
+	 * @pre The GET Result Button is pressed.
+	 * @post The Result is generated.
 	 */
 	@FXML
 	private void handleGetResult(){
 		 if(!checkBox(listVehicleType)){
-	        	System.out.println("Select a type");
+	        	
+	        	Dialogs.showErrorDialog(stage, "Select A Type");
 	        	return;
 	        }
 	        if(!checkBox(listSearchType)){
-	        	System.out.println("Select an option");
+	        	
+	        	Dialogs.showErrorDialog(stage, "Select An Option");
 	        	return;
 	        }
 	        if(listSearchType.getValue().toString().equalsIgnoreCase("By Year")){
 	        	if(isNull(listYear.getText())){
-	        		System.out.println("Select a year");
+	        		Dialogs.showErrorDialog(stage, "Select A Year");
 	        		return;
 	        	}
 	        	if(!isInt(listYear.getText())){
-	        		System.out.println("Value should be an integer");
+	        		Dialogs.showErrorDialog(stage, "Value should be an Integer.");
 	        		return;
 	        	}
 	        	int year = Integer.parseInt(listYear.getText());
@@ -1151,7 +1207,8 @@ public class ManagerController implements Validator, Initializable {
 	        }
 	}
 	/**
-	 * Disables All the Buttons from the SET PRICE TAB in manager.
+	 * Disables All the Buttons from the VEHICLE LIST TAB in manager.
+	 * @post The Buttons are disabled.
 	 */
 	private void setDisableAll(){
 		removeButton.setDisable(true);
@@ -1161,6 +1218,9 @@ public class ManagerController implements Validator, Initializable {
 		priceSellCardLabel.setVisible(false);
 		priceSellLabel.setVisible(false);
 		priceSellText.setVisible(false);
+		listPriceLabel.setVisible(false);
+		listPriceText.setVisible(false);
+		
 	}
 
 	/**
@@ -1193,44 +1253,47 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Removes a vehicle from the database.
+	 * @pre The Remove button is pressed.
+	 * @post The selected vehicle is deleted.
 	 */
 	@FXML
 	private void handleRemoveButton(){
 	   String vID =resultsTable.getSelectionModel().getSelectedItem().getVehicleID();	
-	   System.out.println("Vehicle id selected is : " +vID);
+	   
 	  
 	   try {
 			Query.autoCommitOff();
 			Query.delete("DELETE FROM Vehicle_Rent  WHERE vehicleID ='" + vID + "'");
 			
-			System.out.println("Hello");
 			
 			Query.commit();
 			Query.autoCommitOn();
-			System.out.println("Deleted");
+			 Dialogs.showInformationDialog(stage, "Vehicle Deleted");
+			
 			handleSearchButton();
 		} catch (MySQLIntegrityConstraintViolationException iCV) {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			System.out.println("Value Already Present");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 
 	}
 	  /**
 	   * Moves a vehicle from vehicle_rent to vehicle_sell.
+	   * @pre The Move Button is pressed.
+	   * @post The Vehicle is moved from rent to sale.
 	   */
 	@FXML
 	protected void handleMoveButton(){
@@ -1239,18 +1302,19 @@ public class ManagerController implements Validator, Initializable {
 		
 		if(isNull(listPriceText.getText())){
 		
-			System.out.println("Provide a value");
+			Dialogs.showErrorDialog(stage, "Provide a selling price");
 		    return;
 		}
 		if(!isInt(listPriceText.getText())){
-			System.out.println("Value to be a number");
+			
+			Dialogs.showErrorDialog(stage, "Value should be a digit");
 			return;
 		}
 		try {
 			String sellPrice = listPriceText.getText();
 			
 			String vID =resultsTable.getSelectionModel().getSelectedItem().getVehicleID();	
-			System.out.println("Vehicle id selected is : " +vID);
+		
 			Query.autoCommitOff();
 			Query.insert("INSERT INTO `Vehicle_Sale`(`vehicleID`, `model`, `make`, `vehicle_year`, `vehicle_type`, `colour`, `license_plate`) "
 					+ "    SELECT `vehicleID`, `model`, `make`, `vehicle_year`, `vehicle_type`, `colour`, `license_plate` FROM `Vehicle_Rent` WHERE vehicleID ='" + vID + "'");
@@ -1261,6 +1325,7 @@ public class ManagerController implements Validator, Initializable {
 		        displayVehicleRent();
 			Query.commit();
 			Query.autoCommitOn();
+			 Dialogs.showInformationDialog(stage, "Vehicle Moved To 'For Sell'");
 			listPriceLabel.setVisible(false);
 			listPriceText.setVisible(false);
 			
@@ -1269,19 +1334,18 @@ public class ManagerController implements Validator, Initializable {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			System.out.println("Value Already Present");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 		
 		
@@ -1289,11 +1353,15 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Method used in the set Price Tab to generate price table.
+	 * @pre The Price Generate Button is pressed.
+	 * @post The List is displayed.
 	 */
 	@FXML
 	private void handlePriceGenerate(){
-	     if(!checkBox(priceSelect)){
-	    	 System.out.println("Price Select");
+	    priceWarningLabel.setVisible(false); 
+		if(!checkBox(priceSelect)){
+	    	 priceWarningLabel.setVisible(true);
+	    	
 	         return;
 	     }
 	     try{
@@ -1345,19 +1413,21 @@ public class ManagerController implements Validator, Initializable {
 	     }
 	     
 	     catch(Exception e){
-	      e.printStackTrace();	 
+	    	 Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 	     }
 	     
 	}
 	
 	
 	/**
-	 * For Update Button in SET PRICE Tab
+	 * For Update Button in SET PRICE Tab.
+	 * @post The visibility is set as below.
 	 */
 	@FXML
 	private void handelPriceUpdate(){
 		priceCategoryLabel.setVisible(true);
 		priceCategoryText.setVisible(true);
+		priceCategoryText.setEditable(false);
 		priceHourLabel.setVisible(true);
 		priceHourText.setVisible(true);
 		priceDayLabel.setVisible(true);
@@ -1377,6 +1447,7 @@ public class ManagerController implements Validator, Initializable {
 			priceHourText.setVisible(false);
 			priceEquipmentLabel.setVisible(true);
 			priceEquipmentText.setVisible(true);
+			priceEquipmentText.setEditable(false);
 			priceEquipmentText.setText(priceTable.getSelectionModel().getSelectedItem().getEquipmentType());
 			
 		}
@@ -1384,6 +1455,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * For Activating the Update button on click on a row in the Price Table
+	 * @post The update button is updated.
 	 */
 	@FXML
 	private void handlePriceTable(){
@@ -1395,9 +1467,12 @@ public class ManagerController implements Validator, Initializable {
 		}
 		
 		priceUpdate.setDisable(false);
+		
 	}
 	/**
 	 * TO change the Price when Change Button is clicked.
+	 * @pre The Change Button is clicked.
+	 * @post The price is changed.
 	 */
 	@FXML
 	private void handlePriceChangeButton(){
@@ -1409,7 +1484,8 @@ public class ManagerController implements Validator, Initializable {
 		String EquipmentType = priceEquipmentText.getText();
 		if(priceSelect.getValue().toString().equalsIgnoreCase("For Category")){
 		if(isNull(Category) || isNull(Hour) || isNull(Day) || isNull(Week)){
-			System.out.println("Fields Should not be empty");
+			
+			Dialogs.showErrorDialog(stage, "Fields should not be empty");
 			
 			return;
 		}
@@ -1418,6 +1494,7 @@ public class ManagerController implements Validator, Initializable {
 		Query.update("Update rentalrates SET hourlyPrice = '"+ Hour +"',"
 				+ "dailyPrice = '"+ Day +"', weeklyPrice = '"+ Week+"' WHERE "
 						+ "rentCategory = '"+ Category +"' ");
+		Dialogs.showInformationDialog(stage, "Price Updated");
 		handlePriceGenerate();
 		}
 		catch(Exception e){
@@ -1426,8 +1503,9 @@ public class ManagerController implements Validator, Initializable {
 	}
 		if(priceSelect.getValue().toString().equalsIgnoreCase("For Extra Equipment")){
 			if(isNull(Category) || isNull(Day) || isNull(Week) || isNull(EquipmentType)){
-				System.out.println("Fields Should not be empty");
-				System.out.println("Here");
+				
+				Dialogs.showErrorDialog(stage, "Fields should not be empty");
+
 				return;
 			}
 			try{
@@ -1438,22 +1516,40 @@ public class ManagerController implements Validator, Initializable {
 					+ "dailyRent = '"+ Day +"', weeklyRent = '"+ Week+"' WHERE "
 							+ "equipmentType = '"+ EquipmentType +"' AND vehicleType"
 									+ "= '"+ Category +"' ");
-			System.out.println("There");
+			
 			handlePriceGenerate();
+			Dialogs.showInformationDialog(stage, "Price Updated");
 			}
 			catch(Exception e){
-				e.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 			}
 		}
 	}
 	/**
-	 * Method used to sell a vehicle when SELL button is pressed.
+	 * TO check if the number is of type long or not.
+	 * @pre The string provided is not null.
 	 */
+	private boolean isLong(String num){
+		try{
+			Long.parseLong(num);
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
+	/**
+	 * Method used to sell a vehicle when SELL button is pressed.
+	 * @pre The Sell button is pressed.
+	 * @post The Vehicle is moved to For Sell.
+	 */
+	
 	@FXML
 	private void handleSellAction(){
 		
 		if(!checkBox(priceSellCom) || isNull(priceSellText.getText())){
-			System.out.println("Should Enter Field values");
+			Dialogs.showErrorDialog(stage, "Provie Field Values");
+			
 		}
 		
 	   try{
@@ -1461,44 +1557,62 @@ public class ManagerController implements Validator, Initializable {
 		   
 		  String vID = resultsTable.getSelectionModel().getSelectedItem().getVehicleID();
 		  String sellingPrice = resultsTable.getSelectionModel().getSelectedItem().getSellingPrice();
-		  System.out.println("Manager id is "+ managerID);
+		  
 		  String num= priceSellText.getText();
-		  System.out.println("Num is " + num);
+		
 		  /*if(!isInt(num)){
 			  return;
 		  }*/
+		  if(!isLong(num)){
+			  Dialogs.showErrorDialog(stage, "Card Numbers should have only Digits");
+			  
+			  return;
+		  }
 		  long number = Long.parseLong(num);
-		  System.out.println("Number is " + number);
+		  
 		  String type = priceSellCom.getValue().toString();
-		  System.out.println("Type is +" + type);
+		  
 		  if(!card.isValid(number, type)){
-			  System.out.println("Invalid Card");
+			  Dialogs.showErrorDialog(stage, "Invalid Card Number");
+			 
 			  return;
 		  }
-		  if(card.isValid(number, type)){
-			  System.out.println("Valid");
-			  return;
-		  }
+		  
 		  Query.autoCommitOff();
-		  System.out.println("Here");
+		  
+		  Query.delete("DELETE FROM Vehicle_Sale WHERE vehicleID = '"+ vID +"'"); 
 		  Query.insert("INSERT INTO `Sells`(`empID`, `vehicleID`, `price`) VALUES ('"+ managerID +"','"+ vID +"','"+ sellingPrice +"')");
-		  System.out.println("There");
-		 // Query.delete("DELETE from Vehicle_Sale WHERE vehicleID = '"+ vID +"'");  
+		  
+		  
 		  Query.commit();
 			Query.autoCommitOn();
+			displayVehicleSell();
+			 Dialogs.showInformationDialog(stage, "Vehicle Sold");
+			
 	   }
 	   
-	   catch(Exception e){
-		  /* try {
+	   catch (MySQLIntegrityConstraintViolationException iCV) {
+			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}*/
-		   e.printStackTrace();
-	   }
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
+			}
+			
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
+		} catch (SQLException e) {
+
+			// TODO Auto-generated catch block
+			try {
+				Query.rollback();
+			} catch (SQLException ex) {
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
+			}
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
+		}
 	}
 	/**
 	 * To disable Label and Text Fields from the SET PRICE Tab.
+	 * @post The visibility is set to false to the below fields. 
 	 */
 	@FXML
 	private void priceSelectAction(){
@@ -1513,6 +1627,8 @@ public class ManagerController implements Validator, Initializable {
 		priceChangeButton.setVisible(false);
 		priceEquipmentLabel.setVisible(false);
 		priceEquipmentText.setVisible(false);
+		priceUpdate.setDisable(true);
+		priceList.clear();
 		
 	}
 	}
