@@ -182,6 +182,7 @@ public class Payment {
         NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
         double rentalWeek = DateOperations.getWeekDifference(startDate, endDate);
         double rentalDay = DateOperations.getDayDifference(startDate, endDate);
+        double rentalHours = DateOperations.getHourDifference(startDate, endDate);
         double totalPrice = 0.0;
         double equipmentDay = 0.0;
         double equipmentWeek = 0.0;
@@ -193,7 +194,10 @@ public class Payment {
                 equipmentDay = results.getDouble(1);
                 equipmentWeek = results.getDouble(2);
             }
-            
+            if (rentalHours > 0 && rentalDay == 0)
+            {
+                totalPrice += (equipmentDay);
+            }
             totalPrice += (rentalWeek * equipmentWeek);
             totalPrice += (rentalDay * equipmentDay);
         } catch (SQLException e) {
