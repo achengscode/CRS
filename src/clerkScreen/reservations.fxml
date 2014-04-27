@@ -14,8 +14,8 @@
     </RadioButton>
     <RadioButton fx:id="searchNo" layoutX="55.0" layoutY="171.0" mnemonicParsing="false" text="Phone No." toggleGroup="$rentParam" />
     <Label layoutX="151.0" layoutY="64.0" text="Search Criteria" />
-    <TextField fx:id="rentID" layoutX="150.0" layoutY="122.0" prefWidth="200.0" />
-    <TextField fx:id="phoneNo" layoutX="150.0" layoutY="171.0" prefWidth="200.0" />
+    <TextField fx:id="rentID" layoutX="150.0" layoutY="122.0" onKeyReleased="#checkIDFormat" prefWidth="200.0" />
+    <TextField fx:id="phoneNo" layoutX="150.0" layoutY="171.0" onKeyReleased="#checkPhoneFormat" prefWidth="200.0" />
     <Label fx:id="errorID" layoutX="150.0" layoutY="144.0" text="Numbers Only" textFill="RED" visible="false" />
     <Label fx:id="errorPhone" layoutX="150.0" layoutY="193.0" text="Format XXX-XXX-XXXXX Only" textFill="RED" visible="false" />
     <TableView fx:id="resultsTable" editable="true" layoutX="491.0" layoutY="47.0" onMouseClicked="#clickedRow" prefHeight="299.0" prefWidth="646.0">

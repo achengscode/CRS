@@ -20,6 +20,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import databaseManagement.Query;
 import rentScreen.RentController;
+
+/**
+ * Controller class for the reservations screen.
+ * 
+ * @author Aaron Cheng
+ *
+ */
 public class reservationsController implements Initializable{
     
     @FXML
@@ -59,6 +66,12 @@ public class reservationsController implements Initializable{
     @FXML
     private Label completeCriteria;
     
+    @FXML
+    private Label errorID;
+    
+    @FXML
+    private Label errorPhone;
+    
     private Stage owner;
     
     private VehicleSearchRow row;
@@ -70,7 +83,13 @@ public class reservationsController implements Initializable{
     @FXML
     private Button completeRent;
     
-    @FXML 
+    @FXML
+    /**
+     * Method fired when the "Search" button is pressed.
+     * @pre phoneNo != null
+     * @pre rentID != null
+     * @post resultList.newlength == resultList.prevLength + 1;
+     */
     private void findRent()
     {
         //find the associated rent
@@ -105,6 +124,12 @@ public class reservationsController implements Initializable{
     }
     
     @FXML
+    /**
+     * Method to handle the table clicked event.
+     * 
+     * @pre tableRow != null
+     * @post completeRent.visible = true;
+     */
     private void clickedRow()
     {
         row = new VehicleSearchRow();
@@ -130,6 +155,7 @@ public class reservationsController implements Initializable{
                 row.setCategory(vehicleData.getString(5));
                 completeRent.setDisable(false);
             }
+            
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -167,6 +193,9 @@ public class reservationsController implements Initializable{
     
     
     @FXML
+    /**
+     * 
+     */
     private void completeRent()
     {
         stage = (Stage)resultsTable.getScene().getWindow();
@@ -214,5 +243,37 @@ public class reservationsController implements Initializable{
                    "( SELECT custID FROM customer WHERE phoneNo='" + phone + "')";
        }
        return query;
+    }
+    
+    @FXML
+    /**
+     * Checks if the phone numbers are in the format:
+     * XXX-XXX-XXXX
+     */
+    private void checkPhoneFormat()
+    {
+        String pattern = "\\d{3}-\\d{3}-\\d{4}";
+        if (phoneNo.getText().matches(pattern))
+        {
+            errorPhone.setVisible(false);
+            return;
+        }
+        errorPhone.setVisible(true);
+    }
+    
+    /**
+     * Checks if the rentIDs are in the format:
+     * [num]+
+     */
+    @FXML
+    private void checkIDFormat()
+    {
+        String pattern = "\\d+";
+        if (rentID.getText().matches(pattern))
+        {
+            errorID.setVisible(false);
+            return;
+        }
+        errorID.setVisible(true);
     }
 }

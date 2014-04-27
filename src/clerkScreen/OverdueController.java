@@ -57,6 +57,10 @@ public class OverdueController implements Initializable {
     }
     
     @FXML
+    /**
+     * Generate the list of all overdue vehicles.
+     * @pre categorySeledt.getValue() != null
+     */
     private void generateReport()
     {
         
