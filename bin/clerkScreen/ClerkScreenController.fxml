@@ -187,28 +187,19 @@
           </AnchorPane>
         </content>
       </Tab>
-      <Tab text="Reservations">
+           <Tab text="Reservations">
         <content>
-          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <fx:include source="reservations.fxml"/>
         </content>
       </Tab>
-      <Tab content="$null" text="Return" />
-      <Tab text="Daily Report">
+      <Tab text="Return">
         <content>
-          <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-            <children>
-              <TableView layoutX="91.0" layoutY="50.0" prefHeight="200.0" prefWidth="447.0">
-                <columns>
-                  <TableColumn prefWidth="75.0" text="Type" />
-                  <TableColumn prefWidth="75.0" text="Model" />
-                  <TableColumn prefWidth="75.0" text="Vehicle ID" />
-                  <TableColumn prefWidth="75.0" text="Rate" />
-                  <TableColumn prefWidth="75.0" text="Pickup" />
-                  <TableColumn prefWidth="75.0" text="Return" />
-                </columns>
-              </TableView>
-            </children>
-          </AnchorPane>
+          <fx:include source="returnPage.fxml" />
+        </content>
+      </Tab>
+      <Tab text="Overdue Vehicles">
+        <content>
+          <fx:include source="overduePage.fxml"/>
         </content>
       </Tab>
     </tabs>

@@ -299,6 +299,9 @@ public class FinalScreenController implements Initializable{
 			printButton.setDisable(false);
 			// Activating ReturnHome Button
 			returnButton.setDisable(false);
+			// Deactivating Submit Button
+			finishButton.setDisable(true);
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
