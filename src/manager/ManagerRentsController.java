@@ -19,9 +19,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -38,7 +40,11 @@ import java.util.ResourceBundle;
 
 
 public class ManagerRentsController implements Initializable {
-
+	
+	private Stage stage;
+	/**
+	 * Below attributes are used for the RENT DETAILS TAB.
+	 */
 	@FXML
 	private Button generateButton;
 	@FXML
@@ -65,8 +71,18 @@ public class ManagerRentsController implements Initializable {
 	private TableColumn modelCol;
 	@FXML
 	private TableColumn coSignerCol;
+	@FXML
+	private ComboBox typeSelect;
+	@FXML
+	private Label selectLabel;
+	 
+	/**
+	 * Linking the table view with Observable List.
+	 */
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		rentList = FXCollections.observableArrayList();
 		rentIDCol.setCellValueFactory(new PropertyValueFactory<RentRow, String>("rentID"));
 		vehicleIDCol.setCellValueFactory(new PropertyValueFactory<RentRow, String>("vehicleID"));
@@ -84,17 +100,59 @@ public class ManagerRentsController implements Initializable {
 	    
 	    
 	}
+	/**
+	 * Checks if the ComboBox has a value selected.
+	 * @param s
+	 * @return
+	 */
+	public boolean checkBox(ComboBox s) {
+		try {
+			s.getValue().toString();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	/**
+	 * Method to set the Stage.
+	 */
+	private void StageSet(){
+		this.stage = (Stage) generateButton.getScene().getWindow();
+	}
+	/**
+	 * Method used to handle action on clicking the Generate Button.
+	 */
 	@FXML
 	private void handleGenerateButton(){
-		System.out.println("Hello Baby");
+		StageSet();
+		
+		vehicleIDCol.prefWidthProperty().bind(rentTable.widthProperty().multiply(0.15));
+		custIDCol.prefWidthProperty().bind(rentTable.widthProperty().multiply(0.05));
+		rentIDCol.prefWidthProperty().bind(rentTable.widthProperty().multiply(0.05));
+		isBookedCol.prefWidthProperty().bind(rentTable.widthProperty().multiply(0.05));
+		selectLabel.setVisible(false);
+		if(!checkBox(typeSelect)){
+			selectLabel.setVisible(true);
+			return;
+		}
 		try{
+			//rentTable.resizeColumnsToContents();
 			rentList.clear();
-			ResultSet result;
-			result = Query.select("SELECT R.rentID, R.vehicleID, R.custID, R.rentStart, R.rentEnd, R.isBooked,C.custLname,V.model,V.make, Co.name"
-					+ " FROM Rents R, customer C,Vehicle_Rent V, cosigner Co "
-					+ "WHERE V.vehicleID = R.vehicleID AND R.custID = C.custID AND Co.custID = C.custID");
-					
-			System.out.println("Here");
+			ResultSet result=null;
+			if((typeSelect.getValue().toString().equalsIgnoreCase("General Customer"))){
+			result = Query.select("SELECT R.rentID, R.vehicleID, R.custID, R.rentStart, R.rentEnd, R.isBooked,C.custLname,V.model,V.make, C.custLname"
+					+ " FROM Rents R, customer C,Vehicle_Rent V"
+					+ " WHERE V.vehicleID = R.vehicleID AND R.custID = C.custID");
+			rentTable.getColumns().get(9).setVisible(false);
+			}
+			if((typeSelect.getValue().toString().equalsIgnoreCase("With Co-Signer"))){
+				result = Query.select("SELECT R.rentID, R.vehicleID, R.custID, R.rentStart, R.rentEnd, R.isBooked,C.custLname,V.model,V.make, Co.name"
+						+ " FROM Rents R, customer C,Vehicle_Rent V, cosigner Co "
+						+ "WHERE V.vehicleID = R.vehicleID AND R.custID = C.custID AND Co.custID = C.custID");
+				rentTable.getColumns().get(9).setVisible(true);
+			
+			}
+			
 			
 			while (result.next()) {
 				
@@ -109,36 +167,14 @@ public class ManagerRentsController implements Initializable {
 				tuple.setMake(result.getString(8));
 				tuple.setModel(result.getString(9));
 				tuple.setCoSigner(result.getString(10));
-				System.out.println("Result is "+result.getString(1));
+				
 				rentList.add(tuple);
 
 			}
-		/*	ResultSet result2;
-			result2 = Query.select("SELECT R.rentID, R.vehicleID, R.custID, R.rentStart, R.rentEnd, R.isBooked,C.custLname,V.model,V.make"
-					+ " FROM Rents R, customer C,Vehicle_Rent V "
-					+ "WHERE V.vehicleID = R.vehicleID AND R.custID = C.custID AND R.custID "
-					+ " NOT IN ( SELECT custID FROM cosigner) ");
-			
-			while (result.next()) {
-				
-                
-				tuple.setRentID(result2.getString(1));
-				tuple.setVehicleID(result2.getString(2));
-				tuple.setCustID(result2.getString(3));
-				tuple.setRentStart(result2.getString(4));
-				tuple.setRentEnd(result2.getString(5));
-				tuple.setIsBooked(result2.getString(6));
-				tuple.setLastName(result2.getString(7));
-				tuple.setMake(result2.getString(8));
-				tuple.setModel(result2.getString(9));
-				tuple.setCoSigner("");
-				System.out.println("Result is "+result.getString(1));
-				rentList.add(tuple);
-
-			}*/
+		
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 }

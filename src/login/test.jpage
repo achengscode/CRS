@@ -1,0 +1,4 @@
+String unhashed;
+unhashed = DBSecurity.hashedString("123", "1398557400197379000");
+
+System.out.println(unhashed);

@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -145,6 +146,8 @@ public class ManagerController implements Validator, Initializable {
 	@FXML
 	private Label reportDisplay;
 	ObservableList<ReportRow> reportList;
+	@FXML
+	private Label plateIncorrectLabel;
     /**
      * Declaring below variables for Vehicle List tab of Manager
      */
@@ -275,6 +278,8 @@ public class ManagerController implements Validator, Initializable {
 	private TextField priceEquipmentText;
 	@FXML
 	private Button sellButton;
+	@FXML
+	private Label priceWarningLabel;
 	
 	ObservableList<SetPriceRow> priceList;
 	ObservableList<VehicleSearchRow> resultList;
@@ -475,10 +480,7 @@ public class ManagerController implements Validator, Initializable {
  * @return
  */
 	public boolean isNull(String s) {
-		if (s.equalsIgnoreCase("")) {
-			return true;
-		}
-		return false;
+		return s.equalsIgnoreCase("");
 	}
 	/**
 	 * To set the visibility of the Labels in the ADD VEHICLE TAB.
@@ -494,6 +496,7 @@ public class ManagerController implements Validator, Initializable {
 		numberLabel.setVisible(false);
 		yearLabel.setVisible(false);
 		idInvalid.setVisible(false);
+		plateIncorrectLabel.setVisible(false);
 
 	}
 /**
@@ -511,6 +514,7 @@ public class ManagerController implements Validator, Initializable {
 		int count = 0;
 		int flag = 0;
 		int flag2 = 0;
+		int flag3 =0;
 		if (isNull(vID)) {
 			idLabel.setVisible(true);
 			count++;
@@ -520,6 +524,11 @@ public class ManagerController implements Validator, Initializable {
 
 		if (isNull(plateValue)) {
 			plateLabel.setVisible(true);
+			count++;
+			flag3++;
+		}
+		if(!checkPlate(plateValue) && flag3 == 0){
+			plateIncorrectLabel.setVisible(true);
 			count++;
 		}
 
@@ -564,6 +573,13 @@ public class ManagerController implements Validator, Initializable {
 		}
 		return false;
 
+	}
+	/**
+	 * Method used to verify Plate Number.
+	 */
+	private boolean checkPlate(String s){
+		String plate = "\\d{3}[A-Z]{3}";
+		return s.matches(plate);
 	}
 	/**
 	 * Method used to add the Vehicle to the Database.
@@ -614,10 +630,11 @@ public class ManagerController implements Validator, Initializable {
 					+ colorValue + "')");
 			Query.insert("INSERT INTO `Vehicle_Category`(`vehicleID`,`rentCategory`) "
 					+ "VALUES ('" + vID + "','" + categoryValue + "')");
-
+            Dialogs.showInformationDialog(stage, "Vehicle Added");
 			Query.commit();
 			Query.autoCommitOn();
 			System.out.println("Inserted");
+			
 			vehicleID.clear();
 			model.clear();
 			make.clear();
@@ -630,19 +647,21 @@ public class ManagerController implements Validator, Initializable {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
+				//ex.printStackTrace();
 			}
-			System.out.println("Value Already Present");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
+			
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
+			
 		}
 
 	}
@@ -740,7 +759,7 @@ public class ManagerController implements Validator, Initializable {
 						.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.amount) FROM RentPayment R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.returnDate = CAST(CURRENT_TIMESTAMP () AS DATE) GROUP BY C.rentCategory");
 			}
 			double totalAmount = 0;
-			double totalVehicle = 0;
+			int totalVehicle = 0;
 			reportList.clear();
 
 			while (result.next()) {
@@ -751,13 +770,12 @@ public class ManagerController implements Validator, Initializable {
 				tuple.setSum(result.getString(3));
 				totalAmount = totalAmount + Double.valueOf(result.getString(3));
 				totalVehicle = totalVehicle
-						+ Double.valueOf(result.getString(2));
+						+ Integer.parseInt(result.getString(2));
 
 				reportList.add(tuple);
 
 			}
-			System.out.println("Total value is :" + totalAmount);
-
+			
 			sum.setText(Double.toString(totalAmount));
 			reportVehicle.setText(Double.toString(totalVehicle));
 
@@ -774,7 +792,7 @@ public class ManagerController implements Validator, Initializable {
 		} catch (SQLException e) {
 
 			
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 /**
@@ -783,16 +801,11 @@ public class ManagerController implements Validator, Initializable {
 	private void displayVehicleSell(){
 		try {
 			setVisibleAll();
-			//setVisibleNone();
+			
 			ResultSet result;
-			///resultList.removeAll(resultList);
-			//initial();
-		    ///resultsTable.getItems().removeAll(resultList);
-			//initial();
+			
 		    resultList.clear();
-		    //resultsTable.setVisible(false);
-		   
-		    //n =3;
+		    
 		   
 		    if(!isNull(listVehicleIDText.getText())){
 		    	String vid = listVehicleIDText.getText();
@@ -818,7 +831,7 @@ public class ManagerController implements Validator, Initializable {
 		    	if(checkBox(listTypeComboBox)){
 		    		type  = listTypeComboBox.getValue().toString();
 		    	}
-		    	//String type = listTypeComboBox.getValue().toString();
+		    	
 		    	if(isNull(make)){
 		    		make = "%";
 		    	}
@@ -853,19 +866,21 @@ public class ManagerController implements Validator, Initializable {
 
 			}
 			resultsTable.getColumns().get(8).setVisible(false);
+			resultsTable.getColumns().get(3).setVisible(false);
 
 		} catch (SQLException e) {
-			System.out.println("Exception");
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 
 		
 	}
+
 	/**
 	 * Selects Vehicle from the Vehicle_Rent table in Database.
 	 */
 	private void displayVehicleRent(){
 		try {
+			
 			setVisibleAll();
 			
 			ResultSet result;
@@ -931,11 +946,11 @@ public class ManagerController implements Validator, Initializable {
 			
             resultsTable.getColumns().get(8).setVisible(false);
             resultsTable.getColumns().get(9).setVisible(false);
+            adjustVehicleListColumns();
 
 		} catch (SQLException e) {
-			System.out.println("Exception");
-			e.printStackTrace();
-		}
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
+			}
 		
 	}
 	/**
@@ -968,7 +983,7 @@ public class ManagerController implements Validator, Initializable {
 	       
 			
 			if(category.equals("")){
-				System.out.println("Here");
+				
 				result = Query
 						.select("SELECT C.rentCategory, count(C.vehicleID) FROM Vehicle_Rent R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.vehicle_year <  '" + year +"' GROUP BY C.rentCategory");
 			}
@@ -995,8 +1010,7 @@ public class ManagerController implements Validator, Initializable {
             resultsTable.getColumns().get(7).setVisible(false);
             resultsTable.getColumns().get(9).setVisible(false);
 		} catch (SQLException e) {
-			System.out.println("Exception");
-			e.printStackTrace();
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 	}
 	/**
@@ -1013,10 +1027,21 @@ public class ManagerController implements Validator, Initializable {
 		}
 	}
 	/**
-	 * Displays the resuld according to the value selected when the Search Button is pressed.
+	 * Method to adjust the column's width.
+	 */
+	private void adjustVehicleListColumns(){
+		vehicleIDCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.15));
+		licPlateCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.15));
+		categoryCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.10));
+		colourCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.10));
+		
+	}
+	/**
+	 * Displays the result according to the value selected when the Search Button is pressed.
 	 */
 	@FXML
 	private void handleSearchButton() {
+		//adjustVehicleListColumns();
         if(listVehicleType.getValue().toString().equalsIgnoreCase("For Rent")){
         	
         	displayVehicleRent();
@@ -1151,7 +1176,7 @@ public class ManagerController implements Validator, Initializable {
 	        }
 	}
 	/**
-	 * Disables All the Buttons from the SET PRICE TAB in manager.
+	 * Disables All the Buttons from the VEHICLE LIST TAB in manager.
 	 */
 	private void setDisableAll(){
 		removeButton.setDisable(true);
@@ -1161,6 +1186,9 @@ public class ManagerController implements Validator, Initializable {
 		priceSellCardLabel.setVisible(false);
 		priceSellLabel.setVisible(false);
 		priceSellText.setVisible(false);
+		listPriceLabel.setVisible(false);
+		listPriceText.setVisible(false);
+		
 	}
 
 	/**
@@ -1207,25 +1235,25 @@ public class ManagerController implements Validator, Initializable {
 			
 			Query.commit();
 			Query.autoCommitOn();
-			System.out.println("Deleted");
+			 Dialogs.showInformationDialog(stage, "Vehicle Deleted");
+			
 			handleSearchButton();
 		} catch (MySQLIntegrityConstraintViolationException iCV) {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			System.out.println("Value Already Present");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 
 	}
@@ -1239,11 +1267,12 @@ public class ManagerController implements Validator, Initializable {
 		
 		if(isNull(listPriceText.getText())){
 		
-			System.out.println("Provide a value");
+			Dialogs.showErrorDialog(stage, "Provide a selling price");
 		    return;
 		}
 		if(!isInt(listPriceText.getText())){
 			System.out.println("Value to be a number");
+			Dialogs.showErrorDialog(stage, "Value should be a digit");
 			return;
 		}
 		try {
@@ -1261,6 +1290,7 @@ public class ManagerController implements Validator, Initializable {
 		        displayVehicleRent();
 			Query.commit();
 			Query.autoCommitOn();
+			 Dialogs.showInformationDialog(stage, "Vehicle Moved To 'For Sell'");
 			listPriceLabel.setVisible(false);
 			listPriceText.setVisible(false);
 			
@@ -1269,19 +1299,18 @@ public class ManagerController implements Validator, Initializable {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			System.out.println("Value Already Present");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
 		
 		
@@ -1292,8 +1321,10 @@ public class ManagerController implements Validator, Initializable {
 	 */
 	@FXML
 	private void handlePriceGenerate(){
-	     if(!checkBox(priceSelect)){
-	    	 System.out.println("Price Select");
+	    priceWarningLabel.setVisible(false); 
+		if(!checkBox(priceSelect)){
+	    	 priceWarningLabel.setVisible(true);
+	    	
 	         return;
 	     }
 	     try{
@@ -1345,7 +1376,7 @@ public class ManagerController implements Validator, Initializable {
 	     }
 	     
 	     catch(Exception e){
-	      e.printStackTrace();	 
+	    	 Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 	     }
 	     
 	}
@@ -1358,6 +1389,7 @@ public class ManagerController implements Validator, Initializable {
 	private void handelPriceUpdate(){
 		priceCategoryLabel.setVisible(true);
 		priceCategoryText.setVisible(true);
+		priceCategoryText.setEditable(false);
 		priceHourLabel.setVisible(true);
 		priceHourText.setVisible(true);
 		priceDayLabel.setVisible(true);
@@ -1377,6 +1409,7 @@ public class ManagerController implements Validator, Initializable {
 			priceHourText.setVisible(false);
 			priceEquipmentLabel.setVisible(true);
 			priceEquipmentText.setVisible(true);
+			priceEquipmentText.setEditable(false);
 			priceEquipmentText.setText(priceTable.getSelectionModel().getSelectedItem().getEquipmentType());
 			
 		}
@@ -1395,6 +1428,7 @@ public class ManagerController implements Validator, Initializable {
 		}
 		
 		priceUpdate.setDisable(false);
+		
 	}
 	/**
 	 * TO change the Price when Change Button is clicked.
@@ -1442,18 +1476,32 @@ public class ManagerController implements Validator, Initializable {
 			handlePriceGenerate();
 			}
 			catch(Exception e){
-				e.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 			}
+		}
+	}
+	/**
+	 * TO check if the number is of type long or not.
+	 */
+	private boolean isLong(String num){
+		try{
+			Long.parseLong(num);
+			return true;
+		}
+		catch(Exception e){
+			return false;
 		}
 	}
 	/**
 	 * Method used to sell a vehicle when SELL button is pressed.
 	 */
+	
 	@FXML
 	private void handleSellAction(){
 		
 		if(!checkBox(priceSellCom) || isNull(priceSellText.getText())){
-			System.out.println("Should Enter Field values");
+			Dialogs.showErrorDialog(stage, "Provie Field Values");
+			//System.out.println("Should Enter Field values");
 		}
 		
 	   try{
@@ -1467,35 +1515,52 @@ public class ManagerController implements Validator, Initializable {
 		  /*if(!isInt(num)){
 			  return;
 		  }*/
+		  if(!isLong(num)){
+			  Dialogs.showErrorDialog(stage, "Card Numbers should have only Digits");
+			  //System.out.println("Not long");
+			  return;
+		  }
 		  long number = Long.parseLong(num);
 		  System.out.println("Number is " + number);
 		  String type = priceSellCom.getValue().toString();
 		  System.out.println("Type is +" + type);
 		  if(!card.isValid(number, type)){
-			  System.out.println("Invalid Card");
+			  Dialogs.showErrorDialog(stage, "Invalid Card Number");
+			  //System.out.println("Invalid Card");
 			  return;
 		  }
-		  if(card.isValid(number, type)){
-			  System.out.println("Valid");
-			  return;
-		  }
+		  
 		  Query.autoCommitOff();
 		  System.out.println("Here");
+		  Query.delete("DELETE FROM Vehicle_Sale WHERE vehicleID = '"+ vID +"'"); 
 		  Query.insert("INSERT INTO `Sells`(`empID`, `vehicleID`, `price`) VALUES ('"+ managerID +"','"+ vID +"','"+ sellingPrice +"')");
 		  System.out.println("There");
-		 // Query.delete("DELETE from Vehicle_Sale WHERE vehicleID = '"+ vID +"'");  
+		  
 		  Query.commit();
 			Query.autoCommitOn();
+			displayVehicleSell();
+			 Dialogs.showInformationDialog(stage, "Vehicle Sold");
+			
 	   }
 	   
-	   catch(Exception e){
-		  /* try {
+	   catch (MySQLIntegrityConstraintViolationException iCV) {
+			try {
 				Query.rollback();
 			} catch (SQLException ex) {
 				ex.printStackTrace();
-			}*/
-		   e.printStackTrace();
-	   }
+			}
+			System.out.println("Value Already Present");
+			iCV.printStackTrace();
+		} catch (SQLException e) {
+
+			// TODO Auto-generated catch block
+			try {
+				Query.rollback();
+			} catch (SQLException ex) {
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
+			}
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
+		}
 	}
 	/**
 	 * To disable Label and Text Fields from the SET PRICE Tab.
@@ -1513,6 +1578,8 @@ public class ManagerController implements Validator, Initializable {
 		priceChangeButton.setVisible(false);
 		priceEquipmentLabel.setVisible(false);
 		priceEquipmentText.setVisible(false);
+		priceUpdate.setDisable(true);
+		priceList.clear();
 		
 	}
 	}
