@@ -14,9 +14,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+import login.LoginController;
 
 /**
  * Controller class for final screen of rental process
@@ -37,6 +39,8 @@ public class FinalScreenController implements Initializable{
 	private Button printButton;
 	@FXML
 	private Button returnButton;
+	@FXML
+	private Button backButton;
 	
 	// Labels
 	@FXML
@@ -278,6 +282,9 @@ public class FinalScreenController implements Initializable{
 			Query.autoCommitOn();
 			
 			// Displaying successful transaction operation
+			Dialogs.showInformationDialog(stage, "Transaction Successfully Completed\n" + "Rent ID Number: " + newId,"Transaction Completed");
+			
+			backButton.setDisable(true);
 			finalMessage.setVisible(true);
 			rentalNumberMessage.setVisible(true);
 			rentalIdMessage.setText(newId);
@@ -295,6 +302,7 @@ public class FinalScreenController implements Initializable{
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			Dialogs.showErrorDialog(stage, "Transaction Error, Please Verify Data and Try Again","Error!");
 			e.printStackTrace();
 			
 		}
@@ -311,9 +319,14 @@ public class FinalScreenController implements Initializable{
 	
 	// Not implemented yet
 	// Should launch a dialogbox indicating that the document was sent to printer
+		// Displaying successful transaction operation
+					Dialogs.showInformationDialog(stage, "Agreement Form Sent to Printer");	
 
 	}
 	
+	/**
+	 * Handler to return to main clerk screen
+	 */
 	@FXML
 	private void handleReturn() {
 		ClerkScreenController returnSc = new ClerkScreenController();
@@ -321,4 +334,22 @@ public class FinalScreenController implements Initializable{
 		returnSc.redirectHome(stage);
 	}
 	
+	/**
+	 * Handler to go to previous screen
+	 */
+	@FXML
+	private void handleBackButton() {
+		CosignerScreenController backSc = new CosignerScreenController();
+		backSc.launchCosignerController(stage);
+		backSc.redirectHome(stage);
+	}
+	
+	@FXML
+	private void handleLogoutButton() {
+		info.flushInfo();
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
+			
+	}
 }
+

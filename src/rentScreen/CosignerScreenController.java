@@ -16,10 +16,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import login.LoginController;
 
 
 /**
@@ -129,6 +131,13 @@ public class CosignerScreenController implements Initializable{
 					"58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81",
 					"82", "83", "84","85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99");
 	
+	/**
+	 * Constructor utilized when clicking next on ClerkScreenController
+	 * @param customer
+	 * @param from
+	 * @param to
+	 * @param total
+	 */
 	public CosignerScreenController(SelectedCustomer customer, String from, String to, String total) {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -167,6 +176,44 @@ public class CosignerScreenController implements Initializable{
 		
 	}
 
+	/**
+	 * COnstructor used when back button pressed in next screen
+	 */
+	public CosignerScreenController() {
+		// TODO Auto-generated constructor stub
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
+				"SelectCosignerScreen.fxml"));
+
+		fxmlLoader.setController(this);
+		try {
+			parent = (Parent) fxmlLoader.load();
+			scene = new Scene(parent);
+			
+			info = RentalInfo.getRentalInfo();
+			// filling fields with arguments
+			displayFinalPhone.setText(info.getPhone());
+			displayFinalLname.setText(info.getLastname());
+			displayFinalFname.setText(info.getFirstname());
+			displayFinalId.setText(info.getId());
+			finalAmount.setText("");
+			customerLicense.setText(info.getLicense());
+			finalAmount.setText(info.getTotalPrice());
+			customerAge.setValue(info.getCustomerAge());
+			
+			
+			// Cosigner Information
+			
+			cosignerLastname.setText(info.getCosignerLastname());
+			cosignerFirstname.setText(info.getCosignerFirstname());
+			cosignerLicense.setText(info.getCosignerLicense());
+			cosignerAge.setValue(info.getCosignerAge());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	public void launchCosignerController(Stage stage) {
 		this.stage = stage;
 		stage.setTitle("Rent Vehicle");
@@ -198,10 +245,10 @@ public class CosignerScreenController implements Initializable{
 	
 	@FXML
 	private void handleCancelButton() {
-		// System.out.println("You pressed cancel!");
-		// Instead of exiting the program, cancel button should move the user to
-		// previous screen
-		System.exit(0);
+		info.flushInfo();
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
+			
 	}
 	
 	/**
@@ -232,6 +279,8 @@ public class CosignerScreenController implements Initializable{
 		else
 		{
 			displayErrors();
+			Dialogs.showErrorDialog(stage, "Errors Were Found in Your Parameters","Error!");
+
 		}
 		
 	}
@@ -459,6 +508,7 @@ public class CosignerScreenController implements Initializable{
 		else
 			cardMessage.setVisible(true);
 	}
+	
 //	@FXML
 //	private void validateCardLength () {
 //		if (cardNumber.getLength() == 16 && isNumeric(cardNumber.getText())) {

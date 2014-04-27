@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
+<?scenebuilder-classpath-element ../../lib/javafx-datepicker-0.0.2.jar?>
 
 <GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="719.0" prefWidth="1439.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <Text fill="WHITE" styleClass="null" text="Welcome" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -39,33 +40,29 @@
                 </columns>
               </TableView>
               <Label layoutX="11.0" layoutY="37.0" text="Search Vehicle" />
-              <Text layoutX="14.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" />
-              <Label layoutX="50.0" layoutY="166.0" text="Pickup" />
-              <Label layoutX="229.0" layoutY="166.0" text="Return" />
-              <ComboBox id="typeCombo" fx:id="type" layoutX="165.0" layoutY="61.0" onAction="#handleCombo" prefWidth="107.90380859375" promptText="Select">
-                <items>
-                  <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Item 1" />
-                    <String fx:value="Item 2" />
-                    <String fx:value="Item 3" />
-                  </FXCollections>
-                </items>
-              </ComboBox>
-              <Label layoutX="14.0" layoutY="101.0" text="Category" />
-              <ComboBox id="categoryCombo" fx:id="category" layoutX="165.0" layoutY="98.0" onAction="#handleCombo" prefWidth="108.0" promptText="Select">
-                <items>
-                  <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Item 1" />
-                    <String fx:value="Item 2" />
-                    <String fx:value="Item 3" />
-                  </FXCollections>
-                </items>
-              </ComboBox>
-              <Button fx:id="searchButton" defaultButton="false" disable="true" layoutX="177.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
-              <Label layoutX="14.0" layoutY="199.0" text="Month" />
-              <Label layoutX="14.0" layoutY="227.0" text="Day" />
-              <Label layoutX="15.0" layoutY="257.0" text="Year" />
-              <!-- 
+              <Button fx:id="searchButton" defaultButton="false" disable="false" layoutX="82.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
+              <Label fx:id="notFoundMsg" disable="false" layoutX="273.0" layoutY="389.0" text="No Results Found!" textFill="RED" visible="false">
+                <font>
+                  <Font name="System Bold" size="18.0" />
+                </font>
+              </Label>
+              <GridPane layoutX="24.0" layoutY="74.0" onMouseClicked="#handleDate" prefWidth="349.0">
+                <children>
+                  <Label text="Pickup Date:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <Label text="Return Date: " GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <DatePicker fx:id="startDatePicker" onInputMethodTextChanged="#handleDate" onMouseClicked="#handleDate" onMouseReleased="#handleDate" prefWidth="97.0" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                    <stylesheets>
+                      <URL value="@DatePicker.css" />
+                    </stylesheets>
+                  </DatePicker>
+                  <DatePicker fx:id="endDatePicker" onInputMethodTextChanged="#handleDate" onMouseClicked="#handleDate" onMouseReleased="#handleDate" prefWidth="79.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <stylesheets>
+                      <URL value="@DatePicker.css" />
+                    </stylesheets>
+                  </DatePicker>
+                  <Label text="Pickup Time:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                  <Label text="Return Time:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <!-- 
               <ComboBox fx:id="fMonthBox" layoutX="70.0" layoutY="194.0" onAction="#handleCombo" promptText="Select">
                 <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -95,17 +92,16 @@
               </ComboBox>
               <Button fx:id="exitButton" cancelButton="true" layoutX="1236.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleExitButton" text="Logout" />
               <Label layoutX="15.0" layoutY="287.0" text="Time" /> -->
-              
-              <ComboBox fx:id="fTimeBox" layoutX="70.0" layoutY="284.0" onAction="#handleCombo" promptText="Select">
-                <items>
-                  <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Item 1" />
-                    <String fx:value="Item 2" />
-                    <String fx:value="Item 3" />
-                  </FXCollections>
-                </items>
-              </ComboBox>
-              <!-- 
+                  <ComboBox fx:id="fTimeBox" onAction="#handleTime" prefWidth="97.0" promptText="Select" GridPane.columnIndex="0" GridPane.rowIndex="6">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Item 1" />
+                        <String fx:value="Item 2" />
+                        <String fx:value="Item 3" />
+                      </FXCollections>
+                    </items>
+                  </ComboBox>
+                  <!-- 
               <Label layoutX="175.0" layoutY="199.0" text="Month" />
               <Label layoutX="175.0" layoutY="227.0" text="Day" />
               <Label layoutX="175.0" layoutY="257.0" text="Year" />
@@ -137,32 +133,56 @@
                   </FXCollections>
                 </items>
               </ComboBox> -->
-              <ComboBox fx:id="tTimeBox" layoutX="251.0" layoutY="285.0" onAction="#handleCombo" promptText="Select">
-                <items>
-                  <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Item 1" />
-                    <String fx:value="Item 2" />
-                    <String fx:value="Item 3" />
-                  </FXCollections>
-                </items>
-              </ComboBox>
-              <Label fx:id="notFoundMsg" disable="false" layoutX="273.0" layoutY="389.0" text="No Results Found!" textFill="RED" visible="false">
-                <font>
-                  <Font name="System Bold" size="18.0" />
-                </font>
-              </Label>
-              <DatePicker fx:id="startDatePicker" layoutX="35.0" layoutY="345.0" >
-              	<stylesheets>
-              		<URL value="@DatePicker.css"/>
-              	</stylesheets>
-              </DatePicker>
-              <DatePicker fx:id="endDatePicker" layoutX="216.0" layoutY="345.0">
-              	<stylesheets>
-              		<URL value="@DatePicker.css"/>
-              	</stylesheets>
-              </DatePicker>
-              <Label layoutX="39.0" layoutY="320.0" text="Pickup Date:" />
-              <Label layoutX="216.0" layoutY="323.0" text="Return Date: " />
+                  <ComboBox fx:id="tTimeBox" onAction="#handleTime" prefWidth="106.0" promptText="Select" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Item 1" />
+                        <String fx:value="Item 2" />
+                        <String fx:value="Item 3" />
+                      </FXCollections>
+                    </items>
+                  </ComboBox>
+                  <Label fx:id="dateMessage" text="* Invalid Date" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Label fx:id="timeMessage" text="* Invalid Time" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Type" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <Label text="Category" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <ComboBox id="typeCombo" fx:id="type" onAction="#handleCombo" prefWidth="107.90380859375" promptText="Select" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Item 1" />
+                        <String fx:value="Item 2" />
+                        <String fx:value="Item 3" />
+                      </FXCollections>
+                    </items>
+                  </ComboBox>
+                  <ComboBox id="categoryCombo" fx:id="category" onAction="#handleCombo" prefWidth="108.0" promptText="Select" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <items>
+                      <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Item 1" />
+                        <String fx:value="Item 2" />
+                        <String fx:value="Item 3" />
+                      </FXCollections>
+                    </items>
+                  </ComboBox>
+                  <Label fx:id="typeMessage" text="* Invalid Type" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                  <Label fx:id="categoryMessage" text="* Invalid Category" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                </children>
+                <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="99.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="106.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="144.0" />
+                </columnConstraints>
+                <rowConstraints>
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+              </GridPane>
+              <Button layoutX="1244.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Logout" />
             </children>
           </AnchorPane>
         </content>
@@ -172,11 +192,7 @@
           <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
         </content>
       </Tab>
-      <Tab text="Return">
-        <content>
-          <fx:include source="returnPage.fxml" />
-        </content>
-      </Tab>
+      <Tab content="$null" text="Return" />
       <Tab text="Daily Report">
         <content>
           <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

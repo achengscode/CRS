@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -26,6 +27,8 @@ import java.sql.Date;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import login.LoginController;
 
 /**
  * Controller class to handle rent tab Controls Search Customer button to search
@@ -167,7 +170,7 @@ public class RentController implements Initializable {
 			displayTotal.setText("125.00");
 			
 			info = RentalInfo.getRentalInfo();
-			
+						
 			// Setting on checkboxes according to selected vehicle type
 			if (tuple.getType().equals("Car")) {
 				skiRackCheck.setDisable(false);
@@ -244,8 +247,14 @@ public class RentController implements Initializable {
 			displayId.setText(info.getId());
 			displayLname.setText(info.getLastname());
 			displayFname.setText(info.getFirstname());
-			// displayStreet.setText(info);
+			skiRackCheck.setSelected(info.isSkiRack());
+			childSeatCheck.setSelected(info.isChildSeat());
+			liftGateCheck.setSelected(info.isLiftGate());
+			towingEqCheck.setSelected(info.isTowingEq());
 			
+			// setting next button available
+			nextButton.setDisable(false);
+
 			info = RentalInfo.getRentalInfo();
 			
 			// Setting on checkboxes according to selected vehicle type
@@ -400,7 +409,8 @@ public class RentController implements Initializable {
 
 		} catch (SQLException e) {
 
-			displayPhone.setText("Not found!");
+			Dialogs.showErrorDialog(stage, "No results found!","Error!");
+			displayPhone.setText("");
 			cleanCustomerInfo();
 			searchPhone.setText("");
 			searchName.setText("");
@@ -414,10 +424,10 @@ public class RentController implements Initializable {
 	 */
 	@FXML
 	private void handleCancelButton() {
-		System.out.println("You pressed cancel!");
-		// Instead of exiting the program, cancel button should move the user to
-		// previous screen
-		System.exit(0);
+		info.flushInfo();
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
+			
 	}
 
 	/**

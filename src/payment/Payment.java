@@ -23,6 +23,7 @@ public class Payment {
     private double weeklyRate;
     private double hourlyRate;
     private double dailyRate;
+    private double insuranceRate;
     
     private double equipment1Week;
     private double equipment1Daily;
@@ -31,6 +32,7 @@ public class Payment {
     private double equipment2Daily;
     
     private double finalPrice;
+    private String vehicleCategory;
     
     /**
      * Payment constructor. Takes a vehicle ID,
@@ -43,9 +45,11 @@ public class Payment {
             ResultSet prices = Query.select("SELECT * FROM rentalrates WHERE rentCategory IN "
                     + "(SELECT rentCategory FROM Vehicle_Category WHERE vehicleID = '" + vehicleID + "')");
             prices.next();
+            vehicleCategory = prices.getString(1);
             hourlyRate = prices.getDouble(2);
             dailyRate = prices.getDouble(3);
             weeklyRate = prices.getDouble(4);
+            insuranceRate = prices.getDouble(5);
             
             equipment1Week = 0.0;
             equipment1Daily = 0.0;
@@ -82,14 +86,17 @@ public class Payment {
         
         double rentalWeek = DateOperations.getWeekDifference(startDate, dueDate);
         double rentalDay = DateOperations.getDayDifference(startDate, dueDate);
+        double rentalHours = DateOperations.getHourDifference(startDate, dueDate);
         rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
-        
         double totalPrice = (rentalWeek * weeklyRate);
+        totalPrice += (rentalHours * hourlyRate);
         totalPrice += (rentalWeek * equipment1Week);
+        totalPrice += (rentalWeek * insuranceRate);
         totalPrice += (rentalWeek * equipment2Week);
         totalPrice += (rentalDay * dailyRate);
         totalPrice += (rentalDay * equipment1Daily);
         totalPrice += (rentalDay * equipment2Daily);
+        totalPrice += (rentalDay * insuranceRate);
         
         //calculate overdue prices (if any)
         if (isOverdue(dueDate, returnDate))
@@ -105,8 +112,23 @@ public class Payment {
         }        
         totalPrice *= TAX_RATE;
         finalPrice = totalPrice;
-        System.out.println(totalPrice);
         return formatter.format(totalPrice);
+    }
+    
+    public double calculateDiscount(int membershipPoints)
+    {
+        int discountMultiplier = 0;
+        if (vehicleCategory.equals("Premium") || vehicleCategory.equals("Full-size") || vehicleCategory.equals("Standard")
+                || vehicleCategory.equals("Standard") || vehicleCategory.equals("Mid-size") || vehicleCategory.equals("Compact")
+                || vehicleCategory.equals("Economy"))
+        {
+            discountMultiplier = membershipPoints / 1000;
+        }
+        else
+        {
+            discountMultiplier = membershipPoints / 1500;
+        }
+        return (discountMultiplier * dailyRate);
     }
     
     /**
@@ -128,10 +150,12 @@ public class Payment {
         
         double rentalWeek = DateOperations.getWeekDifference(startDate, dueDate);
         double rentalDay = DateOperations.getDayDifference(startDate, dueDate);
+        double rentalHours = DateOperations.getHourDifference(startDate, dueDate);
         rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
         
         double totalPrice = (rentalWeek * weeklyRate);
         totalPrice += (rentalDay * dailyRate);
+        totalPrice += (rentalHours * hourlyRate);
         
         totalPrice *= TAX_RATE;
         return formatter.format(totalPrice);
@@ -158,21 +182,22 @@ public class Payment {
         NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
         double rentalWeek = DateOperations.getWeekDifference(startDate, endDate);
         double rentalDay = DateOperations.getDayDifference(startDate, endDate);
+        double rentalHours = DateOperations.getHourDifference(startDate, endDate);
         double totalPrice = 0.0;
         double equipmentDay = 0.0;
         double equipmentWeek = 0.0;
         rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
-          
         try {
             ResultSet results = Query.select("SELECT dailyRent, weeklyRent FROM equipment WHERE equpimentID='" + equipmentID +"'");
-           
             if (results.next())
             {
                 equipmentDay = results.getDouble(1);
                 equipmentWeek = results.getDouble(2);
-
             }
-            
+            if (rentalHours > 0 && rentalDay == 0)
+            {
+                totalPrice += (equipmentDay);
+            }
             totalPrice += (rentalWeek * equipmentWeek);
             totalPrice += (rentalDay * equipmentDay);
         } catch (SQLException e) {
@@ -183,6 +208,25 @@ public class Payment {
         
     }
     
+    /**
+     * Calculates the insurance rate discount (if selected).
+     * @param startDate
+     * @param endDate
+     * @param returnDate
+     * @return
+     */
+    public double calculateInsuranceDiscount(Date startDate, Date endDate, Date returnDate)
+    {
+        double rentalWeek = DateOperations.getWeekDifference(startDate, endDate);
+        double rentalDay = DateOperations.getDayDifference(startDate, endDate);
+        rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
+        
+        double discount = rentalDay * (insuranceRate / 2);
+        discount += rentalWeek * (insuranceRate / 2);
+        
+        return discount;
+    }
+        
     /**
      * Checks if the date objects are overdue or not.
      * @param startDate

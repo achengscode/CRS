@@ -432,6 +432,7 @@ public class RentalInfo {
 
 
 	private RentalInfo() {
+		flushInfo();
 	
 	}
 	
