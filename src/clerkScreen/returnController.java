@@ -441,7 +441,10 @@ public class returnController implements Initializable {
             {
                 pointsAvail.setText(result.getString(1));
             }
-            
+            else
+            {
+            	pointsAvail.setText("0");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -510,6 +513,7 @@ public class returnController implements Initializable {
         String vehicleID = this.findVehicleID(rentID);
         String custID = this.findCustomerID(rentID);
         String gasStatus = tankStatus.getValue().toString();
+        int points = (int) (priceToPay / 5);
         try {
             Query.delete("DELETE FROM Rents WHERE rentID='" + rentID + "'"); //delete from rent
             Query.delete("DELETE FROM rentCardInfo WHERE rentID='" + rentID + "'"); //delete from cardInfo
@@ -517,7 +521,9 @@ public class returnController implements Initializable {
                     , custID, vehicleID, dateTo, dateFrom, dateReturn, priceToPay, rentID)); //insert into rent payment
             Query.insert(String.format("INSERT INTO Vehicle_Rent (odometer, full_tank) WHERE vehicleID='%s' "
                     + "VALUES ('%s', '%s')", odometer.getText(), gasStatus));
-            Dialogs.showInformationDialog(owner, "Return complete!");
+            
+            Query.insert(String.format("UPDATE customer_points SET points='%d' WHERE custID='%s'", points ,custID));
+            Dialogs.showInformationDialog(owner, "Return complete! Customer gained " + points + "points!");
             
         } catch (SQLException e) {
             e.printStackTrace();
