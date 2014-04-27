@@ -337,14 +337,13 @@ public class ManagerController implements Validator, Initializable {
 		// vehicleID.setMaxLength(17);
 		vehicleID.setPromptText("VIN NUMBER");
 
-		System.out.println("Hello");
-
+		
 		type.getSelectionModel().selectedIndexProperty()
 				.addListener(new ChangeListener() {
 					@SuppressWarnings("rawtypes")
 					@Override
 					public void changed(ObservableValue ov, Object t, Object t1) {
-						System.out.println("Here" + t1.toString());
+						
 						switch (t1.toString()) {
 						case "0":
 							category.setItems(carCategory);
@@ -618,7 +617,7 @@ public class ManagerController implements Validator, Initializable {
 			return;
 		}
 		String type2 = type.getValue().toString();
-		System.out.println(type2);
+		
 		String categoryValue = category.getValue().toString();
 
 		int manufacturingValue = Integer.parseInt(manufacturing.getText());
@@ -645,7 +644,7 @@ public class ManagerController implements Validator, Initializable {
             Dialogs.showInformationDialog(stage, "Vehicle Added");
 			Query.commit();
 			Query.autoCommitOn();
-			System.out.println("Inserted");
+			
 			
 			vehicleID.clear();
 			model.clear();
@@ -763,7 +762,7 @@ public class ManagerController implements Validator, Initializable {
 
 			
 			String select = selectReport.getValue().toString();
-			System.out.println("Value selected is :" + select);
+			
 			if (select.equals("Daily Rental")) {
 
 				flag = 1;
@@ -840,7 +839,7 @@ public class ManagerController implements Validator, Initializable {
 		  
 		    }
 		    else {
-		    	System.out.println("Inside Sale");
+		    	
 		    	String make = listMakeText.getText();
 		    	String model = listModelText.getText();
 		    	String color  = listColorText.getText();
@@ -1000,7 +999,7 @@ public class ManagerController implements Validator, Initializable {
 		try {
 			setVisibleAll();
 			ResultSet result;
-			System.out.println("Category value is " + category);
+			
 			resultList.clear();
 	       
 			
@@ -1123,6 +1122,7 @@ public class ManagerController implements Validator, Initializable {
 		 if(!checkBox(listVehicleType)){
 			   
 	        	System.out.println("Select a type first");
+	        	
 	        	return;
 	        }
 		 if(listSearchType.getValue().toString().equalsIgnoreCase("By Year")){
@@ -1178,20 +1178,22 @@ public class ManagerController implements Validator, Initializable {
 	@FXML
 	private void handleGetResult(){
 		 if(!checkBox(listVehicleType)){
-	        	System.out.println("Select a type");
+	        	
+	        	Dialogs.showErrorDialog(stage, "Select A Type");
 	        	return;
 	        }
 	        if(!checkBox(listSearchType)){
-	        	System.out.println("Select an option");
+	        	
+	        	Dialogs.showErrorDialog(stage, "Select An Option");
 	        	return;
 	        }
 	        if(listSearchType.getValue().toString().equalsIgnoreCase("By Year")){
 	        	if(isNull(listYear.getText())){
-	        		System.out.println("Select a year");
+	        		Dialogs.showErrorDialog(stage, "Select A Year");
 	        		return;
 	        	}
 	        	if(!isInt(listYear.getText())){
-	        		System.out.println("Value should be an integer");
+	        		Dialogs.showErrorDialog(stage, "Value should be an Integer.");
 	        		return;
 	        	}
 	        	int year = Integer.parseInt(listYear.getText());
@@ -1257,13 +1259,12 @@ public class ManagerController implements Validator, Initializable {
 	@FXML
 	private void handleRemoveButton(){
 	   String vID =resultsTable.getSelectionModel().getSelectedItem().getVehicleID();	
-	   System.out.println("Vehicle id selected is : " +vID);
+	   
 	  
 	   try {
 			Query.autoCommitOff();
 			Query.delete("DELETE FROM Vehicle_Rent  WHERE vehicleID ='" + vID + "'");
 			
-			System.out.println("Hello");
 			
 			Query.commit();
 			Query.autoCommitOn();
@@ -1305,7 +1306,7 @@ public class ManagerController implements Validator, Initializable {
 		    return;
 		}
 		if(!isInt(listPriceText.getText())){
-			System.out.println("Value to be a number");
+			
 			Dialogs.showErrorDialog(stage, "Value should be a digit");
 			return;
 		}
@@ -1313,7 +1314,7 @@ public class ManagerController implements Validator, Initializable {
 			String sellPrice = listPriceText.getText();
 			
 			String vID =resultsTable.getSelectionModel().getSelectedItem().getVehicleID();	
-			System.out.println("Vehicle id selected is : " +vID);
+		
 			Query.autoCommitOff();
 			Query.insert("INSERT INTO `Vehicle_Sale`(`vehicleID`, `model`, `make`, `vehicle_year`, `vehicle_type`, `colour`, `license_plate`) "
 					+ "    SELECT `vehicleID`, `model`, `make`, `vehicle_year`, `vehicle_type`, `colour`, `license_plate` FROM `Vehicle_Rent` WHERE vehicleID ='" + vID + "'");
@@ -1483,7 +1484,8 @@ public class ManagerController implements Validator, Initializable {
 		String EquipmentType = priceEquipmentText.getText();
 		if(priceSelect.getValue().toString().equalsIgnoreCase("For Category")){
 		if(isNull(Category) || isNull(Hour) || isNull(Day) || isNull(Week)){
-			System.out.println("Fields Should not be empty");
+			
+			Dialogs.showErrorDialog(stage, "Fields should not be empty");
 			
 			return;
 		}
@@ -1492,6 +1494,7 @@ public class ManagerController implements Validator, Initializable {
 		Query.update("Update rentalrates SET hourlyPrice = '"+ Hour +"',"
 				+ "dailyPrice = '"+ Day +"', weeklyPrice = '"+ Week+"' WHERE "
 						+ "rentCategory = '"+ Category +"' ");
+		Dialogs.showInformationDialog(stage, "Price Updated");
 		handlePriceGenerate();
 		}
 		catch(Exception e){
@@ -1500,8 +1503,9 @@ public class ManagerController implements Validator, Initializable {
 	}
 		if(priceSelect.getValue().toString().equalsIgnoreCase("For Extra Equipment")){
 			if(isNull(Category) || isNull(Day) || isNull(Week) || isNull(EquipmentType)){
-				System.out.println("Fields Should not be empty");
-				System.out.println("Here");
+				
+				Dialogs.showErrorDialog(stage, "Fields should not be empty");
+
 				return;
 			}
 			try{
@@ -1512,8 +1516,9 @@ public class ManagerController implements Validator, Initializable {
 					+ "dailyRent = '"+ Day +"', weeklyRent = '"+ Week+"' WHERE "
 							+ "equipmentType = '"+ EquipmentType +"' AND vehicleType"
 									+ "= '"+ Category +"' ");
-			System.out.println("There");
+			
 			handlePriceGenerate();
+			Dialogs.showInformationDialog(stage, "Price Updated");
 			}
 			catch(Exception e){
 				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
@@ -1544,7 +1549,7 @@ public class ManagerController implements Validator, Initializable {
 		
 		if(!checkBox(priceSellCom) || isNull(priceSellText.getText())){
 			Dialogs.showErrorDialog(stage, "Provie Field Values");
-			//System.out.println("Should Enter Field values");
+			
 		}
 		
 	   try{
@@ -1552,32 +1557,32 @@ public class ManagerController implements Validator, Initializable {
 		   
 		  String vID = resultsTable.getSelectionModel().getSelectedItem().getVehicleID();
 		  String sellingPrice = resultsTable.getSelectionModel().getSelectedItem().getSellingPrice();
-		  System.out.println("Manager id is "+ managerID);
+		  
 		  String num= priceSellText.getText();
-		  System.out.println("Num is " + num);
+		
 		  /*if(!isInt(num)){
 			  return;
 		  }*/
 		  if(!isLong(num)){
 			  Dialogs.showErrorDialog(stage, "Card Numbers should have only Digits");
-			  //System.out.println("Not long");
+			  
 			  return;
 		  }
 		  long number = Long.parseLong(num);
-		  System.out.println("Number is " + number);
+		  
 		  String type = priceSellCom.getValue().toString();
-		  System.out.println("Type is +" + type);
+		  
 		  if(!card.isValid(number, type)){
 			  Dialogs.showErrorDialog(stage, "Invalid Card Number");
-			  //System.out.println("Invalid Card");
+			 
 			  return;
 		  }
 		  
 		  Query.autoCommitOff();
-		  System.out.println("Here");
+		  
 		  Query.delete("DELETE FROM Vehicle_Sale WHERE vehicleID = '"+ vID +"'"); 
 		  Query.insert("INSERT INTO `Sells`(`empID`, `vehicleID`, `price`) VALUES ('"+ managerID +"','"+ vID +"','"+ sellingPrice +"')");
-		  System.out.println("There");
+		  
 		  
 		  Query.commit();
 			Query.autoCommitOn();
@@ -1590,10 +1595,10 @@ public class ManagerController implements Validator, Initializable {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				Dialogs.showErrorDialog(stage,"Oops!", "Exception!", ex.getMessage());
 			}
-			System.out.println("Value Already Present");
-			iCV.printStackTrace();
+			
+			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", iCV.getMessage());
 		} catch (SQLException e) {
 
 			// TODO Auto-generated catch block
