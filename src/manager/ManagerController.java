@@ -29,6 +29,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import dataHold.ReportRow;
 import dataHold.VehicleSearchRow;
@@ -765,9 +767,13 @@ public class ManagerController implements Validator, Initializable {
 			
 			if (select.equals("Daily Rental")) {
 
+				Date date = new Date(System.currentTimeMillis());
+				SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+				String s = fmt.format(date) + "00:00:01";
+
 				flag = 1;
 				result = Query
-						.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.amount) FROM RentPayment R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.dateFrom = CAST(CURRENT_TIMESTAMP () AS DATE)GROUP BY C.rentCategory");
+						.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.isBooked) FROM Rents R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.rentStart >='" + s + "' GROUP BY C.rentCategory");
 			} else {
 				result = Query 
 						.select("SELECT C.rentCategory, count(C.vehicleID) , sum(R.amount) FROM RentPayment R, Vehicle_Category C WHERE R.vehicleID = C.vehicleID and R.returnDate = CAST(CURRENT_TIMESTAMP () AS DATE) GROUP BY C.rentCategory");
