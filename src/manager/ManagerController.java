@@ -24,10 +24,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.text.NumberFormat;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -768,8 +770,9 @@ public class ManagerController implements Validator, Initializable {
 			if (select.equals("Daily Rental")) {
 
 				Date date = new Date(System.currentTimeMillis());
-				SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
-				String s = fmt.format(date) + "00:00:01";
+				SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+				String s = fmt.format(date) + " 00:00:00";
+				System.out.println("Value of s is " +s);
 
 				flag = 1;
 				result = Query
@@ -795,9 +798,9 @@ public class ManagerController implements Validator, Initializable {
 				reportList.add(tuple);
 
 			}
-			
-			sum.setText(Double.toString(totalAmount));
-			reportVehicle.setText(Double.toString(totalVehicle));
+			NumberFormat numFmt = NumberFormat.getCurrencyInstance(Locale.US);
+			sum.setText(numFmt.format(totalAmount));
+			reportVehicle.setText(Integer.toString(totalVehicle));
 
 			if (flag == 0) {
 				sum.setVisible(true);
