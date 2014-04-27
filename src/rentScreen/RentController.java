@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import payment.Payment;
+import AddCustomer.AddCustomer;
 import clerkScreen.ClerkScreenController;
 import clerkScreen.VehicleSearchRow;
 import javafx.fxml.FXML;
@@ -613,6 +614,17 @@ public class RentController implements Initializable {
 			e.printStackTrace();
 		}
 			
+	}
+	
+	@FXML
+	/**
+	 * Show the AddCustomer form
+	 */
+	private void showCustomerForm()
+	{
+		Stage newStage = new Stage();
+		AddCustomer customerForm = new AddCustomer();
+		customerForm.launchLoginController(newStage);
 	}
 	
 	
