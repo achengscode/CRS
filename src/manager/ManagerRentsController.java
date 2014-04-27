@@ -37,7 +37,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-
+/**
+ * ManagerRentsController class
+ * 
+ * Servers as a controller class for ManagerRents.fxml
+ * 
+ * @author Puneet Kumar Dimri
+ * 
+ */
 
 public class ManagerRentsController implements Initializable {
 	
@@ -77,7 +84,9 @@ public class ManagerRentsController implements Initializable {
 	private Label selectLabel;
 	 
 	/**
+	 * @pre Manager is logged in.
 	 * Linking the table view with Observable List.
+	 * @post table view is linked with the observable list.
 	 */
 	
 	@Override
@@ -102,6 +111,7 @@ public class ManagerRentsController implements Initializable {
 	}
 	/**
 	 * Checks if the ComboBox has a value selected.
+	 * @post returns the result, either true or false.
 	 * @param s
 	 * @return
 	 */
@@ -121,6 +131,8 @@ public class ManagerRentsController implements Initializable {
 	}
 	/**
 	 * Method used to handle action on clicking the Generate Button.
+	 * @pre The manager is inside the RENT DETAIL TAB.
+	 * @post The list providing rents details is generated.
 	 */
 	@FXML
 	private void handleGenerateButton(){

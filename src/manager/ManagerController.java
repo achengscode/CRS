@@ -54,6 +54,9 @@ public class ManagerController implements Validator, Initializable {
 	private Parent parent;
 	private Scene scene;
 	private Stage stage;
+	/**
+	 * managerID is used to hold the current managerID information.
+	 */
     private String managerID;
 	
 	@FXML
@@ -121,7 +124,7 @@ public class ManagerController implements Validator, Initializable {
 	/**
 	 * Below is the list of attributes used by manager for the ADD VEHICLE TAB
 	 */
-// Declaring Table and Columns
+
 	@FXML
 	private TableView<ReportRow> reportTable;
 	@FXML
@@ -151,7 +154,7 @@ public class ManagerController implements Validator, Initializable {
     /**
      * Declaring below variables for Vehicle List tab of Manager
      */
-	// Declaring Table and Columns
+	
 	@FXML
 	private TableView<VehicleSearchRow> resultsTable;
 	@FXML
@@ -309,6 +312,8 @@ public class ManagerController implements Validator, Initializable {
 
 	/**
 	 * This method is called by the Login Controller class.
+	 * @pre The manager provides the correct credentials.
+	 * @post The manger login screen is displayed.
 	 * @param stage
 	 */
 	public void redirectHome(Stage stage, String name) {
@@ -383,6 +388,8 @@ public class ManagerController implements Validator, Initializable {
 
 /**
  * This method is used to verify the VIN number.
+ * @pre The string provided should be not null
+ * @post A boolean value is returned.
  */
 	public boolean validator(String valid) {
 		int[] values = { 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 0, 7, 0, 9,
@@ -462,6 +469,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 /**
  * To check if the input in the text field is and Integer or not.
+ * @pre The string provided should be not null.
  * @param s
  * @return
  */
@@ -484,6 +492,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * To set the visibility of the Labels in the ADD VEHICLE TAB.
+	 * @post The visibility of the warning labels is set to false.
 	 */
 
 	protected void setVisibleFalse() {
@@ -576,6 +585,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Method used to verify Plate Number.
+	 * @pre The string provided should be not null.
 	 */
 	private boolean checkPlate(String s){
 		String plate = "\\d{3}[A-Z]{3}";
@@ -583,6 +593,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Method used to add the Vehicle to the Database.
+	 * @pre Manager is logged into the system.
+	 * @post Vehicle is added to the database.
 	 * @param event
 	 */
 
@@ -667,7 +679,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 
 		/**
-		 * Used for linking the Observable list to the Table for List Of Vehicle table 
+		 * Used for linking the Observable list to the Table for List Of Vehicle table
+		 * @post The observable list is linked to the table. 
 		 */
 	@SuppressWarnings("unchecked")
 	public void initial(){
@@ -703,6 +716,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Used for linking the observable list to the table for SET PRICE table.
+	 * @post The observable list is linked to the table for the SET PRICE TAB.
 	 */
 	@SuppressWarnings("unchecked")
 	public void initializeSetPrice(){
@@ -731,6 +745,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 /**
  * Generates the report when the Generate Button is pressed.
+ * @post The report list is produced.
  */
 	@FXML
 	private void handelGenerate() {
@@ -797,6 +812,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 /**
  * Method used to select vehicle from the Database's Sells Table.
+ * @pre The Manager is in the VEHICLE LIST TAB
+ * @post List of vehicle's to sell is generated.
  */
 	private void displayVehicleSell(){
 		try {
@@ -877,6 +894,8 @@ public class ManagerController implements Validator, Initializable {
 
 	/**
 	 * Selects Vehicle from the Vehicle_Rent table in Database.
+	 * @pre The Generate Button is clicked.
+	 * @post The list of vehicle is generated.
 	 */
 	private void displayVehicleRent(){
 		try {
@@ -955,6 +974,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Set All the Columns in the VEHICLE LIST TAB Table visible.
+	 * @post The columns of the Result Table become visible.
 	 */
 	private void setVisibleAll(){
 		resultsTable.getColumns().get(0).setVisible(true);
@@ -971,6 +991,8 @@ public class ManagerController implements Validator, Initializable {
 	
 	/**
 	 * Selects the Vechile's from the Database for a particular year.
+	 * @pre The Get Result button is pressed.
+	 * @post The List of Vehicle is generated.
 	 * @param year
 	 * @param category
 	 */
@@ -1028,6 +1050,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Method to adjust the column's width.
+	 * @post The columns width in the resultsTable is adjusted.
 	 */
 	private void adjustVehicleListColumns(){
 		vehicleIDCol.prefWidthProperty().bind(resultsTable.widthProperty().multiply(0.15));
@@ -1038,6 +1061,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Displays the result according to the value selected when the Search Button is pressed.
+	 * @pre The Search Button is pressed.
+	 * @post The List of vehicle is generated.
 	 */
 	@FXML
 	private void handleSearchButton() {
@@ -1055,6 +1080,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Hide or Shows Labels and Text Fields according to the type of vehicle selected.
+	 * 
 	 */
 	@FXML
 	private void handleListVehicleType(){
@@ -1095,6 +1121,7 @@ public class ManagerController implements Validator, Initializable {
 	private void handleListSearchType(){
 		
 		 if(!checkBox(listVehicleType)){
+			   
 	        	System.out.println("Select a type first");
 	        	return;
 	        }
@@ -1145,6 +1172,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Displays the result when the Get Result Button is pressed.
+	 * @pre The GET Result Button is pressed.
+	 * @post The Result is generated.
 	 */
 	@FXML
 	private void handleGetResult(){
@@ -1177,6 +1206,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Disables All the Buttons from the VEHICLE LIST TAB in manager.
+	 * @post The Buttons are disabled.
 	 */
 	private void setDisableAll(){
 		removeButton.setDisable(true);
@@ -1221,6 +1251,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Removes a vehicle from the database.
+	 * @pre The Remove button is pressed.
+	 * @post The selected vehicle is deleted.
 	 */
 	@FXML
 	private void handleRemoveButton(){
@@ -1259,6 +1291,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	  /**
 	   * Moves a vehicle from vehicle_rent to vehicle_sell.
+	   * @pre The Move Button is pressed.
+	   * @post The Vehicle is moved from rent to sale.
 	   */
 	@FXML
 	protected void handleMoveButton(){
@@ -1318,6 +1352,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Method used in the set Price Tab to generate price table.
+	 * @pre The Price Generate Button is pressed.
+	 * @post The List is displayed.
 	 */
 	@FXML
 	private void handlePriceGenerate(){
@@ -1383,7 +1419,8 @@ public class ManagerController implements Validator, Initializable {
 	
 	
 	/**
-	 * For Update Button in SET PRICE Tab
+	 * For Update Button in SET PRICE Tab.
+	 * @post The visibility is set as below.
 	 */
 	@FXML
 	private void handelPriceUpdate(){
@@ -1417,6 +1454,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * For Activating the Update button on click on a row in the Price Table
+	 * @post The update button is updated.
 	 */
 	@FXML
 	private void handlePriceTable(){
@@ -1432,6 +1470,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * TO change the Price when Change Button is clicked.
+	 * @pre The Change Button is clicked.
+	 * @post The price is changed.
 	 */
 	@FXML
 	private void handlePriceChangeButton(){
@@ -1482,6 +1522,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * TO check if the number is of type long or not.
+	 * @pre The string provided is not null.
 	 */
 	private boolean isLong(String num){
 		try{
@@ -1494,6 +1535,8 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * Method used to sell a vehicle when SELL button is pressed.
+	 * @pre The Sell button is pressed.
+	 * @post The Vehicle is moved to For Sell.
 	 */
 	
 	@FXML
@@ -1564,6 +1607,7 @@ public class ManagerController implements Validator, Initializable {
 	}
 	/**
 	 * To disable Label and Text Fields from the SET PRICE Tab.
+	 * @post The visibility is set to false to the below fields. 
 	 */
 	@FXML
 	private void priceSelectAction(){
