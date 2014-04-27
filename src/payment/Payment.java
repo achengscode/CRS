@@ -150,10 +150,12 @@ public class Payment {
         
         double rentalWeek = DateOperations.getWeekDifference(startDate, dueDate);
         double rentalDay = DateOperations.getDayDifference(startDate, dueDate);
+        double rentalHours = DateOperations.getHourDifference(startDate, dueDate);
         rentalDay -= (rentalWeek * 7); //subtract any multiple of 7 days.
         
         double totalPrice = (rentalWeek * weeklyRate);
         totalPrice += (rentalDay * dailyRate);
+        totalPrice += (rentalHours * hourlyRate);
         
         totalPrice *= TAX_RATE;
         return formatter.format(totalPrice);
