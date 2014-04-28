@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.*?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <!-- TODO Add Nodes -->
+  <center>
+    <Pane prefHeight="200.0" prefWidth="200.0">
+      <children>
+        <TextField fx:id="userName" layoutX="208.0" layoutY="167.0" prefWidth="200.0" />
+        <PasswordField fx:id="passwd" layoutX="208.0" layoutY="219.0" prefWidth="200.0" />
+        <Text layoutX="140.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" />
+        <Text layoutX="141.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
+        <Button fx:id="loginBtn" layoutX="220.0" layoutY="291.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Login" />
+        <Button fx:id="cancelBtn" layoutX="329.0" layoutY="291.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Exit" />
+        <ImageView fitHeight="139.11267313463935" fitWidth="415.0" layoutX="20.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../crs-logo-blue.png" />
+          </image>
+        </ImageView>
+        <Label fx:id="missingName" visible="false" layoutX="208.0" layoutY="189.0" text="User name is required!" textFill="RED" />
+        <Label fx:id="missingPwd" visible="false" layoutX="208.0" layoutY="241.0" text="Password is required!" textFill="RED" />
+      </children>
+    </Pane>
+  </center>
+</BorderPane>

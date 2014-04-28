@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="568.0" prefWidth="1376.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="clerkScreen.OverdueController">
+  <!-- TODO Add Nodes -->
+  <children>
+    <TableView fx:id="resultsTable" editable="true" layoutX="491.0" layoutY="72.0" onMouseClicked="#clickedRow" prefHeight="299.0" prefWidth="646.0">
+      <columns>
+        <TableColumn prefWidth="75.0" text="Rent ID" fx:id="rentIDCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="97.0" text="Vehicle Make" fx:id="makeCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="99.0" text="Vehicle Model" fx:id="modelCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="83.0" text="License Plate" fx:id="plateCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="145.0" text="Rent Start" fx:id="startCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="145.0" text="Rent End" fx:id="endCol" />
+      </columns>
+    </TableView>
+    <Label layoutX="111.0" layoutY="72.0" text="Select a category" />
+    <ComboBox fx:id="categorySelect" layoutX="111.0" layoutY="124.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="12-Foot" />
+          <String fx:value="15-Foot" />
+          <String fx:value="24-Foot" />
+          <String fx:value="Box Truck" />
+          <String fx:value="Cargo Van" />
+          <String fx:value="Economy" />
+          <String fx:value="Compact" />
+          <String fx:value="Full-size" />
+          <String fx:value="Luxury" />
+          <String fx:value="Mid-size" />
+          <String fx:value="Premium" />
+          <String fx:value="Standard" />
+          <String fx:value="SUV" />
+          <String fx:value="Van" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <Button layoutX="111.0" layoutY="222.0" mnemonicParsing="false" onAction="#generateReport" text="List Overdue Vehicles" />
+    <Label fx:id="errorCategory" layoutX="254.0" layoutY="129.0" text="Please select a category" textFill="RED" visible="false" />
+  </children>
+</AnchorPane>
