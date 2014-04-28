@@ -34,6 +34,7 @@ import dataHold.ReportRow;
 import databaseManagement.Query;
 import validator.Validator;
 import limitTextFeild.RestrictiveTextField;
+import login.LoginController;
 
 public class SystemAdminController 
 
@@ -235,6 +236,16 @@ public class SystemAdminController
 	    
 	    } 
 	 
+		/**
+		 * Logout button handler
+		 */
+		@FXML
+		private void handleCancelButton() {
+			LoginController login = new LoginController();
+			login.launchLoginController(stage);
+				
+		}
+	   
 	 @FXML
 	 private void handleSearchButton()
 	 {

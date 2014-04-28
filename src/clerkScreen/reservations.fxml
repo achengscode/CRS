@@ -31,5 +31,6 @@
     <Button layoutX="194.0" layoutY="263.0" mnemonicParsing="false" onAction="#findRent" text="Find Rent" />
     <Label fx:id="completeCriteria" layoutX="56.0" layoutY="99.0" text="Must choose a search Criteria" textFill="RED" visible="false" />
     <Button fx:id="completeRent" disable="true" layoutX="803.0" layoutY="483.0" mnemonicParsing="false" onAction="#completeRent" text="Next" />
+    <Button layoutX="1244.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Logout" />
   </children>
 </AnchorPane>

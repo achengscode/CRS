@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import login.LoginController;
 import databaseManagement.Query;
 import rentScreen.RentController;
 import rentScreen.RentalInfo;
@@ -280,4 +281,14 @@ public class reservationsController implements Initializable{
         }
         errorID.setVisible(true);
     }
+    
+	/**
+	 * Logout button handler
+	 */
+	@FXML
+	private void handleCancelButton() {
+		stage = (Stage) resultsTable.getScene().getWindow();
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
+	}
 }

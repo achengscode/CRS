@@ -29,6 +29,7 @@ import javafx.scene.control.Dialogs.DialogResponse;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import login.LoginController;
 import databaseManagement.Query;
 import payment.Payment;
 import payment.PaymentDialog;
@@ -520,7 +521,7 @@ public class returnController implements Initializable {
             Query.insert(String.format("INSERT INTO RentPayment VALUES ('%s', '%s', '%s', '%s', '%s', '%.2f', '%s')"
                     , custID, vehicleID, dateTo, dateFrom, dateReturn, priceToPay, rentID)); //insert into rent payment
             Query.insert(String.format("INSERT INTO Vehicle_Rent (odometer, full_tank) WHERE vehicleID='%s' "
-                    + "VALUES ('%s', '%s')", odometer.getText(), gasStatus));
+                    + "VALUES ('%s', '%s')",vehicleID, odometer.getText(), gasStatus));
             
             Query.insert(String.format("UPDATE customer_points SET points='%d' WHERE custID='%s'", points ,custID));
             Dialogs.showInformationDialog(owner, "Return complete! Customer gained " + points + "points!");
@@ -552,6 +553,16 @@ public class returnController implements Initializable {
         return hasNull;
     }
     
+	/**
+	 * Logout button handler
+	 */
+	@FXML
+	private void handleCancelButton() {
+		Stage stage = (Stage) resultsTable.getScene().getWindow();
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
+	}
+	
     @FXML
     private void calculateInsuranceDiscount()
     {
@@ -583,5 +594,9 @@ public class returnController implements Initializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        
     }
+    
+    
 }

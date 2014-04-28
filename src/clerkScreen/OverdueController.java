@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import login.LoginController;
 import databaseManagement.Query;
 
 public class OverdueController implements Initializable {
@@ -111,5 +112,16 @@ public class OverdueController implements Initializable {
         endCol.setCellValueFactory(new PropertyValueFactory<RentRow, String>("rentEnd"));
         
     }
+    
+	/**
+	 * Logout button handler
+	 */
+	@FXML
+	private void handleCancelButton() {
+		Stage stage = (Stage) resultsTable.getScene().getWindow();
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
+			
+	}
 
 }

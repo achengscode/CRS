@@ -2,7 +2,6 @@ package SystemAdministrator;
 
 
 import java.beans.EventHandler;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -39,6 +38,7 @@ import dataHold.ReportRow;
 import databaseManagement.Query;
 import validator.Validator;
 import limitTextFeild.RestrictiveTextField;
+import login.LoginController;
 import security.DBSecurity;
 
 /**System Admintrator Controller class
@@ -435,6 +435,17 @@ import security.DBSecurity;
 		   passUpdate.clear();
 		   
 	   }
+	   
+		/**
+		 * Logout button handler
+		 */
+		@FXML
+		private void handleCancelButton() {
+			Stage stage = (Stage) radio1.getScene().getWindow();
+			LoginController login = new LoginController();
+			login.launchLoginController(stage);
+				
+		}
 	
 	}
 			

@@ -397,21 +397,6 @@ public class ClerkScreenController implements Initializable {
 	}
 
 	/**
-	 * Event handler for the cancel/exit button
-	 * 
-	 */
-	@FXML
-	private void handleExitButton() {
-		
-		// Instead of exiting the program, cancel button should move the user to
-		// previous screen
-		LoginController log = new LoginController();
-		// log.redirectHome(stage);
-		
-		// System.exit(0);
-	}
-
-	/**
 	 * Method that switches to next screen in rental process
 	 * @pre A result row has been selected and the Next button was pressed
 	 * @post The RentScreen Controller object is created and a new window containing selected row results is created
@@ -653,6 +638,7 @@ public class ClerkScreenController implements Initializable {
 				
 		}
 	}
+	
 	/**
 	 * Logout button handler
 	 */

@@ -42,5 +42,6 @@
     </ComboBox>
     <Button layoutX="111.0" layoutY="222.0" mnemonicParsing="false" onAction="#generateReport" text="List Overdue Vehicles" />
     <Label fx:id="errorCategory" layoutX="254.0" layoutY="129.0" text="Please select a category" textFill="RED" visible="false" />
+    <Button layoutX="1244.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Logout" />
   </children>
 </AnchorPane>

@@ -62,5 +62,6 @@
     <Label fx:id="errorID" layoutX="154.0" layoutY="125.0" text="Numbers Only" textFill="RED" visible="false" />
     <Label fx:id="errorPlate" layoutX="154.0" layoutY="174.0" text="Must be formatted correctly" textFill="RED"  visible="false"/>
     <Label fx:id="errorPhone" layoutX="154.0" layoutY="218.0" text="Must be in XXX-XXX-XXXX format" textFill="RED"  visible="false"/>
+    <Button layoutX="1244.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Logout" />
   </children>
 </AnchorPane>
