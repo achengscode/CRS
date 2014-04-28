@@ -59,7 +59,7 @@ public class AlertBox {
      */
     private static void loadScene()
     {
-        FXMLLoader loader = new FXMLLoader(AlertBox.class.getResource("/ui/alertBox.fxml"));
+        FXMLLoader loader = new FXMLLoader(AlertBox.class.getResource("ui.alertBox.fxml"));
         try {
            root = (Parent) loader.load();
            scene = new Scene(root);

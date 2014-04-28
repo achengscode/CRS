@@ -5,7 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<<<<<<< HEAD
 <AnchorPane prefHeight="200.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="alertBox.AlertBox">
+=======
+<AnchorPane prefHeight="200.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="ui.AlertBox">
+>>>>>>> RentReturn
   <!-- TODO Add Nodes -->
   <children>
     <Button fx:id="closeWindow" layoutX="132.0" layoutY="150.0" mnemonicParsing="false" onAction="#closeDialog" text="OK" />
