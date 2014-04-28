@@ -10,7 +10,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" prefHeight="819.0" prefWidth="1200.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<GridPane alignment="CENTER" gridLinesVisible="true" hgap="0.0" maxHeight="+Infinity" maxWidth="+Infinity" minWidth="-Infinity" prefHeight="819.0" prefWidth="1368.0" styleClass="title-pane" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <Text fill="WHITE" text="Welcome" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.rowIndex="0" />
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="+Infinity" minWidth="600.0" prefWidth="1077.0" />

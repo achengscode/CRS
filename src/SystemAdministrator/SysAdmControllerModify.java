@@ -122,8 +122,7 @@ import security.DBSecurity;
 		   @FXML 
 		   private Label pwdUpdateSuccess;
 		 
-		   
-		    
+		   	    
 		    
 		    @SuppressWarnings("unchecked")
 			public void initialize(URL location, ResourceBundle resources) {
@@ -329,7 +328,6 @@ import security.DBSecurity;
 		    @FXML
 		    private void handleRemoveEmp()
 		    {
-		    System.out.println("WOW");
 		   	String empid = Emp2id.getText();
 		    String empid2 = searchemptable.getSelectionModel().getSelectedItem().getEmpid();
 		    System.out.println("Empid is " + empid2);
@@ -353,7 +351,6 @@ import security.DBSecurity;
 			 private void handleChangeButton()
 		     {	
 		    	String empidup= searchemptable.getSelectionModel().getSelectedItem().getEmpid();
-		    	//String pwdUpdate=searchemptable.getSelectionModel().getSelectedItem().getPassword();
 		    	String fnameUpdate=searchemptable.getSelectionModel().getSelectedItem().getFname();
 		    	String lnameUpdate=searchemptable.getSelectionModel().getSelectedItem().getLname();
 		    	String tyUpdate=searchemptable.getSelectionModel().getSelectedItem().getType();
@@ -370,17 +367,17 @@ import security.DBSecurity;
 		    @FXML
 		    private void manageupdateButton()
 		    {	System.out.println("Update button is clicked");
+		    	String empid2=Emp2id.getText();
 		    	String empid3=empUpdate.getText();
 		    	String fn3=fnUpdate.getText();
 		    	String ln3=lnUpdate.getText();
 		    	String type3=typeUpdate.getText();
 		    	String pwd3=passUpdate.getText();
-		    
-		    	System.out.println("Employee is updated");
+		    	
 		    	ResultSet result2;
 		    	String salt = null;
 				try {
-					result2 = Query.select("SELECT pwdSalt FROM employee WHERE empID='"+empid3+"'");
+					result2 = Query.select("SELECT pwdSalt FROM employee WHERE empID='"+empid2+"'");
 					result2.next();
 					salt = result2.getString(1);
 				} catch (SQLException e1) {
@@ -389,10 +386,9 @@ import security.DBSecurity;
 				}
 		    	
 		    	String newPassword = DBSecurity.hashedString(pwd3,salt);
-		    
 		    	
 		   try{ 	
-		    Query.update("UPDATE `employee` SET `empID`="+empid3+",`empPwd`='"+newPassword+"',`empFname`='"+fn3+"',`empLname`='"+ln3+"',`pwdSalt`='"+salt+"',`empType`='"+type3+"' WHERE empID='"+empid3+"'");
+		    Query.update("UPDATE `employee` SET `empID`='"+empid3+"',`empPwd`='"+newPassword+"',`empFname`='"+fn3+"',`empLname`='"+ln3+"',`pwdSalt`='"+salt+"',`empType`='"+type3+"' WHERE empID='"+empid2+"'");
 		   
 		    empUpdate.clear();
 		    fnUpdate.clear();
