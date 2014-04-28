@@ -516,15 +516,18 @@ public class returnController implements Initializable {
         String gasStatus = tankStatus.getValue().toString();
         int points = (int) (priceToPay / 5);
         try {
+            Query.autoCommitOff();
             Query.delete("DELETE FROM Rents WHERE rentID='" + rentID + "'"); //delete from rent
             Query.delete("DELETE FROM rentCardInfo WHERE rentID='" + rentID + "'"); //delete from cardInfo
             Query.insert(String.format("INSERT INTO RentPayment VALUES ('%s', '%s', '%s', '%s', '%s', '%.2f', '%s')"
                     , custID, vehicleID, dateTo, dateFrom, dateReturn, priceToPay, rentID)); //insert into rent payment
-            Query.insert(String.format("INSERT INTO Vehicle_Rent (odometer, full_tank) WHERE vehicleID='%s' "
-                    + "VALUES ('%s', '%s')",vehicleID, odometer.getText(), gasStatus));
+            Query.insert(String.format("UPDATE Vehicle_Rent  SET odometer = '%s', full_tank='%s' "
+                    + "WHERE vehicleID='%s'", odometer.getText(), gasStatus, vehicleID));
             
             Query.insert(String.format("UPDATE customer_points SET points='%d' WHERE custID='%s'", points ,custID));
-            Dialogs.showInformationDialog(owner, "Return complete! Customer gained " + points + "points!");
+            Query.commit();
+            Query.autoCommitOff();
+            Dialogs.showInformationDialog(owner, "Return complete! Customer gained " + points + " points!");
             
         } catch (SQLException e) {
             e.printStackTrace();
