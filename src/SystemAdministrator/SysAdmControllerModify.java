@@ -227,7 +227,6 @@ import security.DBSecurity;
 		    		else{
 		    			Emp2id.clear(); 
 		    			Emp2id.setDisable(true);
-		    			 
 		    			fname2.setDisable(false);
 		    			lname2.setDisable(false);
 		    			Selectype2.setDisable(false);
@@ -251,18 +250,46 @@ import security.DBSecurity;
 		    	        	String lname =null;
 		    	        	String fnname =null;
 		    	        	String type = null;
-		    	        	
+
+		    	        	type2label.setVisible(false);
+		    	        	fn2label.setVisible(false);
+		    	        	ln2label.setVisible(false);
+		    	        	Empid2Label.setVisible(false);
 		    		if(radio1.isSelected()){		
 		    		 empid = Emp2id.getText();
+		    		 if(isNull(empid))
+		    		 {
+		    			 Empid2Label.setVisible(true);
+		    		 }
+		    		 
 		    		}
 		    		else if(radio2.isSelected()){
 		    		 fnname =fname2.getText();
     				 lname =lname2.getText();
-    				if(!isBoxSelected(Selectype2)){
-    					System.out.println("Select a type");
+    				 int count =0;
+    				 if(isNull(fnname))
+ 					{
+ 						fn2label.setVisible(true);
+ 						count++;
+ 						
+ 					}
+ 					 if(isNull(lname))
+ 					{
+ 						ln2label.setVisible(true);
+ 						count++;
+ 					}
+    				if(!isBoxSelected(Selectype2))
+    				{
+    					type2label.setVisible(true);
+    					count++;
     					return;
     				}
+    					if(count > 0){
+    						return;
+    					}
+    				
     				 type =Selectype2.getValue().toString();
+    				
 		    		}
 		    		else{
 		    			System.out.println("Select a radio button");
@@ -273,7 +300,7 @@ import security.DBSecurity;
 		    		searchEmplist.clear();
 		    		System.out.println("HELLO");
 		    		ResultSet result = null;
-		    	
+		    	// populating the table with  the corresponding feild selected by the customer.
 		    		result = Query.select("SELECT `empID`, `empPwd`, `empFname`, `empLname`"
 		    				+ ", `empType` FROM `employee` W "
 		    				+ "WHERE empid='"+empid+"'OR(empFname='"+fnname+"'AND empLname='"
@@ -313,7 +340,7 @@ import security.DBSecurity;
 		    		ResultSet result;
 		    	
 		    		Query.delete("DELETE FROM employee WHERE empID='"+empid2+"'");
-		    		
+		    		clearAllData();
 		    	   
 		    	}
 		    	catch(Exception e){
@@ -392,7 +419,7 @@ import security.DBSecurity;
 			 private void handlecancelButton()
 			 {	 
 				 searchpane.setVisible(true);
-				 
+				 clearAllData();
 				 
 			 }
 	   private void clearAllData()
@@ -401,7 +428,16 @@ import security.DBSecurity;
 		   Emp2id.clear();
 		   fname2.clear();
 		   lname2.clear();
-	   
+		   Empid2Label.setVisible(false);
+		   fn2label.setVisible(false);
+		   ln2label.setVisible(false);
+		   type2label.setVisible(false);
+		   empUpdate.clear();
+		   fnUpdate.clear();
+		   lnUpdate.clear();
+		   typeUpdate.clear();
+		   passUpdate.clear();
+		   
 	   }
 	
 	}

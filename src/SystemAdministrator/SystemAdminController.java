@@ -1,4 +1,11 @@
 package SystemAdministrator;
+/**SystemAdmintratorController class
+ * 
+ * Servers as a controller class for SystemAdminstrator.fxml
+ * For Add function of the employee.
+ * @author Prateek Kumar
+ *
+ */
 
 //import java.awt.Button;
 import java.io.IOException;

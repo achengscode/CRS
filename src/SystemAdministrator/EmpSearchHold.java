@@ -1,7 +1,14 @@
 
 package SystemAdministrator;
-import javafx.beans.property.SimpleStringProperty;
 
+import javafx.beans.property.SimpleStringProperty;
+/**System EmpSearchHold class
+ * 
+ * Servers as a controller class for SystemAdminstrator.fxml
+ * Holding the search result from the dataBase.
+ * @author Prateek Kumar
+ *
+ */
 
      	public class EmpSearchHold {
 
