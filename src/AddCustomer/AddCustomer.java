@@ -1,6 +1,7 @@
 package AddCustomer;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javafx.event.ActionEvent;
@@ -9,7 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -69,6 +72,21 @@ public class AddCustomer
 	private Label custProvInstructLabel;
 	@FXML
 	private Label custPostalInstructLabel;
+	@FXML
+	private RadioButton selectPhone;
+	@FXML
+	private RadioButton selectID;
+	@FXML
+	private RadioButton selectUserName;
+	@FXML
+	private TextField searchName;
+	@FXML
+	private TextField searchPhone;
+	@FXML
+	private TextField searchID;
+	
+
+	private String customerID;
 
 	/*
 	 * For the modify employee For the Modify Employee used different variables
@@ -78,7 +96,6 @@ public class AddCustomer
 	public AddCustomer()
 
 	{
-
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
 				"AddCustomer.fxml"));
 		fxmlLoader.setController(this);
@@ -91,7 +108,7 @@ public class AddCustomer
 		}
 	}
 
-	public void launchLoginController(Stage stage) {
+	public void launchCustomerController(Stage stage) {
 		this.stage = stage;
 		stage.setTitle("User Login");
 		stage.setScene(scene);
@@ -130,7 +147,7 @@ public class AddCustomer
 
 	private boolean setVisibleTrue(String custDL, String custFN, String custLN,
 			String custUn, String custPh, String custPsswd, String custAdd,
-			String custCty, String custProv, String P1, String P2) {
+			String custCty, String custProv, String P1) {
 		int count = 0;
 
 		if (isNull(custDL)) {
@@ -179,15 +196,82 @@ public class AddCustomer
 			custPostalInstructLabel.setVisible(true);
 			count++;
 		}
-		if (isNull(P2)) {
-			custPostalInstructLabel.setVisible(true);
-			count++;
-		}
 		if (count == 0) {
 			return true;
 		}
 		return false;
 
+	}
+
+	@FXML
+	protected void searchCustomerRecord() {
+		// searches the customer based on any combination of the 4 pks in modify
+		// customer, stores it, and then calls the customer info to screen
+		String query = buildQuery();
+		try {
+			ResultSet result = Query.select(query);
+			if (result.next())
+			{
+				customerID = result.getString(1);
+				custUserName.setText(result.getString(2));
+				custPhoneNumber.setText(result.getString(3));
+				custDriverLicense.setText(result.getString(6));
+				custFirstName.setText(result.getString(7));
+				custLastName.setText(result.getString(8));
+				custStreetAddress.setText(result.getString(11));
+				custCity.setText(result.getString(12));
+				custProvince.setText(result.getString(13));
+				custPostal1.setText(result.getString(14));
+			}
+			else
+			{
+				Dialogs.showErrorDialog(stage, "No results found!", "Oops!");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String buildQuery()
+	{
+		String query = "";
+		if (selectPhone.isSelected())
+		{
+			query = String.format("SELECT * FROM customer C, custAddress A WHERE C.custID = A.custID AND C.phoneNo='%s'",
+					searchPhone.getText());
+		} 
+		else if (selectUserName.isSelected())
+		{
+			query = String.format("SELECT * FROM customer C, custAddress A WHERE C.custID = A.custID AND C.custUserName='%s'",
+					searchName.getText());
+		}
+		else if (selectID.isSelected())
+		{
+			query = String.format("SELECT * FROM customer C, custAddress A WHERE C.custID = A.custID AND C.custID='%s'",
+					searchID.getText());
+		}
+		return query;
+	}
+
+	@FXML
+	private void updateCustomerRecord() {
+		try {
+			Query.autoCommitOff();
+
+			Query.update("UPDATE  customer SET custUsername =" + "'"
+					+ custUserName.getText() + "'" + "," + "phoneNo=" + "'"
+					+ custPhoneNumber.getText() + "'" + ","
+					+ "driverLicenseNo=" + "'" + custDriverLicense.getText()
+					+ "'," + "custFname=" + "'" + custFirstName.getText() + "',"
+					+ "custLname=" + "'" + custLastName.getText() + "'" + " WHERE custID=" + customerID);
+
+			Query.commit();
+			Query.autoCommitOn();
+			Dialogs.showInformationDialog(stage, "Customer updated!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@FXML
@@ -203,11 +287,9 @@ public class AddCustomer
 		String custCty = custCity.getText();
 		String custProv = custProvince.getText();
 		String custP1 = custPostal1.getText();
-		String custP2 = custPostal2.getText();
 
 		if (!setVisibleTrue(custDL, custFN, custLN, custUN, custPh, custPwd,
-				custStAdd, custCty, custProv, custP1, custP2)) {
-
+				custStAdd, custCty, custProv, custP1)) {
 		}
 
 		try {
@@ -226,6 +308,10 @@ public class AddCustomer
 					+ custDL
 					+ "','"
 					+ custFN + "' ,'" + custLN + "')");
+			
+			String query = String.format("INSERT INTO custAddress VALUES(`%s`, `%s`, `%s`, `%s`, `%s`", customerID, custStreetAddress.getText(),
+					custCity.getText(), custProvince.getText(), custPostal1.getText());
+			Query.insert(query);
 
 			Query.commit();
 			Query.autoCommitOn();
@@ -242,15 +328,12 @@ public class AddCustomer
 			custPostal1.clear();
 			custPostal2.clear();
 
-			// selectBox.getSelectionModel().clearSelection();
-
 		} catch (MySQLIntegrityConstraintViolationException iCV) {
 			try {
 				Query.rollback();
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
-			System.out.println("Value Already Present");
 		} catch (SQLException e) {
 
 			try {
@@ -261,82 +344,14 @@ public class AddCustomer
 			e.printStackTrace();
 			System.out.println("OOPS");
 		}
-
 	}
-
 	@FXML
-	protected void AddButton(ActionEvent event)
-
-	{
-		setVisibleFalse1();
-		String custDL = custDriverLicense.getText();
-		String custFN = custFirstName.getText();
-		String custLN = custLastName.getText();
-		String custUN = custUserName.getText();
-		String custPh = custPhoneNumber.getText();
-		String custPwd = custPassword.getText();
-		String custStAdd = custStreetAddress.getText();
-		String custCty = custCity.getText();
-		String custProv = custProvince.getText();
-		String custP1 = custPostal1.getText();
-		String custP2 = custPostal2.getText();
-
-		if (!setVisibleTrue(custDL, custFN, custLN, custUN, custPh, custPwd,
-				custStAdd, custCty, custProv, custP1, custP2)) {
-
-		}
-
+	private void keepAlive() {
 		try {
-			Query.autoCommitOff();
-
-			Query.insert("INSERT INTO `customer`(`custUsername`, `phoneNo`, `custPassword`, `salt`, `driverLicenseNo`, `custFname`, `custLname`)"
-					+ "VALUES ('"
-					+ custUN
-					+ "','"
-					+ custPh
-					+ "' ,'"
-					+ custPwd
-					+ "','"
-					+ System.nanoTime()
-					+ "','"
-					+ custDL
-					+ "','"
-					+ custFN + "' ,'" + custLN + "')");
-
-			Query.commit();
-			Query.autoCommitOn();
-			System.out.println("The employee is added");
-			custDriverLicense.clear();
-			custFirstName.clear();
-			custLastName.clear();
-			custUserName.clear();
-			custPhoneNumber.clear();
-			custPassword.clear();
-			custStreetAddress.clear();
-			custCity.clear();
-			custProvince.clear();
-			custPostal1.clear();
-			custPostal2.clear();
-
-			// selectBox.getSelectionModel().clearSelection();
-
-		} catch (MySQLIntegrityConstraintViolationException iCV) {
-			try {
-				Query.rollback();
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
-			System.out.println("Value Already Present");
+			Query.select("Select * from equipment");
 		} catch (SQLException e) {
-
-			try {
-				Query.rollback();
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
-			e.printStackTrace();
-			System.out.println("OOPS");
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
 		}
-
 	}
 }

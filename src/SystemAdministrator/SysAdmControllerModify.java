@@ -176,7 +176,7 @@ import security.DBSecurity;
 	       
 	       
 	        	parent = (Parent) fxmlLoader.load();
-	            scene = new Scene(parent, 800, 600);
+	            scene = new Scene(parent);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }

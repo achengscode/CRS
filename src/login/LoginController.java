@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
 import clerkScreen.ClerkScreenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +21,8 @@ import javafx.stage.Stage;
 import security.DBSecurity;
 import databaseManagement.Query;
 import manager.ManagerController;
-
+import SystemAdministrator.SysAdmControllerModify;
+import SystemAdministrator.SystemAdminController;;
 
 //import manager.ManagerController;
 
@@ -174,6 +176,9 @@ public class LoginController implements Initializable{
 				clerk.redirectHome(stage);
 	           break;
 	        case "sysadmin":
+	        	// Launching Sys Admin Screen 
+	        	SysAdmControllerModify admin = new SysAdmControllerModify();
+				admin.redirectHome(stage);
 	           break;
 	    }
 	}

@@ -635,7 +635,7 @@ public class RentController implements Initializable {
 	{
 		Stage newStage = new Stage();
 		AddCustomer customerForm = new AddCustomer();
-		customerForm.launchLoginController(newStage);
+		customerForm.launchCustomerController(newStage);
 	}
 	
 	/**
