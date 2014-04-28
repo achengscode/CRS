@@ -78,7 +78,7 @@ public class LoginController implements Initializable{
 	 public void launchLoginController(Stage stage) 
 	 {
 	        this.stage = stage;
-	        stage.setTitle("User Login");
+	        stage.setTitle("Welcome to CRS");
 	        stage.setScene(scene);
 	        stage.setResizable(false);
 	        stage.hide();
@@ -105,7 +105,6 @@ public class LoginController implements Initializable{
 			
 			String name = userName.getText();
 			String pwd = passwd.getText();
-		
 			
 			//check if name and password are empty.
 			if (isFieldsEmpty(name, pwd))

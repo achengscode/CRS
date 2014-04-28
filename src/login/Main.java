@@ -1,12 +1,8 @@
 package login;
 	
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 
-import login.LoginController;
 
 import login.LoginController;
 public class Main extends Application {
