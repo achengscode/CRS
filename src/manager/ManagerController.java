@@ -43,6 +43,7 @@ import dataHold.ReportRow;
 import databaseManagement.Query;
 import validator.Validator;
 import limitTextFeild.RestrictiveTextField;
+import login.LoginController;
 import dataHold.SetPriceRow;
 import ui.AlertBox;
 /**
@@ -71,6 +72,9 @@ public class ManagerController implements Validator, Initializable {
 	/**
 	 * Below is the list of attributes used for the ADD VEHICLE TAB for the Manager.
 	 */
+	@FXML
+	private Button logoutReportButton;
+	
 	@FXML
 	private TextField vehicleID;
 	
@@ -130,6 +134,8 @@ public class ManagerController implements Validator, Initializable {
 	 */
 
 	@FXML
+	private Button logoutAddButton;
+	@FXML
 	private TableView<ReportRow> reportTable;
 	@FXML
 	private TableColumn categoryyCol;
@@ -158,7 +164,8 @@ public class ManagerController implements Validator, Initializable {
     /**
      * Declaring below variables for Vehicle List tab of Manager
      */
-	
+	@FXML
+	private Button logoutVehicleButton;
 	@FXML
 	private TableView<VehicleSearchRow> resultsTable;
 	@FXML
@@ -242,7 +249,8 @@ public class ManagerController implements Validator, Initializable {
 	/**
 	 * Below declarations used of the SET PRICE Tab of Manager
 	 */
-	
+	@FXML
+	private Button logoutPriceButton;
 	@FXML
 	private ComboBox priceSelect;
 	@FXML
@@ -1639,5 +1647,14 @@ public class ManagerController implements Validator, Initializable {
 		priceUpdate.setDisable(true);
 		priceList.clear();
 		
+	}
+	/**
+	 * handler for logout button 
+	 * Redirects to initial screen
+	 */
+	@FXML
+	private void handleLogout() {
+		LoginController login = new LoginController();
+		login.launchLoginController(stage);
 	}
 	}

@@ -37,6 +37,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import login.LoginController;
+
 /**
  * ManagerRentsController class
  * 
@@ -54,6 +56,8 @@ public class ManagerRentsController implements Initializable {
 	 */
 	@FXML
 	private Button generateButton;
+	@FXML
+	private Button logoutButton;
 	@FXML
 	private TableView<RentRow> rentTable; 
 	@FXML
@@ -188,5 +192,15 @@ public class ManagerRentsController implements Initializable {
 		catch(Exception e){
 			Dialogs.showErrorDialog(stage,"Oops!", "Exception!", e.getMessage());
 		}
+	}
+	/**
+	 * handler for logout button 
+	 * Redirects to initial screen
+	 */
+	@FXML
+	private void handleLogout() {
+		stage = (Stage)logoutButton.getScene().getWindow();
+		LoginController login2 = new LoginController();
+		login2.launchLoginController(stage);
 	}
 }
