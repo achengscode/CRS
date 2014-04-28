@@ -2,6 +2,7 @@ package SystemAdministrator;
 
 
 import java.beans.EventHandler;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -39,6 +40,14 @@ import databaseManagement.Query;
 import validator.Validator;
 import limitTextFeild.RestrictiveTextField;
 import security.DBSecurity;
+
+/**System Admintrator Controller class
+ * 
+ * Servers as a controller class for SystemAdminstrator.fxml
+ * 
+ * @author Prateek Kumar
+ *
+ */
 	public class SysAdmControllerModify implements Initializable
 	{
 	private Parent parent;
@@ -219,9 +228,9 @@ import security.DBSecurity;
 		    			Emp2id.clear(); 
 		    			Emp2id.setDisable(true);
 		    			 
-		    			 fname2.setDisable(false);
-		    			 lname2.setDisable(false);
-		    			 Selectype2.setDisable(false);
+		    			fname2.setDisable(false);
+		    			lname2.setDisable(false);
+		    			Selectype2.setDisable(false);
 		    			}
 		    		}
 		    	
@@ -270,21 +279,7 @@ import security.DBSecurity;
 		    				+ "WHERE empid='"+empid+"'OR(empFname='"+fnname+"'AND empLname='"
 		    				+lname+"'AND empType='"+type+"')");
 		    		
-		    		/*if(radio1.isSelected()){			
-		    		result = Query.select("SELECT `empID`, `empPwd`, `empFname`, `empLname`"
-		    				+ ", `empType` FROM `employee` W "
-		    				+ "WHERE empid='"+empid+"'"); 
-		    		}
-		    		*/
 		    		
-		    		
-		    		
-		    		/*if(radio2.isSelected()){
-		    			result = Query.select("SELECT `empID`, `empPwd`, `empFname`, `empLname`"
-			    				+ ", `empType` FROM `employee` W "
-			    				+ "WHERE empFname='"+fnname+"'AND empLname='"
-			    				+lname+"'AND empType='"+type+"'");
-		    		} */
 		    		while(result.next()){
 		    	    	EmpSearchHold tuple = new EmpSearchHold();
 		    	    	tuple.setEmpid(result.getString(1));
@@ -302,44 +297,7 @@ import security.DBSecurity;
 		    		e.printStackTrace();
 		    	}
 		   }
-		    		
-		    		/*	else{
-		    				
-		    			
-		    				radio1.setDisable(true);
-		    				Emp2id.setDisable(true);
-	
-		    				String fnname =fname2.getText();
-		    				String lname =lname2.getText();
-		    				String type= Selectype2.getValue().toString();
-			    
-			    
-		    	try{
-		    		searchEmplist.clear();
-		    		System.out.println("HELLO");
-		    		ResultSet result;
-		    		result = Query.select("SELECT empID,empPwd,empFname,empLname,empType FROM employee WHERE empFname='"+fnname+"'AND empLname='"+lname+"' AND empType='"+type+"'");
-		    						
-		    		while(result.next()){
-		    	    	EmpSearchHold tuple = new EmpSearchHold();
-		    	    	tuple.setEmpid(result.getString(1));
-		    	    	tuple.setPassword(result.getString(2));
-		    	    	tuple.setFname(result.getString(3));
-		    	    	tuple.setLname(result.getString(4));
-		    	    	tuple.setType(result.getString(5));
-		    	    	System.out.println(tuple.getType());
-		    	    	searchEmplist.add(tuple);
-		    	    
-		    	    }
-		    	}
-		    	catch(Exception e){
-		    		e.printStackTrace();
-		    	}
 		    	
-			   
-			   }
-		    		*/
-		    
 		    
 		    @FXML
 		    private void handleRemoveEmp()
@@ -407,13 +365,13 @@ import security.DBSecurity;
 		    
 		    	
 		   try{ 	
-		    Query.update("UPDATE `employee` SET `empID`="+empid3+",`empPwd`='"+newPassword+"',`empFname`='"+fn3+"',`empLname`='"+ln3+"',`pwdSalt`='"+System.nanoTime()+"',`empType`='"+type3+"' WHERE empID='"+empid3+"'");
+		    Query.update("UPDATE `employee` SET `empID`="+empid3+",`empPwd`='"+newPassword+"',`empFname`='"+fn3+"',`empLname`='"+ln3+"',`pwdSalt`='"+salt+"',`empType`='"+type3+"' WHERE empID='"+empid3+"'");
 		   
 		    empUpdate.clear();
 		    fnUpdate.clear();
 		    lnUpdate.clear();
 		    typeUpdate.clear();
-		    //passUpdate.clear();
+		   //passUpdate.clear();
 		    pwdUpdateSuccess.setVisible(true);
 		    clearAllData();
 		    
@@ -433,7 +391,8 @@ import security.DBSecurity;
 		    @FXML
 			 private void handlecancelButton()
 			 {	 
-				 searchpane.setDisable(true);
+				 searchpane.setVisible(true);
+				 
 				 
 			 }
 	   private void clearAllData()
@@ -442,9 +401,7 @@ import security.DBSecurity;
 		   Emp2id.clear();
 		   fname2.clear();
 		   lname2.clear();
-		   
-		   
-		   
+	   
 	   }
 	
 	}
