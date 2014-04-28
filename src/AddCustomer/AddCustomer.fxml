@@ -27,9 +27,9 @@
           <AnchorPane id="Content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="1077.0">
             <children>
               <Label layoutX="16.0" layoutY="97.0" text="First Name" />
-              <TextField fx:id="custFirstName" layoutX="97.0" layoutY="88.0"  prefWidth="200.0" />
+              <TextField fx:id="custFirstName" layoutX="97.0" layoutY="88.0" prefWidth="200.0" />
               <Label layoutX="14.0" layoutY="218.0" text="Password" />
-              <TextField fx:id="custPassword" layoutX="97.0" layoutY="218.0"  prefWidth="200.0" />
+              <TextField fx:id="custPassword" layoutX="97.0" layoutY="218.0" prefWidth="200.0" />
               <TextField fx:id="custLastName" layoutX="96.0" layoutY="130.0" prefWidth="200.0" />
               <Button id="AddButton" fx:id="AddCustomer" disable="false" layoutX="96.0" layoutY="256.0" mnemonicParsing="false" onAction="#AddAction" prefWidth="117.0" text="Add Customer" />
               <Label id="fnNotFound" fx:id="custFnInstructLabel" layoutX="101.0" layoutY="111.0" text="Enter First Name" textFill="RED" visible="false" />
