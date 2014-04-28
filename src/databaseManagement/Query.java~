@@ -39,28 +39,6 @@ public class Query {
 		insert.close();
 		return rowsAffected;
 	}
-	
-	/**
-	 * Overloaded insert method. 
-	 * Returns the newly auto-incremented key, instead of the number of rows affected by the query.
-	 * @param userQuery
-	 * @param autoKey
-	 * @return
-	 * @throws SQLException
-	 */
-	public static int insert(String userQuery, int autoKey) throws SQLException
-	{
-	    if (dbConn == null) 
-        {
-            dbConn = DatabaseManagement.getConnection(); 
-        }
-	    Statement insert = dbConn.createStatement();
-	    autoKey = insert.executeUpdate(userQuery, Statement.RETURN_GENERATED_KEYS);
-	    ResultSet results = insert.getGeneratedKeys();
-	    results.next();
-	    autoKey = results.getInt(1);
-	    return autoKey;
-	}
 
 	/**
 	 * Alias of the create() method. Ideally, this is called whenever
@@ -129,23 +107,45 @@ public class Query {
 		ResultSet results = dbStatement.executeQuery("SELECT * FROM " + tableName);
 		return results;
 	}
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> RentReturn
 	public static void autoCommitOn() throws SQLException{
 		if (dbConn == null)
 		{
 			dbConn = DatabaseManagement.getConnection();
 		}
+<<<<<<< HEAD
+		
+		
+			dbConn.setAutoCommit(true);
+		
+	}
+	
+=======
 
 
 			dbConn.setAutoCommit(true);
 
 	}
 
+>>>>>>> RentReturn
 	public static void autoCommitOff() throws SQLException{
 		if (dbConn == null)
 		{
 			dbConn = DatabaseManagement.getConnection();
 		}
+<<<<<<< HEAD
+		
+		
+			dbConn.setAutoCommit(false);
+		
+	}
+	
+	
+=======
 
 
 			dbConn.setAutoCommit(false);
@@ -153,11 +153,21 @@ public class Query {
 	}
 
 
+>>>>>>> RentReturn
 	public static void commit() throws SQLException{
 		if (dbConn == null)
 		{
 			dbConn = DatabaseManagement.getConnection();
 		}
+<<<<<<< HEAD
+		
+		
+			dbConn.commit();
+		
+		
+	}
+	
+=======
 
 
 			dbConn.commit();
@@ -165,11 +175,21 @@ public class Query {
 
 	}
 
+>>>>>>> RentReturn
 	public static void rollback() throws SQLException{
 		if (dbConn == null)
 		{
 			dbConn = DatabaseManagement.getConnection();
 		}
+<<<<<<< HEAD
+		
+		
+			dbConn.rollback();
+		
+		
+	}
+}
+=======
 
 
 			dbConn.rollback();
@@ -177,3 +197,4 @@ public class Query {
 
 	}
 }
+>>>>>>> RentReturn
