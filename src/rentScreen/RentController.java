@@ -109,6 +109,10 @@ public class RentController implements Initializable {
 	private Button backButton;
 	@FXML
 	private Button nextButton;
+	@FXML
+	private Button nextResultButton;
+	@FXML
+	private Button previousResultButton;
 
 	// Radio Buttons declaration
 	@FXML
@@ -138,6 +142,8 @@ public class RentController implements Initializable {
 	private double childSeatPrice;
 	private double liftGatePrice;
 	private double towingEqPrice;
+	
+	private ResultSet result;
 	
 	/**
 	 * Controller constructor
@@ -344,6 +350,10 @@ public class RentController implements Initializable {
 		// database call to search for customer info in database
 		// so far only search by phone number is implemented
 		
+		// Initially set next and previous buttons off
+		nextResultButton.setDisable(true);
+		previousResultButton.setDisable(true);
+		
 		try {
 
 			cleanCustomerInfo();
@@ -353,10 +363,11 @@ public class RentController implements Initializable {
 			// compare the name given and password with one in database.
 			// start by getting the salt.
 
-			ResultSet result;
+			
 
 			// SQL Query must be adjusted depending on the search parameter
 			// given (phone or lastname)
+			// 
 			if (searchName.isDisabled()) {
 				result = Query
 						.select("SELECT C.phoneNo, C.custLname, C.custFname, C.custID, A.street, A.city, A.province, A.postalcode FROM customer C, custAddress A WHERE C.custID = A.custID AND C.phoneNo = "
@@ -364,12 +375,14 @@ public class RentController implements Initializable {
 			} else {
 				// at this point search name is enabled, meaning searchPhone is
 				// disabled
+				
 				result = Query
 						.select("SELECT C.phoneNo, C.custLname, C.custFname, C.custID, A.street, A.city, A.province, A.postalcode FROM customer C, custAddress A WHERE C.custID = A.custID AND C.custLname = "
 								+ "'" + lastname + "'");
 			}
 
-			result.next();
+			result.first();
+			//result.next();
 			phone = result.getString(1);
 			String lname = result.getString(2);
 			String fname = result.getString(3);
@@ -379,7 +392,7 @@ public class RentController implements Initializable {
 			String province = result.getString(7);
 			String pCode = result.getString(8);
 
-			
+						
 			// Setting fields in customer information
 			displayPhone.setText(phone);
 			displayFname.setText(fname);
@@ -394,18 +407,17 @@ public class RentController implements Initializable {
 			if (!displayId.getText().equals(""))
 				nextButton.setDisable(false);
 
-			// Setting fields as editable
-			displayPhone.setEditable(true);
-			displayFname.setEditable(true);
-			displayLname.setEditable(true);
-			displayStreet.setEditable(true);
-			displayCity.setEditable(true);
-			displayProvince.setEditable(true);
-			displayPcode.setEditable(true);
 
 			// cleaning search input
 			searchPhone.setText("");
 			searchName.setText("");
+			
+			// Enabling next result button if more than one result
+			if (result.next())
+			{
+				nextResultButton.setDisable(false);
+				result.previous();
+			}
 
 		} catch (SQLException e) {
 
@@ -626,6 +638,109 @@ public class RentController implements Initializable {
 		customerForm.launchLoginController(newStage);
 	}
 	
-	
+	/**
+	 * Handler for next customer result
+	 */
+	@FXML
+	private void handleNextResult() {
+		
+		cleanCustomerInfo();
+		try {
+			
+			// Disabling next result button if no more results are found
+			if (!result.next()) {
+				nextResultButton.setDisable(true);
+				return;
+			}
+			
+			
+			String phone = searchPhone.getText();
+			phone = result.getString(1);
+			String lname = result.getString(2);
+			String fname = result.getString(3);
+			String id = result.getString(4);
+			String street = result.getString(5);
+			String city = result.getString(6);
+			String province = result.getString(7);
+			String pCode = result.getString(8);
 
+			// Setting fields in customer information
+			displayPhone.setText(phone);
+			displayFname.setText(fname);
+			displayLname.setText(lname);
+			displayId.setText(id);
+			displayStreet.setText(street);
+			displayCity.setText(city);
+			displayProvince.setText(province);
+			displayPcode.setText(pCode);
+			
+			// Enabling previous result button
+			previousResultButton.setDisable(false);
+			
+			// getting ready for the next one
+			// Disabling next result button if no more results are found
+			if (result.isLast()) {
+				nextResultButton.setDisable(true);
+			}
+			else
+				result.previous();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			Dialogs.showErrorDialog(stage, "No results found!","Error!");
+			e.printStackTrace();
+
+		}
+				
+		// Activating the Next Button 
+		if (!displayId.getText().equals(""))
+			nextButton.setDisable(false);
+	}
+	@FXML
+	private void handlePreviousResult() {
+
+		cleanCustomerInfo();
+		try {
+			if (!result.previous())
+			{
+				previousResultButton.setDisable(true);
+				return;
+			}
+			
+			
+			String phone = searchPhone.getText();
+			
+			// Setting next result button on
+			nextResultButton.setDisable(false);
+			
+			phone = result.getString(1);
+			String lname = result.getString(2);
+			String fname = result.getString(3);
+			String id = result.getString(4);
+			String street = result.getString(5);
+			String city = result.getString(6);
+			String province = result.getString(7);
+			String pCode = result.getString(8);
+
+			// Setting fields in customer information
+			displayPhone.setText(phone);
+			displayFname.setText(fname);
+			displayLname.setText(lname);
+			displayId.setText(id);
+			displayStreet.setText(street);
+			displayCity.setText(city);
+			displayProvince.setText(province);
+			displayPcode.setText(pCode);
+			
+			// Disabling next result button if no more results are found
+			if (result.isFirst()) {
+				previousResultButton.setDisable(true);
+			}
+			
+		} catch (SQLException e) {
+			Dialogs.showErrorDialog(stage, "No results found!","Error!");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
