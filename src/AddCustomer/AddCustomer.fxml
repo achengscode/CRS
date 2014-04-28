@@ -27,20 +27,20 @@
           <AnchorPane id="Content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="1077.0">
             <children>
               <Label layoutX="16.0" layoutY="97.0" text="First Name" />
-              <TextField fx:id="custFirstName" layoutX="97.0" layoutY="88.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custFirstName" layoutX="97.0" layoutY="88.0" prefWidth="200.0" />
               <Label layoutX="14.0" layoutY="218.0" text="Password" />
-              <TextField fx:id="custPassword" layoutX="97.0" layoutY="218.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
-              <TextField fx:id="custLastName" layoutX="96.0" layoutY="130.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custPassword" layoutX="97.0" layoutY="218.0" prefWidth="200.0" />
+              <TextField fx:id="custLastName" layoutX="96.0" layoutY="130.0" prefWidth="200.0" />
               <Button id="AddButton" fx:id="AddCustomer" disable="false" layoutX="96.0" layoutY="256.0" mnemonicParsing="false" onAction="#AddAction" prefWidth="117.0" text="Add Customer" />
               <Label id="fnNotFound" fx:id="custFnInstructLabel" layoutX="101.0" layoutY="111.0" text="Enter First Name" textFill="RED" visible="false" />
               <Label layoutX="17.0" layoutY="175.0" text="User Name" />
-              <TextField fx:id="custUserName" layoutX="97.0" layoutY="174.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
-              <TextField fx:id="custStreetAddress" layoutX="521.0" layoutY="94.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custUserName" layoutX="97.0" layoutY="174.0" prefWidth="200.0" />
+              <TextField fx:id="custStreetAddress" layoutX="521.0" layoutY="94.0"  prefWidth="200.0" />
               <Label layoutX="408.0" layoutY="97.0" text="Street Address" />
               <Label layoutX="408.0" layoutY="139.0" text="" />
-              <TextField fx:id="custCity" layoutX="521.0" layoutY="133.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custCity" layoutX="521.0" layoutY="133.0"  prefWidth="200.0" />
               <Label layoutX="415.0" layoutY="133.0" text="City" />
-              <TextField fx:id="custProvince" layoutX="521.0" layoutY="174.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custProvince" layoutX="521.0" layoutY="174.0" prefWidth="200.0" />
               <Label layoutX="415.0" layoutY="172.0" prefHeight="22.0" text="Province" />
               <Label layoutX="415.0" layoutY="215.0" text="Postal Code" />
               <Label fx:id="custLnInstructLabel" layoutX="102.0" layoutY="153.0" minHeight="11.0" prefHeight="15.999900000002526" prefWidth="106.0" text="Enter Last Name" textFill="RED" visible="false" />
@@ -50,9 +50,9 @@
               <Label fx:id="custPostalInstructLabel" layoutX="526.0" layoutY="237.0" text="Enter Postal Code" textFill="RED" visible="false" />
               <Pane layoutX="60.0" layoutY="358.0" prefHeight="283.0" prefWidth="391.0">
                 <children>
-                  <TextField fx:id="searchName" layoutX="165.0" layoutY="54.0" onKeyTyped="#keepAlive" prefWidth="189.0" />
-                  <TextField fx:id="searchID" layoutX="165.0" layoutY="93.0" onKeyTyped="#keepAlive" prefWidth="189.0" />
-                  <TextField fx:id="searchPhone" layoutX="164.0" layoutY="131.0" onKeyTyped="#keepAlive" prefWidth="189.0" />
+                  <TextField fx:id="searchName" layoutX="165.0" layoutY="54.0" prefWidth="189.0" />
+                  <TextField fx:id="searchID" layoutX="165.0" layoutY="93.0"  prefWidth="189.0" />
+                  <TextField fx:id="searchPhone" layoutX="164.0" layoutY="131.0" o prefWidth="189.0" />
                   <RadioButton fx:id="selectUserName" layoutX="32.0" layoutY="60.0" mnemonicParsing="false" text="User name">
                     <toggleGroup>
                       <ToggleGroup fx:id="Toggle" />
@@ -66,11 +66,11 @@
               </Pane>
               <Label layoutX="17.0" layoutY="131.0" text="Last Name" />
               <Button fx:id="updateCustomer" layoutX="521.0" layoutY="256.0" mnemonicParsing="false" onAction="#updateCustomerRecord" text="Update Customer" />
-              <TextField fx:id="custDriverLicense" layoutX="96.0" layoutY="48.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custDriverLicense" layoutX="96.0" layoutY="48.0" prefWidth="200.0" />
               <Label layoutX="16.0" layoutY="51.0" text="Driver Lic." />
-              <TextField fx:id="custPostal1" layoutX="523.0" layoutY="215.0" onKeyTyped="#keepAlive" prefHeight="22.0" prefWidth="75.0" />
+              <TextField fx:id="custPostal1" layoutX="523.0" layoutY="215.0"  prefHeight="22.0" prefWidth="75.0" />
               <Label layoutX="410.0" layoutY="51.0" text="Phone Number" />
-              <TextField fx:id="custPhoneNumber" layoutX="521.0" layoutY="48.0" onKeyTyped="#keepAlive" prefWidth="200.0" />
+              <TextField fx:id="custPhoneNumber" layoutX="521.0" layoutY="48.0"  prefWidth="200.0" />
               <Label fx:id="custPhoneInstructLabel" layoutX="526.0" layoutY="72.0" text="Enter Phone Number" textFill="RED" visible="false" />
               <Label fx:id="custDLInstructLabel" layoutX="102.0" layoutY="68.0" text="Enter Driver License" textFill="RED" visible="false" />
               <Label id="custLnInstructLabel" fx:id="custPswdInstructLabel" layoutX="101.0" layoutY="240.0" minHeight="11.0" prefHeight="15.999900000002526" prefWidth="106.0" text="Enter Password" textFill="RED" visible="false" />
